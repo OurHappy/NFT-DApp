@@ -1,0 +1,10 @@
+body {
+  font-family: "Noto Sans TC", sans-serif;
+}
+
+.connectButton {
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+/*# sourceMappingURL=style.css.map */
