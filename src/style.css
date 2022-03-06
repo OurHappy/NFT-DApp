@@ -1,0 +1,9 @@
+* {
+    background-color: rgb(16, 38, 48);
+    color:aliceblue;
+}
+
+.text-class {
+    padding: '10px';
+    margin: '10px';
+}
