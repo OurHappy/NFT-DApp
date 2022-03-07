@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import Web3 from "web3";
-// import ethereum from "web3";
 
-const WalletInfo = () => {
-  let [account, setAccount] = useState("");
-  let [balance, setBalance] = useState("");
-  let [networkName, setNetworkName] = useState("");
+const WalletInfo = ({ account, setAccount, web3 }) => {
+  const [balance, setBalance] = useState("");
+  const [networkName, setNetworkName] = useState("");
 
-  //web3 provider
-  const web3 = new Web3(Web3.givenProvider || "http://localhost:3000/");
-
-  //onClick handler
   const connectWallet = () => {
     let address = web3.eth.getAccounts();
     address.then((msg) => {
@@ -25,10 +18,13 @@ const WalletInfo = () => {
       switch (id) {
         case 1:
           setNetworkName("Ethereum Mainnet");
+          break;
         case 4:
           setNetworkName("Rinkeby Testnet");
+          break;
         case 56:
           setNetworkName("Smart Chain");
+          break;
         case 108:
           setNetworkName("ThunderCore Mainnet");
           break;
@@ -39,12 +35,12 @@ const WalletInfo = () => {
           setNetworkName("Unknown");
           break;
       }
-      console.log(id);
     });
   };
 
   return (
     <div className="walletInfo">
+      <h2>Wallet Infomation</h2>
       <button className="connectButton" onClick={connectWallet}>
         Connect
       </button>
