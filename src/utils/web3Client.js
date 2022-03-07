@@ -1,46 +1,25 @@
-/* import web3.js library */
+import Web3 from "web3";
 
+/**
+ * Constants
+ */
 
 /** web3 instance */
-function init(){
-  // init function should create a web3 instance with ethereum provider
-  // return false if unable to create a web3 instance
-}
+export class web3Instance {
+  constructor(provider) {
+    this.provider = provider;
+    this.web3 = new Web3(provider);
+  }
 
-function isMetamask(){
-  // check if user has metamask installed
-}
+  connect() {}
 
-function makeContract(address) {
-  // should return a web3 Contract instance
-}
+  on(eventName, callback) {
+    this.provider.on(eventName, callback);
+  }
 
+  removeListener(eventName, callback) {
+    this.provider.removeListener(eventName, callback);
+  }
 
-/** web3 contract */
-function isERC1155(contract){
-  // check if the provided contract implement ERC1155 interface
-}
-
-function isERC721(contract){
-  // check if the provided contract implement ERC721 interface
-}
-
-function balanceOf(address, tokenId){
-  // check the token amount the address hold
-}
-
-function ownerOf(tokenId){
-  // check the owner address of the token
-}
-
-function tokenURI(tokenId) {
-  // get the token metadata URI
-}
-
-function transfer(fromAddress, toAddress, tokenId, amount) {
-  // transfer token
-}
-
-function burn(address, tokenId, amount) {
-  // burn token
+  makeContract(address) {}
 }
