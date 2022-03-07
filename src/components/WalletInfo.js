@@ -22,15 +22,19 @@ const WalletInfo = ({ account, setAccount, web3 }) => {
         case 4:
           setNetworkName("Rinkeby Testnet");
           break;
+        case 18:
+          setNetworkName("ThunderCore Testnet");
+          break;
         case 56:
-          setNetworkName("Smart Chain");
+          setNetworkName("Smart Chain Mainnet");
+          break;
+        case 97:
+          setNetworkName("Smart Chain Testntet");
           break;
         case 108:
           setNetworkName("ThunderCore Mainnet");
           break;
-        case 18:
-          setNetworkName("ThunderCore Testnet");
-          break;
+
         default:
           setNetworkName("Unknown");
           break;
