@@ -5,44 +5,34 @@ const Wallet = () => {
     const [networkId, setNetworkId] = useState(0);
     const [address, setAddress] = useState("None");
     const [networkName, setNetworkName] = useState("None");
-    //const [balance, setBalance] = useState(0.0);
+    const [balance, setBalance] = useState(0);
     const [status, setStatus] = useState("Unconnect");
 
     // provider
     const Web3 = require('web3');
     const web3 = new Web3(Web3.givenProvider || "http://localhost:3000");
-    
-    // get the network name by the ID
-    let getNetworkName = (ID) => {
-        if(ID == 1) return "Mainnet";
-        else if(ID == 4) return "Rinkeby Testnet";
-        else if(ID == 18) return "Thundercore Testnet";
-        else return "";
-    }
 
     // after clicking the button, run ConnectAction
     let ConnectAction = () => {
         // get the address, need to use 'requestAccounts' instead of 'getAccounts'
         web3.eth.requestAccounts(function (err, addr) {
-            setAddress(address => addr);
+            setAddress(address => addr[0]);
+            web3.eth.getBalance(addr[0], (err, bal) => {
+                let number = Math.round(web3.utils.fromWei(bal, 'ether') * 1000) / 1000;
+                setBalance(balance => number);
+            });
         });
 
-        // get the network ID and the name
+        // get the network ID and name, and set the status
         web3.eth.net.getId(function (err, ID) {
             setNetworkId(networkId => ID);
-        });
-        setNetworkName(networkName => getNetworkName(networkId));
-        
-        // // get the balance
-        // if(address == "None") setBalance(balance => 0);
-        // else {
-        //     web3.eth.getBalance(address, (err, bal) => {
-        //         let number = Math.round(web3.utils.fromWei(bal, 'ether') * 1000) / 1000;
-        //         setBalance(balance => number);
-        //     });
-        // }
+            if(ID == 1) setNetworkName(networkName => "Mainnet");
+            else if(ID == 4) setNetworkName(networkName => "Rinkeby Testnet");
+            else if(ID == 18) setNetworkName(networkName => "Thundercore Testnet");
+            else return "";
 
-        if(networkId != 0) setStatus("Connected");
+            if(ID != 0) setStatus("Connected");
+        });
     }
 
     return (
@@ -54,6 +44,7 @@ const Wallet = () => {
             <div className="text-class pv3">
                 Network: {networkName} <br></br>
                 Address: {address} <br></br>
+                Balance: {balance}
             </div>
         </div>
     );   
