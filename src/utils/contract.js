@@ -7,23 +7,23 @@ class Contract {
   constructor(contract) {
     this.contract = contract;
   }
-  getTokenMeta() {}
-  isERC721() {}
-  isERC1155() {}
-  burn() {}
-  transfer() {}
-  symbol() {}
-  name() {}
+  async getTokenMeta() {}
+  async isERC721() {}
+  async isERC1155() {}
+  async burn() {}
+  async transfer() {}
+  async symbol() {}
+  async name() {}
 }
 
 class ERC721Contract extends Contract {
-  ownerOf() {}
-  balanceOf() {}
-  totalSupply() {}
+  async ownerOf() {}
+  async balanceOf() {}
+  async totalSupply() {}
 }
 
 class ERC1155Contract extends Contract {
-  balanceOf() {}
+  async balanceOf() {}
 }
 
 export function createContract(web3, address) {
