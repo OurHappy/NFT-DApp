@@ -1,25 +1,26 @@
 import Web3 from "web3";
 
 /**
- * Constants
+ * variables
  */
+let web3, provider;
 
 /** web3 instance */
-export class web3Instance {
-  constructor(provider) {
-    this.provider = provider;
-    this.web3 = new Web3(provider);
-  }
-
-  connect() {}
-
-  on(eventName, callback) {
-    this.provider.on(eventName, callback);
-  }
-
-  removeListener(eventName, callback) {
-    this.provider.removeListener(eventName, callback);
-  }
-
-  makeContract(address) {}
+function init(givenProvider) {
+  provider = givenProvider;
+  web3 = new Web3(givenProvider);
 }
+
+function connect() {}
+
+function on(eventName, callback) {
+  provider.on(eventName, callback);
+}
+
+function removeListener(eventName, callback) {
+  provider.removeListener(eventName, callback);
+}
+
+function makeContract(address) {}
+
+export default web3;
