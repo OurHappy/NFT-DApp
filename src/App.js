@@ -5,7 +5,8 @@ import Navbar from "./components/Navbar";
 function App() {
   return (
     <div className="App">
-      <Navbar />
+      <h1>Hello World</h1>
+      {/* <Navbar /> */}
       {/* Remove the sample React code */}
       {/* Install bootstrap for styling */}
       {/* Add a default empty page when there is no ethereum provider */}
