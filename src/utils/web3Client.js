@@ -1,5 +1,4 @@
 import Web3 from "web3";
-import ERC1155Interface from "../contracts/ERC1155.json";
 import ERC721Interface from "../contracts/ERC721.json";
 import ERC165Interface from "../contracts/ERC165.json";
 import OurSongInterface from "../contracts/OurSong.json";
@@ -85,14 +84,15 @@ export function isContractAddress(address) {
 export async function makeContract(contractAddress) {
   let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
 
-  let result = await contract.methods
-    .supportsInterface(ERC1155InterfaceID)
-    .call();
+  let ERC1155 = await isERC1155(contract);
+  let ERC721 = await isERC721(contract);
 
-  if (result) {
+  if (ERC1155) {
     return new web3.eth.Contract(OurSongInterface, contractAddress);
+  } else if (ERC721) {
+    return new web3.eth.Contract(ERC721Interface, contractAddress)();
   } else {
-    return new web3.eth.Contract(OurSongInterface, contractAddress);
+    return new Error();
   }
 }
 
