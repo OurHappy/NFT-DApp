@@ -1,11 +1,12 @@
 import "./App.css";
-
+import React from "react";
 import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <div className="App">
       <Navbar />
+
       {/* Remove the sample React code */}
       {/* Install bootstrap for styling */}
       {/* Add a default empty page when there is no ethereum provider */}
