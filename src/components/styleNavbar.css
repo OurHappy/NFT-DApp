@@ -1,0 +1,21 @@
+.navClass {
+    padding: 70px 30px 70px 30px;
+    background-color: rgb(35, 38, 41);
+    color:azure;
+}
+
+#titleText {
+    font-size: 30px;
+    background-color: rgb(35, 38, 41);
+}
+
+#addressText {
+    color: lightblue;
+    font-size: 15px;
+    background-color: rgb(35, 38, 41);
+}
+
+.chainBlock {
+    margin: -10px 0px -10px 0px;
+    background-color: rgb(35, 38, 41);
+}
