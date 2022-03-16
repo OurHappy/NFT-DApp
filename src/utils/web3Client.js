@@ -1,7 +1,12 @@
 import Web3 from "web3";
 import ERC1155Interface from "../contracts/ERC1155.json";
 import ERC721Interface from "../contracts/ERC721.json";
+import ERC165Interface from "../contracts/ERC165.json";
 import OurSongInterface from "../contracts/OurSong.json";
+import { isERC721, isERC1155 } from "../utils/contract.js";
+
+const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
+const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
 
 /**
  * variables
@@ -16,13 +21,15 @@ export function init(givenProvider) {
     web3 = new Web3(provider);
     return true;
   } else {
-    throw new console.error("failed to initiate a web3 instance!");
+    throw new Error();
   }
 }
 
 export async function connect() {
-  init(Web3.givenProvider);
-  let wallectinformation = [];
+  try {
+    init(Web3.givenProvider);
+  } catch (error) {}
+
   let address = await web3.eth.requestAccounts();
   let balance = await web3.eth.getBalance(address[0]);
 
@@ -54,6 +61,8 @@ export async function connect() {
       break;
   }
 
+  //store address, balance, networkname in and array
+  let wallectinformation = [];
   wallectinformation.push(address[0]);
   wallectinformation.push(balance[0]);
   wallectinformation.push(networkName);
@@ -73,10 +82,18 @@ export function isContractAddress(address) {
   return web3.utils.isAddress(address);
 }
 
-export function makeContract(contractaddress) {
-  //by default using OurSong's interface to initiate a contract instance
-  //have to check whether given address is oursong's NFT address
-  return new web3.eth.Contract(OurSongInterface, contractaddress);
+export async function makeContract(contractAddress) {
+  let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
+
+  let result = await contract.methods
+    .supportsInterface(ERC1155InterfaceID)
+    .call();
+
+  if (result) {
+    return new web3.eth.Contract(OurSongInterface, contractAddress);
+  } else {
+    return new web3.eth.Contract(OurSongInterface, contractAddress);
+  }
 }
 
 export default web3;
