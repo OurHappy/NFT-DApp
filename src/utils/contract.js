@@ -11,18 +11,6 @@ export async function getContractMeta(contract) {
   // let contractURI = await contract.methods.contractURI().call((err, res) => {
   //   return res;
   // });
-
-  let meta = {
-    name: "OurSong Vibe NFT ERC1155",
-    description:
-      "OurSong is the world\u2019s first music NFT marketplace. For the first time in history, music and sentiments can be packaged, sold and traded as meaningful digital assets. Buying and collecting music is back in a big way.",
-    image: "https://stage.oursong.com/images/oursong-logo-v3.png",
-    external_url: "https://stage.oursong.com",
-    seller_fee_basis_points: 1000,
-    fee_recipient: "0xd90E0Ad754Ac08e8708Df7eAD69e3f590c076aa2",
-  };
-
-  return meta;
 }
 
 export async function isERC721(contract) {

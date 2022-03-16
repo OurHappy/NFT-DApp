@@ -90,7 +90,7 @@ export async function makeContract(contractAddress) {
   if (ERC1155) {
     return new web3.eth.Contract(OurSongInterface, contractAddress);
   } else if (ERC721) {
-    return new web3.eth.Contract(ERC721Interface, contractAddress)();
+    return new web3.eth.Contract(ERC721Interface, contractAddress);
   } else {
     return new Error();
   }

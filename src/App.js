@@ -1,8 +1,6 @@
 import "./App.css";
-import React, { useState } from "react";
-
+import React from "react";
 import Navbar from "./components/Navbar";
-import Contract from "./components/Contract";
 
 function App() {
   return (
