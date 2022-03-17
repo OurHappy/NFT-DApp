@@ -1,7 +1,8 @@
 import Web3 from "web3";
 import ERC721Interface from "../contracts/ERC721.json";
 import ERC165Interface from "../contracts/ERC165.json";
-import OurSongInterface from "../contracts/OurSong.json";
+import OurSong1155Interface from "../contracts/OurSong1155.json";
+import OurSong721Interface from "../contracts/OurSong721.json";
 import { isERC721, isERC1155 } from "../utils/contract.js";
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
@@ -24,11 +25,16 @@ export function init(givenProvider) {
   }
 }
 
-export async function connect() {
-  try {
-    init(Web3.givenProvider);
-  } catch (error) {}
+export async function disconnect() {
+  // TODO: implement disconnect function
+  await provider.request({
+    method: "eth_requestAccounts",
+    params: [{eth_accounts: {}}]
+  });
+  return true;
+}
 
+export async function connect() {
   let address = await web3.eth.requestAccounts();
   let balance = await web3.eth.getBalance(address[0]);
 
@@ -66,7 +72,10 @@ export async function connect() {
   wallectinformation.push(balance[0]);
   wallectinformation.push(networkName);
 
-  return wallectinformation;
+  return {
+    address: address[0],
+    network: networkName
+  };
 }
 
 export function on(eventName, callback) {
@@ -88,11 +97,21 @@ export async function makeContract(contractAddress) {
   let ERC721 = await isERC721(contract);
 
   if (ERC1155) {
-    return new web3.eth.Contract(OurSongInterface, contractAddress);
+    return {
+      contractInterface: 'ERC1155',
+      contract: new web3.eth.Contract(OurSong1155Interface, contractAddress)
+    };
   } else if (ERC721) {
-    return new web3.eth.Contract(ERC721Interface, contractAddress);
+    return {
+      contractInterface: 'ERC721',
+      contract: new web3.eth.Contract(OurSong721Interface, contractAddress)
+    };
   } else {
-    return new Error();
+    return {
+      contractInterface: 'unsupport_contract',
+      contract: null
+    };
+    // throw new Error('unsupport contract type');
   }
 }
 

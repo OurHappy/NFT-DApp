@@ -9,6 +9,10 @@
     box-sizing: border-box;
 }
 
+.searchBoxClass.invalid {
+    color: rgb(255, 93, 81)
+}
+
 .divClass-search {
     text-align: center;
     padding: 100px 100px 0px 100px;

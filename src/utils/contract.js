@@ -1,3 +1,6 @@
+import sample1155Meta from './sample1155TokenMeta.json';
+import sampleOurSong1155ContractMeta from './sampleOurSong1155ContractMeta.json';
+
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
 
@@ -5,9 +8,11 @@ export async function getTokenMeta(contract, tokenId) {
   // let tokenURI = await contract.methods.uri(tokenId).call((err, res) => {
   //   return res;
   // });
+  return sample1155Meta;
 }
 
 export async function getContractMeta(contract) {
+  return sampleOurSong1155ContractMeta;
   // let contractURI = await contract.methods.contractURI().call((err, res) => {
   //   return res;
   // });
@@ -36,6 +41,11 @@ export async function symbol(contract) {
 
 export async function name(contract) {
   return contract.methods.name().call();
+}
+
+export async function getContractOwner(contract) {
+  const result = contract.methods.owner().call(res => res);
+  return result;
 }
 
 export async function ownerOf(contract) {
