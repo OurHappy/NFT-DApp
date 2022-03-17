@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './styleToken.css'
 
 const Token = () => {
@@ -17,13 +17,13 @@ const Token = () => {
 
     // to see whether it is a valid token
     // 之後會改成 token 是否存在的 API，這邊測試是 token「123」存在
-    let tokenValid = (ID) => {  
-        if(ID === "123") return true;
+    let tokenValid = (ID) => {
+        if (ID === "123") return true;
         else return false;
     }
 
     let searchToken = (event) => {
-        if(tokenValid(event.target.value)) {
+        if (tokenValid(event.target.value)) {
             setShowToken(showToken => 1);
         } else {
             setShowToken(showToken => 0);
@@ -42,32 +42,32 @@ const Token = () => {
     return (
         <div className="divClass">
             <span className="tokenText">Token:</span>
-            <input 
+            <input
                 type="search"
                 placeholder="Token ID"
-                onChange = {searchToken}
-                className = "tokenSearchClass"
+                onChange={searchToken}
+                className="tokenSearchClass"
             />
-            
+
             {/* if token exists, show the token */}
             <div>
-                { showToken === 1 && 
-                <div className="container">
-                    {/* Show token metadata if a valid token is provided */}
-                    <div className="row">
-                        <div className="col">
-                            token image
+                {showToken === 1 &&
+                    <div className="container">
+                        {/* Show token metadata if a valid token is provided */}
+                        <div className="row">
+                            <div className="col">
+                                token image
+                            </div>
+                            <div className="col tokenInfo">
+                                Name:  {name} <br />
+                                Description:  {description} <br /><br />
+                                External Link:  {exLink} <br />
+                                Other meta:  {meta} <br /><br />
+                                Total Supply:  {totalSupply} <br />
+                                You owned:  {own}
+                            </div>
                         </div>
-                        <div className="col tokenInfo">
-                            Name:  {name} <br/>
-                            Description:  {description} <br/><br/>
-                            External Link:  {exLink} <br/>
-                            Other meta:  {meta} <br/><br/>
-                            Total Supply:  {totalSupply} <br/>
-                            You owned:  {own}
-                        </div>
-                    </div>
-                </div> }
+                    </div>}
             </div>
         </div>
     );
