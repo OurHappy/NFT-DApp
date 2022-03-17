@@ -1,40 +1,44 @@
 import "./App.css";
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar";
 import Searchbox from './components/Searchbox';
 import ContractPanel from "./components/ContractPanel";
 
+import { init } from './utils/web3Client';
+import { getProvider } from './utils/provider';
+
 
 function App() {
-  
+
   /* States */
+  const [appState, setAppState] = useState('initializing');
   const [isContract, setIsContract] = useState(0);
   const [address, setAddress] = useState('test');
 
+  useEffect(() => {
+    initApp();
+  }, [])
+
   /* Functions */
-  // to see whether it is a valid contract
-  // 之後會改成 contract 是否合法的 API，這邊測試是「test123」為合法
-    let contractValid = (addr) => {  
-      if(addr === "test123" || addr === "") return true;  // 注意沒有輸入時也是判定合法
-      else return false;
-  }
-
-  let onSearchChange = (event) => {
-    let val = contractValid(event.target.value);
-
-    if(event.target.value === "") {
-      setIsContract(isContract => 0);
-      setAddress(address => '');
-    } else if (val) {
-      setIsContract(isContract => 1);
-      setAddress(address => event.target.value);
-    } else {
-      setIsContract(isContract => 0);
-      setAddress(address => '');
+  async function initApp() {
+    const provider = await getProvider();
+    if (provider) {
+      const initialized = init(provider);
+      if (initialized) {
+        setAppState('ready');
+        return;
+      }
     }
+    setAppState('no_provider');
   }
+
+  let onSearchChange = (addr) => {
+    setIsContract(1);
+    setAddress(addr);
+  }
+
 
   /* Render Function */
   return (
@@ -46,8 +50,8 @@ function App() {
 
           <Routes>
             {/* Add a search bar to enter contract address */}
-            { isContract === 0 && <Route exact path ='/' element={<Searchbox searchChange={onSearchChange}/>}/> }
-            { isContract && <Route exact path ='/' element={<ContractPanel contractAddress={address}/>}/> }
+            {isContract === 0 && <Route exact path='/' element={<Searchbox searchChange={onSearchChange} />} />}
+            {isContract && <Route exact path='/' element={<ContractPanel contractAddress={address} />} />}
           </Routes>
         </div>
       </Fragment>
