@@ -3,17 +3,17 @@ import './styleToken.css'
 
 const Token = () => {
 
-    /* States */
-    const [showToken, setShowToken] = useState(0);
-    /* The followings are the states which need to call API */
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [exLink, setExLink] = useState('');
-    const [meta, setMeta] = useState('');
-    const [totalSupply, setTotalSupply] = useState(0);
-    const [own, setOwn] = useState(0);
+  /* States */
+  const [showToken, setShowToken] = useState(0);
+  /* The followings are the states which need to call API */
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [exLink, setExLink] = useState('');
+  const [meta, setMeta] = useState('');
+  const [totalSupply, setTotalSupply] = useState(0);
+  const [own, setOwn] = useState(0);
 
-    /* Functions */
+  /* Functions */
 
     // to see whether it is a valid token
     // 之後會改成 token 是否存在的 API，這邊測試是 token「123」存在
@@ -23,19 +23,11 @@ const Token = () => {
     }
 
     let searchToken = (event) => {
-        if (tokenValid(event.target.value)) {
-            setShowToken(showToken => 1);
+        if(tokenValid(event.target.value)) {
+        setShowToken(showToken => 1);
         } else {
-            setShowToken(showToken => 0);
+        setShowToken(showToken => 0);
         }
-
-        /* set Token (之後會改成用 API 來獲取資訊) */
-        setName(name => "Token Name 123");
-        setDescription(description => "Token description 123");
-        setExLink(exLink => "Token External Link 123");
-        setMeta(meta => "Token other meta 123");
-        setTotalSupply(totalSupply => 123);
-        setOwn(own => 123);
     }
 
     /* Render functions */
@@ -69,8 +61,8 @@ const Token = () => {
                         </div>
                     </div>}
             </div>
-        </div>
+          </div>
     );
-}
+};
 
 export default Token;
