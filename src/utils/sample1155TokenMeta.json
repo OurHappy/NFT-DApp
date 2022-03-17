@@ -1,0 +1,7 @@
+{
+    "name": "Yume",
+    "description": "Perfect Blue",
+    "image": "https://oursong-stage.s3.amazonaws.com/projects/sst-design/e640ae44-4943-4c0e-9ebe-c260697ef2de.jpg",
+    "animation_url": "https://oursong-stage.s3.ap-southeast-1.amazonaws.com/video/727b4e46-8c1d-4af9-b9cc-c24e23e0dfac_preview.mp4?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJFSWCB27XGG4CKEQ%2F20220317%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20220317T041743Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Signature=ba3102512a9caa0068873e5754f8ba63d9b88f64f42cca41f957c8f0b70a48ae",
+    "external_url": "https://stage.oursong.com/project/kpwgvpar"
+}

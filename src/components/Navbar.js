@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import Button from 'react-bootstrap/Button';
-import Stack from 'react-bootstrap/Stack'
-import './styleNavbar.css'
+import Stack from 'react-bootstrap/Stack';
+import './styleNavbar.css';
+import { connect, disconnect } from "../utils/web3Client";
 
 export const Navbar = (props) => {
   /* States */
@@ -15,19 +16,22 @@ export const Navbar = (props) => {
   /* API calls */
 
   /* Functions */
-  let clickAction = () => {
-    if(isConnect === 0) {
-      setIsConnect(isConnect => 1);
-      setConnectText(connectText => "Disconnect");
-      setChainName(chainName => "TestChain");  // 之後會換成串API
-      setAddress(address => "TestAddress0xwer322fwfr");  // 之後會換成串API
-    } else {
-      setIsConnect(isConnect => 0);
-      setConnectText(connectText => "Connect");
-      setChainName(chainName => "");
-      setAddress(address => "");
+  let clickAction = async () => {
+    if (isConnect) {
+      await disconnect();
+      setIsConnect(0);
+      setConnectText("Connect");
+      setChainName("");
+      setAddress("");
     }
-  }
+    else {
+      const result = await connect();
+      setAddress(result.address);
+      setChainName(result.network);
+      setIsConnect(true);
+      setConnectText("Disconnect");
+    }
+  };
 
   /* Render functions */
   return (
