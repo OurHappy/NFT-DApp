@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './styleToken.css';
+import { getTokenMeta } from "../utils/contract";
+import { makeContract } from '../utils/web3Client';
 
 const Token = () => {
 

@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Button from 'react-bootstrap/Button';
 import Stack from 'react-bootstrap/Stack';
 import './styleNavbar.css';
-import { connect, disconnect } from "../utils/web3Client";
+import { connect, disconnect, on, removeListener } from "../utils/web3Client";
 
 export const Navbar = (props) => {
   /* States */
@@ -12,6 +12,31 @@ export const Navbar = (props) => {
   const [address, setAddress] = useState("");
   
   /* Listeners */
+  useEffect(() => {
+    const handleAccountsChanged = async (accounts) => {
+      const result = await connect();
+      setAddress(result.address);
+      setChainName(result.network);
+    };
+    const handleChainChanged = async (chainId) => {
+      const result = await connect();
+      setAddress(result.address);
+      setChainName(result.network);
+    };  
+
+    if (isConnect) {
+      on('accountsChanged', handleAccountsChanged);
+      on('chainChanged', handleChainChanged);
+    }
+
+    // remove the listener when finishing listening
+    return () => {
+      if (isConnect) {
+        removeListener('accountsChanged', handleAccountsChanged);
+        removeListener('chainChanged', handleChainChanged);
+      }
+    };
+  }, [isConnect]);
 
   /* API calls */
 
