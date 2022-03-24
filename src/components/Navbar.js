@@ -1,16 +1,18 @@
-import React, {useState} from "react";
-import Button from 'react-bootstrap/Button';
-import Stack from 'react-bootstrap/Stack';
-import './styleNavbar.css';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Stack from "react-bootstrap/Stack";
 import { connect, disconnect } from "../utils/web3Client";
+import { Spinner } from "react-bootstrap";
+import { triggerFocus } from "antd/lib/input/Input";
+import PropTypes from "prop-types";
 
-export const Navbar = (props) => {
+export const Navbar = () => {
   /* States */
   const [isConnect, setIsConnect] = useState(0);
   const [connectText, setConnectText] = useState("Connect");
   const [chainName, setChainName] = useState("");
   const [address, setAddress] = useState("");
-  
+
   /* Listeners */
 
   /* API calls */
@@ -23,13 +25,13 @@ export const Navbar = (props) => {
       setConnectText("Connect");
       setChainName("");
       setAddress("");
-    }
-    else {
+    } else {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
       setIsConnect(true);
       setConnectText("Disconnect");
+      setConnectState(true);
     }
   };
 
@@ -42,10 +44,16 @@ export const Navbar = (props) => {
         <span id="addressText">{address}</span>
       </div>
       <div>
-        <Button variant="outline-light" onClick={clickAction}>{connectText}</Button>
+        <Button variant="outline-light" onClick={clickAction}>
+          {connectText}
+        </Button>
       </div>
     </Stack>
   );
 };
+
+// Navbar.propTypes = {
+//   setConnectState: PropTypes.func.isRequired,
+// };
 
 export default Navbar;
