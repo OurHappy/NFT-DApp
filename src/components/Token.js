@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-// import "./styleToken.css";
+import React, { useState } from 'react';
+import { getTokenMeta } from "../utils/contract";
+import { makeContract } from '../utils/web3Client';
 
 const Token = () => {
   /* States */
@@ -12,6 +13,7 @@ const Token = () => {
   const [totalSupply, setTotalSupply] = useState(0);
   const [own, setOwn] = useState(0);
 
+
   /* Functions */
 
   // to see whether it is a valid token
@@ -23,9 +25,9 @@ const Token = () => {
 
   let searchToken = (event) => {
     if (tokenValid(event.target.value)) {
-      setShowToken((showToken) => 1);
+      setShowToken(showToken => 1);
     } else {
-      setShowToken((showToken) => 0);
+      setShowToken(showToken => 0);
     }
 
     /* set Token (之後會改成用 API 來獲取資訊) */

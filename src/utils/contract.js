@@ -1,14 +1,58 @@
-import sample1155Meta from "./sample1155TokenMeta.json";
-import sampleOurSong1155ContractMeta from "./sampleOurSong1155ContractMeta.json";
+import sample1155Meta from './sample1155TokenMeta.json';
+import sample721Meta from './sample721TokenMeta.json';
+import sampleOurSong1155ContractMeta from './sampleOurSong1155ContractMeta.json';
+import axios from 'axios';
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
 
 export async function getTokenMeta(contract, tokenId) {
-  // let tokenURI = await contract.methods.uri(tokenId).call((err, res) => {
-  //   return res;
-  // });
-  return sample1155Meta;
+  let ERC1155 = await isERC1155(contract);
+  let ERC721 = await isERC721(contract);
+
+  if (ERC1155) {
+    let tokenURI = await contract.methods.uri(tokenId).call();
+
+    /* replace the {id} with the actual token ID in lowercase,
+       and leading zero padded to 64 hex characters
+    */
+    let tokenIdNew = (Number(tokenId).toString(16)).toLowerCase();
+    let zeroNum = 64 - tokenIdNew.length;
+    for (let i = 0; i < zeroNum; i++) {
+      tokenIdNew = "0" + tokenIdNew;
+    }
+    tokenURI = tokenURI.replace("{id}", tokenIdNew);
+    console.log(tokenURI);
+
+    await axios.get(tokenURI, {
+      headers: {
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Origin": "*",
+      },
+      responseType: "json",
+    }).then((res) => {
+      return res;
+    }).catch((err) => {
+      console.log(err);
+      return sample1155Meta;
+    });
+  } else if (ERC721) {
+    let tokenURI = await contract.methods.tokenURI(tokenId).call();
+    console.log(tokenURI);
+
+    await axios.get(tokenURI, {
+      headers: {
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Origin": "*",
+      },
+      responseType: "json",
+    }).then((res) => {
+      return res;
+    }).catch((err) => {
+      console.log(err);
+      return sample721Meta;
+    });
+  }
 }
 
 export async function getContractMeta(contract) {
