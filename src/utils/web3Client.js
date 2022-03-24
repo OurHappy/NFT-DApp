@@ -35,6 +35,7 @@ export async function disconnect() {
 }
 
 export async function connect() {
+  
   let address = await web3.eth.requestAccounts();
   let balance = await web3.eth.getBalance(address[0]);
 

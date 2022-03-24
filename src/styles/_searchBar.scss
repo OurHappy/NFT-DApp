@@ -1,0 +1,26 @@
+.searchBoxClass {
+  margin: 1rem;
+  text-align: center;
+
+  width: 60%;
+  height: 3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.searchBoxClass.invalid {
+  color: rgb(255, 93, 81);
+}
+
+.divClass-search {
+  text-align: center;
+  padding: 100px 100px 0px 100px;
+}
+
+.warnClass {
+  color: rgb(255, 93, 81);
+  display: flex;
+  justify-content: center;
+  font-size: 15px;
+}

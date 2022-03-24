@@ -1,0 +1,26 @@
+.navClass {
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgb(35, 38, 41);
+  color: azure;
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  button {
+    margin: 0rem 2rem;
+  }
+
+  div.chainBlock {
+    display: flex;
+    flex-direction: column;
+    margin: 0rem 1rem;
+
+    span.addressText {
+      color: lightblue;
+      font-size: 1rem;
+    }
+  }
+}

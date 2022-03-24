@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import './styleToken.css';
 import { getTokenMeta } from "../utils/contract";
 import { makeContract } from '../utils/web3Client';
 
 const Token = () => {
-
   /* States */
   const [showToken, setShowToken] = useState(0);
   /* The followings are the states which need to call API */
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [exLink, setExLink] = useState('');
-  const [meta, setMeta] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [exLink, setExLink] = useState("");
+  const [meta, setMeta] = useState("");
   const [totalSupply, setTotalSupply] = useState(0);
   const [own, setOwn] = useState(0);
+
 
   /* Functions */
 
@@ -30,6 +29,14 @@ const Token = () => {
     } else {
       setShowToken(showToken => 0);
     }
+
+    /* set Token (之後會改成用 API 來獲取資訊) */
+    setName((name) => "Token Name 123");
+    setDescription((description) => "Token description 123");
+    setExLink((exLink) => "Token External Link 123");
+    setMeta((meta) => "Token other meta 123");
+    setTotalSupply((totalSupply) => 123);
+    setOwn((own) => 123);
   };
 
   /* Render functions */
@@ -45,23 +52,24 @@ const Token = () => {
 
       {/* if token exists, show the token */}
       <div>
-        {showToken === 1 &&
-                    <div className="container">
-                      {/* Show token metadata if a valid token is provided */}
-                      <div className="row">
-                        <div className="col">
-                                token image
-                        </div>
-                        <div className="col tokenInfo">
-                                Name:  {name} <br />
-                                Description:  {description} <br /><br />
-                                External Link:  {exLink} <br />
-                                Other meta:  {meta} <br /><br />
-                                Total Supply:  {totalSupply} <br />
-                                You owned:  {own}
-                        </div>
-                      </div>
-                    </div>}
+        {showToken === 1 && (
+          <div className="container">
+            {/* Show token metadata if a valid token is provided */}
+            <div className="row">
+              <div className="col">token image</div>
+              <div className="col tokenInfo">
+                Name: {name} <br />
+                Description: {description} <br />
+                <br />
+                External Link: {exLink} <br />
+                Other meta: {meta} <br />
+                <br />
+                Total Supply: {totalSupply} <br />
+                You owned: {own}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

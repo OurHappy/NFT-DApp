@@ -88,34 +88,34 @@ export async function name(contract) {
 }
 
 export async function getContractOwner(contract) {
-  const result = contract.methods.owner().call(res => res);
+  const result = await contract.methods.owner().call((res) => res);
   return result;
 }
 
 export async function ownerOf(contract) {
-  return contract.methods.owner().call();
+  const result = await contract.methods.owner().call();
+  return result;
 }
-export async function balanceOf(address, id) {
-  if (isERC1155(address)) {
-    this.methods.balanceOf(address, id).call((err, res) => {
-      if (err) {
-        console.log("error");
-      } else {
-        return res;
-      }
-    });
-  } else {
-    console.log("error");
-  }
+export async function balanceOf(contract, address, id) {
+  let balance = await contract.methods.balanceOf(address, id).call();
+
+  return balance;
 }
+
 export async function totalSupply(contract, tokenId) {
-  contract.methods.totalSupply(tokenId).call((err, res) => {
-    if (err) {
-      console.log("error");
-    } else {
-      console.log("res", res);
-    }
-  });
+  let supply = await contract.methods.totalSupply(tokenId).call();
+  return supply;
+}
+
+export async function balanceOf721(contract, account) {
+  let balance = await contract.methods.balanceOf(account).call();
+  return balance;
+}
+
+export async function ownerOf721(contract, id) {
+  let owner = await contract.methods.ownerOf(id).call();
+
+  return owner;
 }
 
 // export async function balanceOf() {}

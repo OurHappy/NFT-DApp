@@ -1,0 +1,42 @@
+.contractText {
+  font-size: 1.5rem;
+}
+
+.divClass {
+  // padding: 30px 100px 30px 60px;
+  padding: 1rem 2rem 1rem 0rem;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.container {
+  .contractInfo {
+    background-color: rgb(24, 37, 43);
+    color: rgb(255, 255, 255);
+    padding: 1.5rem;
+    margin: 1rem;
+    border-radius: 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+.addrText {
+  font-size: 25px;
+  color: gray;
+  padding: 15px;
+}
+
+.blueText {
+  color: rgb(104, 185, 255);
+}
+
+.contractpanel {
+  margin: 3rem;
+  font-size: 1.5rem;
+
+  p {
+    font-size: 1rem;
+    margin-top: 1rem;
+    color: gray;
+  }
+}
