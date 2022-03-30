@@ -5,8 +5,9 @@ import { connect, disconnect, on, removeListener } from "../utils/web3Client";
 import { Spinner } from "react-bootstrap";
 import { triggerFocus } from "antd/lib/input/Input";
 import PropTypes from "prop-types";
+import { ContactsOutlined } from "@ant-design/icons";
 
-export const Navbar = () => {
+export const Navbar = (props) => {
   /* States */
   const [isConnect, setIsConnect] = useState(0);
   const [connectText, setConnectText] = useState("Connect");
@@ -19,11 +20,13 @@ export const Navbar = () => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
+      props.accountChange(result.address);
     };
     const handleChainChanged = async (chainId) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
+      props.accountChange(result.address);
     };  
 
     if (isConnect) {
@@ -43,6 +46,7 @@ export const Navbar = () => {
   /* API calls */
 
   /* Functions */
+
   let clickAction = async () => {
     if (isConnect) {
       await disconnect();
@@ -56,14 +60,20 @@ export const Navbar = () => {
       setChainName(result.network);
       setIsConnect(true);
       setConnectText("Disconnect");
-      setConnectState(true);
+      props.accountChange(result.address);
     }
+  };
+
+  let clickMenu = async() => {
+    props.clickChange();
   };
 
   /* Render functions */
   return (
     <Stack direction="horizontal" gap={3} className="navClass">
-      <div id="titleText">OurSong NFT Viewer</div>
+      <div id="titleText" onClick={clickMenu}>
+        OurSong NFT Viewer
+      </div>
       <div className="ms-auto chainBlock">
         {chainName} <br></br>
         <span id="addressText">{address}</span>
@@ -80,5 +90,9 @@ export const Navbar = () => {
 // Navbar.propTypes = {
 //   setConnectState: PropTypes.func.isRequired,
 // };
+Navbar.propTypes = {
+  clickChange: PropTypes.func,
+  accountChange: PropTypes.func,
+};
 
 export default Navbar;

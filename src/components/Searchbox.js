@@ -52,6 +52,7 @@ const Searchbox = (props) => {
             aria-label="Username"
             aria-describedby="basic-addon1"
             onKeyPress={handleKeyPress}
+            onChange={resetStates}
             className={`searchBoxClass ${warnText ? "invalid" : ""}`}
           />
         </InputGroup>

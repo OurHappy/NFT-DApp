@@ -12,7 +12,7 @@ const Panel_ERC721 = ({ contractInstance }) => {
   const [ownerResult, setOwnerResult] = useState("address");
   const [tokenId,setTokenId]=useState(null);
 
-  console.log(contractInstance);
+  // console.log(contractInstance);
   const balanceIdOnChange = (e) => {
     setBalanceId(e.target.value);
   };
@@ -33,7 +33,6 @@ const Panel_ERC721 = ({ contractInstance }) => {
 
   return (
     <div className="contractpanel">
-      <h2>721!</h2>
       <Accordion defaultActiveKey={["0"]} alwaysOpen>
         <Accordion.Item eventKey="0">
           <Accordion.Header>balanceOf</Accordion.Header>

@@ -3,6 +3,7 @@ import Token from "./Token";
 import PropTypes from "prop-types";
 import { makeContract } from "../utils/web3Client";
 import { getContractOwner, name, symbol } from "../utils/contract";
+import { getContractMeta } from "../utils/contract";
 // import { Icon, message } from 'antd';
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
 import { Card } from "react-bootstrap";
@@ -11,15 +12,18 @@ import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
 // import './styleContract.css';
 
-const ContractPanel = ({ contractAddress }) => {
+const ContractPanel = ({ contractAddress, accountAddress }) => {
+  /* Variables */
+  let contractMeta = null;
+
   /* States */
   /* The followings are the states which need to call API */
   const [contractName, setContractName] = useState("test Name");
   const [contractSymbol, setContractSymbol] = useState("test symbol");
   const [contractOwner, setContractOwner] = useState("test Owner");
-  const [exteralName, setExternalName] = useState("");
-  const [externalDescipt, setExternalDescript] = useState("");
-  const [externalLink, setExternalLink] = useState("External Link");
+  const [exteralName, setExternalName] = useState("No External Name");
+  const [externalDescipt, setExternalDescript] = useState("No External Description");
+  const [externalLink, setExternalLink] = useState("No External Link");
   const [contractType, setContractType] = useState(null);
   const [contractInstance, setContractInstance] = useState("contract");
 
@@ -53,6 +57,15 @@ const ContractPanel = ({ contractAddress }) => {
       setContractType("ERC721");
     } else {
     }
+
+    contractMeta = getContractMeta(contract);
+    if (contractMeta != null) {
+      contractMeta.then((meta) => {
+        setExternalName(meta.name);
+        setExternalDescript(meta.description);
+        setExternalLink(meta.external_url);
+      });
+    }
   };
 
   const clickToCopy = () => {
@@ -75,7 +88,7 @@ const ContractPanel = ({ contractAddress }) => {
   /* Render Function */
   return (
     <div>
-      <Token />
+      <Token contractAddr={contractAddress} accountAddr={accountAddress} />
       {/* Show the contract and  you can copy it */}
       <div className="divClass">
         <span className="contractText">Contract:</span>
@@ -109,6 +122,7 @@ const ContractPanel = ({ contractAddress }) => {
 
 ContractPanel.propTypes = {
   contractAddress: PropTypes.string.isRequired,
+  accountAddress: PropTypes.string.isRequired,
 };
 
 export default ContractPanel;

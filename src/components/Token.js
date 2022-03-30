@@ -1,54 +1,112 @@
 import React, { useState } from 'react';
 import { getTokenMeta } from "../utils/contract";
 import { makeContract } from '../utils/web3Client';
+import { FormControl } from "react-bootstrap";
+import { InputGroup } from "react-bootstrap";
+import PropTypes from "prop-types";
+import { balanceOf721 } from "../utils/contract";
+import { balanceOf, totalSupply } from "../utils/contract";
 
-const Token = () => {
+const Token = (props) => {
+  /* Variables */
+  const contractAddress = props.contractAddr;
+  const accountAddress = props.accountAddr;
+  let contractType, contractInstance;
+  let tokenMeta = null;
+  
   /* States */
   const [showToken, setShowToken] = useState(0);
   /* The followings are the states which need to call API */
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [exLink, setExLink] = useState("");
-  const [meta, setMeta] = useState("");
-  const [totalSupply, setTotalSupply] = useState(0);
+  const [name, setName] = useState("None");
+  const [description, setDescription] = useState("None");
+  const [exLink, setExLink] = useState("None");
+  const [meta, setMeta] = useState("None");
+  const [supply, setSupply] = useState(0);
   const [own, setOwn] = useState(0);
-
+  const [img, setImg] = useState("");
+  const [is1155, setIs1155] = useState(false);
 
   /* Functions */
-
-  // to see whether it is a valid token
-  // 之後會改成 token 是否存在的 API，這邊測試是 token「123」存在
-  let tokenValid = (ID) => {
-    if (ID === "123") return true;
-    else return false;
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") searchToken(event);
   };
 
-  let searchToken = (event) => {
-    if (tokenValid(event.target.value)) {
-      setShowToken(showToken => 1);
-    } else {
-      setShowToken(showToken => 0);
-    }
+  const resetStates = () => {
+    setShowToken(0);
+  };
 
-    /* set Token (之後會改成用 API 來獲取資訊) */
-    setName((name) => "Token Name 123");
-    setDescription((description) => "Token description 123");
-    setExLink((exLink) => "Token External Link 123");
-    setMeta((meta) => "Token other meta 123");
-    setTotalSupply((totalSupply) => 123);
-    setOwn((own) => 123);
+  // build token meta data
+  let showTokenMeta = async (tokenMeta, tokenId) => {
+    const defaultType = ["id", "name", "description", "external_url", "image"];
+    for (let [key, value] of Object.entries(tokenMeta)) {
+      if (defaultType.includes(key)) {
+        if (key === "name") setName(value);
+        else if (key === "description") setDescription(value);
+        else if (key === "external_url") setExLink(value);
+        else if (key === "image") setImg(value);
+      } else {
+        setMeta(value);
+      }
+    }
+    
+    if (contractType === "ERC1155") {
+      let supplyResult = totalSupply(contractInstance, tokenId);
+      supplyResult.then((msg) => setSupply(msg));
+
+      let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
+      ownResult.then((msg) => setOwn(msg));
+
+      // only 1155 can see the token's total supply
+      setIs1155(true);
+
+    } else if (contractType === "ERC721") {
+      let ownResult = balanceOf721(contractInstance, accountAddress);
+      ownResult.then((msg) => setOwn(msg));
+    }
+  };
+
+  // to see whether it is a valid token
+  let tokenValid = async (ID) => {
+    let { contractInterface, contract } = await makeContract(contractAddress);
+    contractType = contractInterface;
+    contractInstance = contract;
+
+    tokenMeta = await getTokenMeta(contract, ID);
+    if (tokenMeta === null) {
+      console.log("Fail to catch token meta data...");
+      return false;
+    } else {
+      showTokenMeta(tokenMeta, ID);    
+      return true;
+    }
+  };
+
+  let searchToken = async (event) => {
+    let val = await tokenValid(event.target.value);
+    if (val) {
+      setShowToken(1);
+    } else {
+      setShowToken(0);
+    }
   };
 
   /* Render functions */
   return (
     <div className="divClass">
-      <span className="tokenText">Token:</span>
-      <input
-        type="search"
-        placeholder="Token ID"
-        onChange={searchToken}
-        className="tokenSearchClass"
-      />
+      <div>
+        <span className="tokenText">Token:</span>
+
+        <InputGroup className="searchbar">
+          <FormControl
+            placeholder="Token ID"
+            aria-label="Token ID"
+            onKeyPress={handleKeyPress}
+            onChange={resetStates}
+            className="tokenSearchClass"
+          />
+        </InputGroup>
+      </div>
+      
 
       {/* if token exists, show the token */}
       <div>
@@ -56,7 +114,7 @@ const Token = () => {
           <div className="container">
             {/* Show token metadata if a valid token is provided */}
             <div className="row">
-              <div className="col">token image</div>
+              {<img src={img} className="col tokenImg"></img>}
               <div className="col tokenInfo">
                 Name: {name} <br />
                 Description: {description} <br />
@@ -64,7 +122,9 @@ const Token = () => {
                 External Link: {exLink} <br />
                 Other meta: {meta} <br />
                 <br />
-                Total Supply: {totalSupply} <br />
+                {is1155 && 
+                  (<p>Total Supply: {supply}</p>)
+                }
                 You owned: {own}
               </div>
             </div>
@@ -73,6 +133,11 @@ const Token = () => {
       </div>
     </div>
   );
+};
+
+Token.propTypes = {
+  contractAddr: PropTypes.string.isRequired,
+  accountAddr: PropTypes.string.isRequired,
 };
 
 export default Token;

@@ -1,6 +1,7 @@
 import sample1155Meta from './sample1155TokenMeta.json';
 import sample721Meta from './sample721TokenMeta.json';
 import sampleOurSong1155ContractMeta from './sampleOurSong1155ContractMeta.json';
+import sampleOurSong721ContractMeta from './sampleOurSong721ContractMeta.json';
 import axios from 'axios';
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
@@ -24,21 +25,7 @@ export async function getTokenMeta(contract, tokenId) {
     tokenURI = tokenURI.replace("{id}", tokenIdNew);
     console.log(tokenURI);
 
-    await axios.get(tokenURI, {
-      headers: {
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Origin": "*",
-      },
-      responseType: "json",
-    }).then((res) => {
-      return res;
-    }).catch((err) => {
-      console.log(err);
-      return sample1155Meta;
-    });
-  } else if (ERC721) {
-    let tokenURI = await contract.methods.tokenURI(tokenId).call();
-    console.log(tokenURI);
+    return sample1155Meta;  // for test, return sample 1155 token (because of CORS policy error)
 
     await axios.get(tokenURI, {
       headers: {
@@ -50,16 +37,73 @@ export async function getTokenMeta(contract, tokenId) {
       return res;
     }).catch((err) => {
       console.log(err);
-      return sample721Meta;
+      return null;
+    });
+  } else if (ERC721) {
+    let tokenURI = await contract.methods.tokenURI(tokenId).call();
+    console.log(tokenURI);
+    return sample721Meta;  // for test, return sample 721 token (because of CORS policy error)
+
+    await axios.get(tokenURI, {
+      headers: {
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Origin": "*",
+      },
+      responseType: "json",
+    }).then((res) => {
+      return res;
+    }).catch((err) => {
+      console.log(err);
+      return null;
     });
   }
 }
 
 export async function getContractMeta(contract) {
-  return sampleOurSong1155ContractMeta;
-  // let contractURI = await contract.methods.contractURI().call((err, res) => {
-  //   return res;
-  // });
+  let ERC1155 = await isERC1155(contract);
+  let ERC721 = await isERC721(contract);
+  let contractUri;
+
+  await contract.methods.contractURI().call((err, res) => {
+    if (err) {
+      console.log(err);
+      return null;
+    }
+    contractUri = res;
+  });
+  console.log(contractUri);
+
+  if (ERC1155) {
+    return sampleOurSong1155ContractMeta; // for test, return sample 1155 contract meta (because of CORS policy error)
+
+    await axios.get(contractUri, {
+      headers: {
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Origin": "*",
+      },
+      responseType: "json",
+    }).then((res) => {
+      return res;
+    }).catch((err) => {
+      console.log(err);
+      return null;
+    });
+  } else if (ERC721) {
+    return sampleOurSong721ContractMeta;  // for test, return sample 721 contract meta (because of CORS policy error)
+
+    await axios.get(contractUri, {
+      headers: {
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Origin": "*",
+      },
+      responseType: "json",
+    }).then((res) => {
+      return res;
+    }).catch((err) => {
+      console.log(err);
+      return null;
+    });
+  }
 }
 
 export async function isERC721(contract) {
@@ -117,6 +161,12 @@ export async function ownerOf721(contract, id) {
 
   return owner;
 }
+
+// export async function totalSupply721(contract) {
+//   let supply = await contract.methods.totalSupply().call();
+//   console.log(supply);
+//   return supply;
+// }
 
 // export async function balanceOf() {}
 
