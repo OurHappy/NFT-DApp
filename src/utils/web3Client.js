@@ -29,13 +29,12 @@ export async function disconnect() {
   // TODO: implement disconnect function
   await provider.request({
     method: "eth_requestAccounts",
-    params: [{eth_accounts: {}}]
+    params: [{ eth_accounts: {} }],
   });
   return true;
 }
 
 export async function connect() {
-  
   let address = await web3.eth.requestAccounts();
   let balance = await web3.eth.getBalance(address[0]);
 
@@ -75,7 +74,7 @@ export async function connect() {
 
   return {
     address: address[0],
-    network: networkName
+    network: networkName,
   };
 }
 
@@ -91,7 +90,7 @@ export function isContractAddress(address) {
   return web3.utils.isAddress(address);
 }
 
-export async function makeContract(contractAddress) {
+export async function makeContract(contractAddress, fromAddress) {
   let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
 
   let ERC1155 = await isERC1155(contract);
@@ -99,18 +98,22 @@ export async function makeContract(contractAddress) {
 
   if (ERC1155) {
     return {
-      contractInterface: 'ERC1155',
-      contract: new web3.eth.Contract(OurSong1155Interface, contractAddress)
+      contractInterface: "ERC1155",
+      contract: new web3.eth.Contract(OurSong1155Interface, contractAddress, {
+        from: fromAddress,
+      }),
     };
   } else if (ERC721) {
     return {
-      contractInterface: 'ERC721',
-      contract: new web3.eth.Contract(OurSong721Interface, contractAddress)
+      contractInterface: "ERC721",
+      contract: new web3.eth.Contract(OurSong721Interface, contractAddress, {
+        from: fromAddress,
+      }),
     };
   } else {
     return {
-      contractInterface: 'unsupport_contract',
-      contract: null
+      contractInterface: "unsupport_contract",
+      contract: null,
     };
     // throw new Error('unsupport contract type');
   }

@@ -5,13 +5,11 @@ import { makeContract } from "../utils/web3Client";
 import { getContractOwner, name, symbol } from "../utils/contract";
 // import { Icon, message } from 'antd';
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
-import { Card } from "react-bootstrap";
-import { Button } from "bootstrap";
 import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
 // import './styleContract.css';
 
-const ContractPanel = ({ contractAddress }) => {
+const ContractPanel = ({ contractAddress, userAddress }) => {
   /* States */
   /* The followings are the states which need to call API */
   const [contractName, setContractName] = useState("test Name");
@@ -29,7 +27,10 @@ const ContractPanel = ({ contractAddress }) => {
 
   /* Functions */
   const getContractData = async () => {
-    let { contractInterface, contract } = await makeContract(contractAddress);
+    let { contractInterface, contract } = await makeContract(
+      contractAddress,
+      userAddress
+    );
     setContractInstance(contract);
     if (contractInterface === "ERC1155") {
       const [parsedName, parsedSymbol, parsedOwner] = await Promise.all([
@@ -69,7 +70,7 @@ const ContractPanel = ({ contractAddress }) => {
   if (contractType === "ERC721") {
     panel = <Panel_ERC721 contractInstance={contractInstance} />;
   } else if (contractType === "ERC1155") {
-    panel = <Panel_ERC1155  contractInstance={contractInstance} />;
+    panel = <Panel_ERC1155 contractInstance={contractInstance} />;
   }
 
   /* Render Function */
@@ -109,6 +110,7 @@ const ContractPanel = ({ contractAddress }) => {
 
 ContractPanel.propTypes = {
   contractAddress: PropTypes.string.isRequired,
+  userAddress: PropTypes.string.isRequired,
 };
 
 export default ContractPanel;

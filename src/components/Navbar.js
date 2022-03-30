@@ -6,7 +6,7 @@ import { Spinner } from "react-bootstrap";
 import { triggerFocus } from "antd/lib/input/Input";
 import PropTypes from "prop-types";
 
-export const Navbar = () => {
+export const Navbar = ({setUserAddress}) => {
   /* States */
   const [isConnect, setIsConnect] = useState(0);
   const [connectText, setConnectText] = useState("Connect");
@@ -19,23 +19,24 @@ export const Navbar = () => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
+      setUserAddress(result.address);
     };
     const handleChainChanged = async (chainId) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-    };  
+    };
 
     if (isConnect) {
-      on('accountsChanged', handleAccountsChanged);
-      on('chainChanged', handleChainChanged);
+      on("accountsChanged", handleAccountsChanged);
+      on("chainChanged", handleChainChanged);
     }
 
     // remove the listener when finishing listening
     return () => {
       if (isConnect) {
-        removeListener('accountsChanged', handleAccountsChanged);
-        removeListener('chainChanged', handleChainChanged);
+        removeListener("accountsChanged", handleAccountsChanged);
+        removeListener("chainChanged", handleChainChanged);
       }
     };
   }, [isConnect]);
@@ -56,7 +57,7 @@ export const Navbar = () => {
       setChainName(result.network);
       setIsConnect(true);
       setConnectText("Disconnect");
-      setConnectState(true);
+      setUserAddress(result.address);
     }
   };
 
@@ -77,8 +78,8 @@ export const Navbar = () => {
   );
 };
 
-// Navbar.propTypes = {
-//   setConnectState: PropTypes.func.isRequired,
-// };
+Navbar.propTypes = {
+  setUserAddress: PropTypes.func.isRequired,
+};
 
 export default Navbar;
