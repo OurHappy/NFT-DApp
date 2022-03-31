@@ -1,7 +1,7 @@
-import sample1155Meta from './sample1155TokenMeta.json';
-import sample721Meta from './sample721TokenMeta.json';
-import sampleOurSong1155ContractMeta from './sampleOurSong1155ContractMeta.json';
-import axios from 'axios';
+import sample1155Meta from "./sample1155TokenMeta.json";
+import sample721Meta from "./sample721TokenMeta.json";
+import sampleOurSong1155ContractMeta from "./sampleOurSong1155ContractMeta.json";
+import axios from "axios";
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
@@ -16,7 +16,7 @@ export async function getTokenMeta(contract, tokenId) {
     /* replace the {id} with the actual token ID in lowercase,
        and leading zero padded to 64 hex characters
     */
-    let tokenIdNew = (Number(tokenId).toString(16)).toLowerCase();
+    let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
     let zeroNum = 64 - tokenIdNew.length;
     for (let i = 0; i < zeroNum; i++) {
       tokenIdNew = "0" + tokenIdNew;
@@ -24,34 +24,40 @@ export async function getTokenMeta(contract, tokenId) {
     tokenURI = tokenURI.replace("{id}", tokenIdNew);
     console.log(tokenURI);
 
-    await axios.get(tokenURI, {
-      headers: {
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Origin": "*",
-      },
-      responseType: "json",
-    }).then((res) => {
-      return res;
-    }).catch((err) => {
-      console.log(err);
-      return sample1155Meta;
-    });
+    await axios
+      .get(tokenURI, {
+        headers: {
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+        },
+        responseType: "json",
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        return sample1155Meta;
+      });
   } else if (ERC721) {
     let tokenURI = await contract.methods.tokenURI(tokenId).call();
     console.log(tokenURI);
 
-    await axios.get(tokenURI, {
-      headers: {
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Origin": "*",
-      },
-      responseType: "json",
-    }).then((res) => {
-      return res;
-    }).catch((err) => {
-      console.log(err);
-      return sample721Meta;
-    });
+    await axios
+      .get(tokenURI, {
+        headers: {
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+        },
+        responseType: "json",
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        return sample721Meta;
+      });
   }
 }
 
@@ -76,15 +82,38 @@ export async function isERC1155(contract) {
   return result;
 }
 
-export async function burn() {}
-export async function transfer() {}
+export async function burn(contract, account, id, amount) {
+  let result = await contract.methods.burn(account, id, amount).send();
+
+  return result;
+}
+export async function transfer(contract, from, to, id, amount, data) {
+  let result = await contract.methods
+    .safeTransferFrom(from, to, id, amount, data)
+    .send();
+
+  return result;
+}
+
+export async function brun721token(contract, id) {
+  let result = await contract.methods.burn(id).send();
+  return result;
+}
+export async function transfer721token(contract, fromAddress, toAddress, id) {
+  let result = await contract.methods
+    .transferFrom(fromAddress, toAddress, id)
+    .send();
+  return result;
+}
 
 export async function symbol(contract) {
-  return contract.methods.symbol().call();
+  let symbol = await contract.methods.symbol().call();
+  return symbol;
 }
 
 export async function name(contract) {
-  return contract.methods.name().call();
+  let name = await contract.methods.name().call();
+  return name;
 }
 
 export async function getContractOwner(contract) {
@@ -98,7 +127,6 @@ export async function ownerOf(contract) {
 }
 export async function balanceOf(contract, address, id) {
   let balance = await contract.methods.balanceOf(address, id).call();
-
   return balance;
 }
 
@@ -114,7 +142,6 @@ export async function balanceOf721(contract, account) {
 
 export async function ownerOf721(contract, id) {
   let owner = await contract.methods.ownerOf(id).call();
-
   return owner;
 }
 

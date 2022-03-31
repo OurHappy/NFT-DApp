@@ -17,6 +17,7 @@ function App() {
   const [isContract, setIsContract] = useState(0);
   const [address, setAddress] = useState("test");
   const [providerExist, setProviderExist] = useState(false);
+  const [userAddress, setUserAddress] = useState(null);
 
   useEffect(() => {
     initApp();
@@ -49,7 +50,7 @@ function App() {
       <Fragment>
         <div className="App">
           {/* TODO: handle when app is at 'no_provider' state */}
-          <Navbar />
+          <Navbar setUserAddress={setUserAddress}/>
 
           <Routes>
             {isContract === 0 && providerExist && (
@@ -63,7 +64,12 @@ function App() {
               <Route
                 exact
                 path="/"
-                element={<ContractPanel contractAddress={address} />}
+                element={
+                  <ContractPanel
+                    contractAddress={address}
+                    userAddress={userAddress}
+                  />
+                }
               />
             )}
             {!providerExist && (
