@@ -57,7 +57,6 @@ function App() {
     <Router>
       <Fragment>
         <div className="App">
-          {/* TODO: handle when app is at 'no_provider' state */}
           <Navbar clickChange={clickMenuAction} setUserAddress={setUserAddress} />
 
           <Routes>

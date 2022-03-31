@@ -10,7 +10,7 @@ import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
 // import './styleContract.css';
 
-const const ContractPanel = ({ contractAddress, userAddress }) => {
+const ContractPanel = ({ contractAddress, userAddress }) => {
   /* Variables */
   let contractMeta = null;
   
