@@ -44,13 +44,21 @@ function App() {
     setAddress(addr);
   };
 
+  const clickMenuAction = () => {
+    setIsContract(0);
+  };
+
+  const accountAction = (accountAddr) => {
+    setAccount(accountAddr);
+  };
+
   /* Render Function */
   return (
     <Router>
       <Fragment>
         <div className="App">
           {/* TODO: handle when app is at 'no_provider' state */}
-          <Navbar setUserAddress={setUserAddress}/>
+          <Navbar clickChange={clickMenuAction} setUserAddress={setUserAddress} />
 
           <Routes>
             {isContract === 0 && providerExist && (

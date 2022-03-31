@@ -5,8 +5,10 @@ import { connect, disconnect, on, removeListener } from "../utils/web3Client";
 import { Spinner } from "react-bootstrap";
 import { triggerFocus } from "antd/lib/input/Input";
 import PropTypes from "prop-types";
+import { ContactsOutlined } from "@ant-design/icons";
 
-export const Navbar = ({setUserAddress}) => {
+export const Navbar = (props) => {
+  const { setUserAddress } = props;
   /* States */
   const [isConnect, setIsConnect] = useState(0);
   const [connectText, setConnectText] = useState("Connect");
@@ -25,7 +27,8 @@ export const Navbar = ({setUserAddress}) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-    };
+      setUserAddress(result.address);
+    };  
 
     if (isConnect) {
       on("accountsChanged", handleAccountsChanged);
@@ -44,6 +47,7 @@ export const Navbar = ({setUserAddress}) => {
   /* API calls */
 
   /* Functions */
+
   let clickAction = async () => {
     if (isConnect) {
       await disconnect();
@@ -61,10 +65,16 @@ export const Navbar = ({setUserAddress}) => {
     }
   };
 
+  let clickMenu = async() => {
+    props.clickChange();
+  };
+
   /* Render functions */
   return (
     <Stack direction="horizontal" gap={3} className="navClass">
-      <div id="titleText">OurSong NFT Viewer</div>
+      <div id="titleText" onClick={clickMenu}>
+        OurSong NFT Viewer
+      </div>
       <div className="ms-auto chainBlock">
         {chainName} <br></br>
         <span id="addressText">{address}</span>
@@ -79,6 +89,7 @@ export const Navbar = ({setUserAddress}) => {
 };
 
 Navbar.propTypes = {
+  clickChange: PropTypes.func,
   setUserAddress: PropTypes.func.isRequired,
 };
 

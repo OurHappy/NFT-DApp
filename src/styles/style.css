@@ -64,6 +64,10 @@
   font-size: 2rem;
 }
 
+.navClass #titleText:hover {
+  color: #89a8bb;
+}
+
 .navClass button {
   margin: 0rem 2rem;
 }
@@ -143,5 +147,17 @@
   margin: 20px;
   border-radius: 10px;
   font-size: 15px;
+}
+
+.tokenImg {
+  width: 40%;
+  padding: 10px;
+  margin: 10px;
+}
+
+.tokenImgAdapt {
+  width: 50px;
+  padding: 40px;
+  margin: 40px;
 }
 /*# sourceMappingURL=style.css.map */
