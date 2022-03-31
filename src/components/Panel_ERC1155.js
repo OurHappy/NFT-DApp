@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import {
-  InputGroup,
-  FormControl,
-  Accordion,
-  Button,
-} from "react-bootstrap";
-import { balanceOf, totalSupply } from "../utils/contract";
+import { InputGroup, FormControl, Accordion, Button } from "react-bootstrap";
+import { balanceOf, totalSupply, burn, transfer } from "../utils/contract";
 import PropTypes from "prop-types";
 
 const Panel_ERC1155 = ({ contractInstance }) => {
@@ -13,8 +8,18 @@ const Panel_ERC1155 = ({ contractInstance }) => {
   const [balanceId, setBalanceid] = useState(null);
   const [supplyId, setSupplyId] = useState(null);
   const [uriId, setUriId] = useState(null);
+  const [burnAccount, setBurnAccount] = useState("unit256");
+  const [burnId, setBurnId] = useState("uint256");
+  const [burnAmount, setBurnAmount] = useState("uint256");
+  const [transferFrom, setTransferFrom] = useState();
+  const [transferTo, setTransferTo] = useState();
+  const [transferId, setTransferId] = useState();
+  const [transferAmount, setTransferAmount] = useState();
+  const [transferData, setTransderData] = useState();
   const [supplyResult, setSupplyResult] = useState("unit256");
   const [balanceResult, setBalanceResult] = useState("unit256");
+  const [burnResult, setBurnresult] = useState("result");
+  const [transferResult, setTransferResult] = useState("result");
 
   const balanceAccountOnChange = (e) => {
     setBalanceAccount(e.target.value);
@@ -32,6 +37,38 @@ const Panel_ERC1155 = ({ contractInstance }) => {
     setUriId(e.target.value);
   };
 
+  const burnAccountOnChange = (e) => {
+    setBurnAccount(e.target.value);
+  };
+
+  const burnIdOnChange = (e) => {
+    setBurnId(e.target.value);
+  };
+
+  const burnAmountOnChange = (e) => {
+    setBurnAmount(e.target.value);
+  };
+
+  const transferFromOnChange = (e) => {
+    setTransferFrom(e.target.value);
+  };
+
+  const transferToOnChange = (e) => {
+    setTransferTo(e.target.value);
+  };
+
+  const transferIdOnChange = (e) => {
+    setTransferId(e.target.value);
+  };
+
+  const transferAmountOnChange = (e) => {
+    setTransferAmount(e.target.value);
+  };
+
+  const transferDataOnChange = (e) => {
+    setTransderData(e.target.value);
+  };
+
   const querySupply = () => {
     let result = totalSupply(contractInstance, supplyId);
     result.then((msg) => setSupplyResult(msg));
@@ -44,6 +81,25 @@ const Panel_ERC1155 = ({ contractInstance }) => {
 
   const queryUri = () => {
     //get token uri
+  };
+
+  const burnToken = () => {
+    let result = burn(contractInstance, burnAccount, burnId, burnAmount);
+    result.then((msg) => setBurnresult(msg.transactionHash));
+    result.catch(setBurnresult("transaction rejected"));
+  };
+
+  const transferToken = () => {
+    let result = transfer(
+      contractInstance,
+      transferFrom,
+      transferTo,
+      transferId,
+      transferAmount,
+      transferData
+    );
+    result.then((msg) => setTransferResult(msg.transactionHash));
+    result.catch(setTransferResult("transaction rejected"));
   };
 
   return (
@@ -116,7 +172,97 @@ const Panel_ERC1155 = ({ contractInstance }) => {
               <Button variant="primary" onClick={queryUri}>
                 Query
               </Button>{" "}
-              <p className="result">{supplyResult}</p>
+              <p className="result">{}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="3">
+          <Accordion.Header>burn</Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="account(address)"
+                    aria-label="account(address)"
+                    aria-describedby="basic-addon1"
+                    onChange={burnAccountOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="id(uint256)"
+                    aria-label="id(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={burnIdOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="valeu(uint256)"
+                    aria-label="value(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={burnAmountOnChange}
+                  />
+                </InputGroup>
+              </>
+              <Button variant="primary" onClick={burnToken}>
+                burn
+              </Button>{" "}
+              <p className="result">{burnResult}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="4">
+          <Accordion.Header>transfer</Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="from(address)"
+                    aria-label="<input>(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={transferFromOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="to(address)"
+                    aria-label="<input>(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={transferToOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="id(uint256)"
+                    aria-label="<input>(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={transferIdOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="amount(uint256)"
+                    aria-label="<input>(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={transferAmountOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="data(bytes)"
+                    aria-label="<input>(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={transferDataOnChange}
+                  />
+                </InputGroup>
+              </>
+              <Button variant="primary" onClick={transferToken}>
+                transfer
+              </Button>{" "}
+              <p className="result">{transferResult}</p>
             </div>
           </Accordion.Body>
         </Accordion.Item>

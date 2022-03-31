@@ -8,6 +8,7 @@ import PropTypes from "prop-types";
 import { ContactsOutlined } from "@ant-design/icons";
 
 export const Navbar = (props) => {
+  const { setUserAddress } = props;
   /* States */
   const [isConnect, setIsConnect] = useState(0);
   const [connectText, setConnectText] = useState("Connect");
@@ -20,25 +21,25 @@ export const Navbar = (props) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-      props.accountChange(result.address);
+      setUserAddress(result.address);
     };
     const handleChainChanged = async (chainId) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-      props.accountChange(result.address);
+      setUserAddress(result.address);
     };  
 
     if (isConnect) {
-      on('accountsChanged', handleAccountsChanged);
-      on('chainChanged', handleChainChanged);
+      on("accountsChanged", handleAccountsChanged);
+      on("chainChanged", handleChainChanged);
     }
 
     // remove the listener when finishing listening
     return () => {
       if (isConnect) {
-        removeListener('accountsChanged', handleAccountsChanged);
-        removeListener('chainChanged', handleChainChanged);
+        removeListener("accountsChanged", handleAccountsChanged);
+        removeListener("chainChanged", handleChainChanged);
       }
     };
   }, [isConnect]);
@@ -60,7 +61,7 @@ export const Navbar = (props) => {
       setChainName(result.network);
       setIsConnect(true);
       setConnectText("Disconnect");
-      props.accountChange(result.address);
+      setUserAddress(result.address);
     }
   };
 
@@ -87,12 +88,9 @@ export const Navbar = (props) => {
   );
 };
 
-// Navbar.propTypes = {
-//   setConnectState: PropTypes.func.isRequired,
-// };
 Navbar.propTypes = {
   clickChange: PropTypes.func,
-  accountChange: PropTypes.func,
+  setUserAddress: PropTypes.func.isRequired,
 };
 
 export default Navbar;

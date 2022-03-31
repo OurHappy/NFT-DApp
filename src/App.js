@@ -17,7 +17,7 @@ function App() {
   const [isContract, setIsContract] = useState(0);
   const [address, setAddress] = useState("test");
   const [providerExist, setProviderExist] = useState(false);
-  const [account, setAccount] = useState(null);
+  const [userAddress, setUserAddress] = useState(null);
 
   useEffect(() => {
     initApp();
@@ -57,7 +57,8 @@ function App() {
     <Router>
       <Fragment>
         <div className="App">
-          <Navbar clickChange={clickMenuAction} accountChange={accountAction} />
+          {/* TODO: handle when app is at 'no_provider' state */}
+          <Navbar clickChange={clickMenuAction} setUserAddress={setUserAddress} />
 
           <Routes>
             {isContract === 0 && providerExist && (
@@ -71,7 +72,12 @@ function App() {
               <Route
                 exact
                 path="/"
-                element={<ContractPanel contractAddress={address} accountAddress={account}/>}
+                element={
+                  <ContractPanel
+                    contractAddress={address}
+                    userAddress={userAddress}
+                  />
+                }
               />
             )}
             {!providerExist && (
