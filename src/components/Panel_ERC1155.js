@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { InputGroup, FormControl, Accordion, Button } from "react-bootstrap";
-import { balanceOf, totalSupply, burn, transfer } from "../utils/contract";
+import { balanceOf, totalSupply, burn, transfer, uri } from "../utils/contract";
 import PropTypes from "prop-types";
 
-const Panel_ERC1155 = ({ contractInstance }) => {
+const Panel_ERC1155 = ({ contractInstance, userAddress }) => {
   const [balanceAccount, setBalanceAccount] = useState(null);
   const [balanceId, setBalanceid] = useState(null);
   const [supplyId, setSupplyId] = useState(null);
   const [uriId, setUriId] = useState(null);
+  const [uriResult, setUriResult] = useState();
   const [burnAccount, setBurnAccount] = useState("unit256");
   const [burnId, setBurnId] = useState("uint256");
   const [burnAmount, setBurnAmount] = useState("uint256");
@@ -80,11 +81,19 @@ const Panel_ERC1155 = ({ contractInstance }) => {
   };
 
   const queryUri = () => {
-    //get token uri
+    let result = uri(contractInstance, uriId);
+    result.then((msg) => setUriResult(msg));
+    console.log(contractInstance);
   };
 
   const burnToken = () => {
-    let result = burn(contractInstance, burnAccount, burnId, burnAmount);
+    let result = burn(
+      contractInstance,
+      burnAccount,
+      burnId,
+      burnAmount,
+      userAddress
+    );
     result.then((msg) => setBurnresult(msg.transactionHash));
     result.catch(setBurnresult("transaction rejected"));
   };
@@ -96,7 +105,8 @@ const Panel_ERC1155 = ({ contractInstance }) => {
       transferTo,
       transferId,
       transferAmount,
-      transferData
+      transferData,
+      userAddress
     );
     result.then((msg) => setTransferResult(msg.transactionHash));
     result.catch(setTransferResult("transaction rejected"));
@@ -104,7 +114,7 @@ const Panel_ERC1155 = ({ contractInstance }) => {
 
   return (
     <div className="contractpanel">
-      <Accordion defaultActiveKey={["0"]} alwaysOpen>
+      <Accordion>
         <Accordion.Item eventKey="0">
           <Accordion.Header>balanceOf</Accordion.Header>
           <Accordion.Body>
@@ -172,7 +182,7 @@ const Panel_ERC1155 = ({ contractInstance }) => {
               <Button variant="primary" onClick={queryUri}>
                 Query
               </Button>{" "}
-              <p className="result">{}</p>
+              <p className="result">{uriResult}</p>
             </div>
           </Accordion.Body>
         </Accordion.Item>
@@ -273,6 +283,7 @@ const Panel_ERC1155 = ({ contractInstance }) => {
 
 Panel_ERC1155.propTypes = {
   contractInstance: PropTypes.object.isRequired,
+  userAddress: PropTypes.string.isRequired,
 };
 
 export default Panel_ERC1155;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { getTokenMeta } from "../utils/contract";
-import { makeContract } from '../utils/web3Client';
+import { makeContract } from "../utils/web3Client";
 import { FormControl } from "react-bootstrap";
 import { InputGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
@@ -13,7 +13,7 @@ const Token = (props) => {
   const accountAddress = props.accountAddr;
   let contractType, contractInstance;
   let tokenMeta = null;
-  
+
   /* States */
   const [showToken, setShowToken] = useState(0);
   /* The followings are the states which need to call API */
@@ -43,12 +43,13 @@ const Token = (props) => {
         if (key === "name") setName(value);
         else if (key === "description") setDescription(value);
         else if (key === "external_url") setExLink(value);
-        else if (key === "image") setImg(value);
+        else if (key === "image")
+          setImg(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
       } else {
-        setMeta(value);
+        setMeta(...value);
       }
     }
-    
+
     if (contractType === "ERC1155") {
       let supplyResult = totalSupply(contractInstance, tokenId);
       supplyResult.then((msg) => setSupply(msg));
@@ -58,7 +59,6 @@ const Token = (props) => {
 
       // only 1155 can see the token's total supply
       setIs1155(true);
-
     } else if (contractType === "ERC721") {
       let ownResult = balanceOf721(contractInstance, accountAddress);
       ownResult.then((msg) => setOwn(msg));
@@ -76,7 +76,7 @@ const Token = (props) => {
       console.log("Fail to catch token meta data...");
       return false;
     } else {
-      showTokenMeta(tokenMeta, ID);    
+      showTokenMeta(tokenMeta, ID);
       return true;
     }
   };
@@ -106,7 +106,6 @@ const Token = (props) => {
           />
         </InputGroup>
       </div>
-      
 
       {/* if token exists, show the token */}
       <div>
@@ -120,11 +119,9 @@ const Token = (props) => {
                 Description: {description} <br />
                 <br />
                 External Link: {exLink} <br />
-                Other meta: {meta} <br />
+                {/* Other meta: {meta} <br /> */}
                 <br />
-                {is1155 && 
-                  (<p>Total Supply: {supply}</p>)
-                }
+                {is1155 && <p>Total Supply: {supply}</p>}
                 You owned: {own}
               </div>
             </div>

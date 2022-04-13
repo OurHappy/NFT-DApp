@@ -13,14 +13,16 @@ import Panel_ERC721 from "./Panel_ERC721";
 const ContractPanel = ({ contractAddress, userAddress }) => {
   /* Variables */
   let contractMeta = null;
-  
+
   /* States */
   /* The followings are the states which need to call API */
   const [contractName, setContractName] = useState("test Name");
   const [contractSymbol, setContractSymbol] = useState("test symbol");
   const [contractOwner, setContractOwner] = useState("test Owner");
   const [exteralName, setExternalName] = useState("No External Name");
-  const [externalDescipt, setExternalDescript] = useState("No External Description");
+  const [externalDescipt, setExternalDescript] = useState(
+    "No External Description"
+  );
   const [externalLink, setExternalLink] = useState("No External Link");
   const [contractType, setContractType] = useState(null);
   const [contractInstance, setContractInstance] = useState("contract");
@@ -81,9 +83,19 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
 
   let panel;
   if (contractType === "ERC721") {
-    panel = <Panel_ERC721 contractInstance={contractInstance} />;
+    panel = (
+      <Panel_ERC721
+        contractInstance={contractInstance}
+        userAddress={userAddress}
+      />
+    );
   } else if (contractType === "ERC1155") {
-    panel = <Panel_ERC1155 contractInstance={contractInstance} />;
+    panel = (
+      <Panel_ERC1155
+        contractInstance={contractInstance}
+        userAddress={userAddress}
+      />
+    );
   }
 
   /* Render Function */

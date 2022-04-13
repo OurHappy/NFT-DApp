@@ -1,11 +1,25 @@
-import sample1155Meta from './sample1155TokenMeta.json';
-import sample721Meta from './sample721TokenMeta.json';
-import sampleOurSong1155ContractMeta from './sampleOurSong1155ContractMeta.json';
-import sampleOurSong721ContractMeta from './sampleOurSong721ContractMeta.json';
-import axios from 'axios';
+import sample1155Meta from "./sample1155TokenMeta.json";
+import sample721Meta from "./sample721TokenMeta.json";
+import sampleOurSong1155ContractMeta from "./sampleOurSong1155ContractMeta.json";
+import sampleOurSong721ContractMeta from "./sampleOurSong721ContractMeta.json";
+import axios from "axios";
+
+import * as IPFS from "ipfs-core";
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
+
+export async function getIPFSdata(ipfsPath) {
+  const ipfs = await IPFS.create();
+  let hash = ipfsPath.replace("ipfs://", "");
+  let info = [];
+
+  for await (const item of ipfs.get(hash)) {
+    info.push(item.toString());
+  }
+
+  return JSON.parse(info[1]);
+}
 
 export async function getTokenMeta(contract, tokenId) {
   let ERC1155 = await isERC1155(contract);
@@ -13,6 +27,14 @@ export async function getTokenMeta(contract, tokenId) {
 
   if (ERC1155) {
     let tokenURI = await contract.methods.uri(tokenId).call();
+    if (tokenURI.includes("ipfs://")) {
+      //the meta is stored in IPFS
+      let ipfsdata = getIPFSdata(tokenURI);
+      return ipfsdata;
+    } else {
+      // for test, return sample 721 token (because of CORS policy error)
+      return sample1155Meta;
+    }
 
     /* replace the {id} with the actual token ID in lowercase,
        and leading zero padded to 64 hex characters
@@ -25,77 +47,91 @@ export async function getTokenMeta(contract, tokenId) {
     tokenURI = tokenURI.replace("{id}", tokenIdNew);
     console.log(tokenURI);
 
-    return sample1155Meta;  // for test, return sample 1155 token (because of CORS policy error)
+    return sample1155Meta; // for test, return sample 1155 token (because of CORS policy error)
 
-    await axios.get(tokenURI, {
-      responseType: "json",
-    }).then((res) => {
-      return res;
-    }).catch((err) => {
-      console.log(err);
-      return null;
-    });
+    await axios
+      .get(tokenURI, {
+        responseType: "json",
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
   } else if (ERC721) {
     let tokenURI = await contract.methods.tokenURI(tokenId).call();
-    console.log(tokenURI);
+    if (tokenURI.includes("ipfs://")) {
+      //the meta is stored in IPFS
+      let ipfsdata = getIPFSdata(tokenURI);
+      return ipfsdata;
+    } else {
+      // for test, return sample 721 token (because of CORS policy error)
+      return sample721Meta;
+    }
 
-    return sample721Meta;  // for test, return sample 721 token (because of CORS policy error)
-
-    await axios.get(tokenURI, {
-      responseType: "json",
-    }).then((res) => {
-      return res;
-    }).catch((err) => {
-      console.log(err);
-      return null;
-    });
+    await axios
+      .get(tokenURI, {
+        responseType: "json",
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
   }
 }
 
 export async function getContractMeta(contract) {
   let ERC1155 = await isERC1155(contract);
   let ERC721 = await isERC721(contract);
-  let contractUri;
-
-  await contract.methods.contractURI().call((err, res) => {
-    if (err) {
-      console.log(err);
-      return null;
-    }
-    contractUri = res;
-  });
-  console.log(contractUri);
+  // let contractUri = await contract.methods.contractURI().call((err, res) => {
+  //   if (err) {
+  //     console.log(err);
+  //     return null;
+  //   }
+  //   contractUri = res;
+  // });
 
   if (ERC1155) {
     return sampleOurSong1155ContractMeta; // for test, return sample 1155 contract meta (because of CORS policy error)
 
-    await axios.get(contractUri, {
-      headers: {
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Origin": "*",
-      },
-      responseType: "json",
-    }).then((res) => {
-      return res;
-    }).catch((err) => {
-      console.log(err);
-      return null;
-    });
+    await axios
+      .get(contractUri, {
+        headers: {
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+        },
+        responseType: "json",
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
   } else if (ERC721) {
-    return sampleOurSong721ContractMeta;  // for test, return sample 721 contract meta (because of CORS policy error)
+    return sampleOurSong721ContractMeta; // for test, return sample 721 contract meta (because of CORS policy error)
 
-    await axios.get(contractUri, {
-      headers: {
-        "Access-Control-Allow-Methods": "GET",
-        "Access-Control-Allow-Origin": "*",
-      },
-      responseType: "json",
-    }).then((res) => {
-      return res;
-    }).catch((err) => {
-      console.log(err);
-      return null;
-    });
+    await axios
+      .get(contractUri, {
+        headers: {
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Origin": "*",
+        },
+        responseType: "json",
+      })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        return null;
+      });
   }
 }
 
@@ -113,28 +149,55 @@ export async function isERC1155(contract) {
   return result;
 }
 
-export async function burn(contract, account, id, amount) {
-  let result = await contract.methods.burn(account, id, amount).send();
+export async function burn(contract, account, id, amount, accountAddress) {
+  console.log("ca=", accountAddress);
+  let result = await contract.methods
+    .burn(account, id, amount)
+    .send({ from: accountAddress });
 
   return result;
 }
-export async function transfer(contract, from, to, id, amount, data) {
+export async function transfer(
+  contract,
+  from,
+  to,
+  id,
+  amount,
+  data,
+  accountAddress
+) {
   let result = await contract.methods
     .safeTransferFrom(from, to, id, amount, data)
-    .send();
+    .send({ from: accountAddress });
 
   return result;
 }
 
-export async function brun721token(contract, id) {
-  let result = await contract.methods.burn(id).send();
+export async function brun721token(contract, id, accountAddress) {
+  let result = await contract.methods.burn(id).send({ from: accountAddress });
   return result;
 }
-export async function transfer721token(contract, fromAddress, toAddress, id) {
+export async function transfer721token(
+  contract,
+  fromAddress,
+  toAddress,
+  id,
+  accountAddress
+) {
   let result = await contract.methods
     .transferFrom(fromAddress, toAddress, id)
-    .send();
+    .send({ from: accountAddress });
   return result;
+}
+
+export async function uri(contract, id) {
+  let uri = await contract.methods.uri(id).call();
+  return uri;
+}
+
+export async function uri721(contract, id) {
+  let uri = contract.methods.tokenURI(id).call();
+  return uri;
 }
 
 export async function symbol(contract) {

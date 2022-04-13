@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 
-import { InputGroup, FormControl, Accordion, Button } from "react-bootstrap";
+import {
+  InputGroup,
+  FormControl,
+  Accordion,
+  Button,
+  Card,
+} from "react-bootstrap";
 import PropTypes from "prop-types";
 import {
   balanceOf721,
   ownerOf721,
   brun721token,
   transfer721token,
+  uri721,
+  getIPFSdata,
 } from "../utils/contract";
 
-const Panel_ERC721 = ({ contractInstance }) => {
-  const [uriId, setUriId] = useState(null);
+const Panel_ERC721 = ({ contractInstance, userAddress }) => {
   const [balanceId, setBalanceId] = useState(null);
   const [balanceResult, setBalanceResult] = useState("uint256");
   const [ownerId, setOwnerId] = useState(null);
@@ -22,6 +29,28 @@ const Panel_ERC721 = ({ contractInstance }) => {
   const [transferTo, setTransferTo] = useState();
   const [transferId, setTransferId] = useState();
   const [transferResult, setTransferResult] = useState();
+  const [uriId, setUriId] = useState(null);
+  const [uriResult, setUriResult] = useState(null);
+  const [parsedUri, setParsedUri] = useState(null);
+  const [parsedName, setParsedName] = useState(null);
+  const [parsedDescription, setParsedDescription] = useState(null);
+  const [parsedImgLink, setParsedImgLink] = useState("");
+
+  // const onClickTester = () => {
+  //   let result = getIPFSdata(uriResult);
+  //   result
+  //     .then((msg) => {
+  //       return JSON.parse(msg);
+  //     })
+  //     .then((msg) => {
+  //       setParsedUri({ ...msg });
+  //       setParsedName(msg.name);
+  //       setParsedDescription(msg.description);
+  //       setParsedImgLink(msg.image.replace("ipfs://", "https://ipfs.io/ipfs/"));
+  //     });
+
+  //   result.catch((msg) => console.log("error", msg));
+  // };
 
   const balanceIdOnChange = (e) => {
     setBalanceId(e.target.value);
@@ -47,6 +76,10 @@ const Panel_ERC721 = ({ contractInstance }) => {
     setTransferId(e.target.value);
   };
 
+  const uriIdOnChange = (e) => {
+    setUriId(e.target.value);
+  };
+
   const queryBalance = () => {
     let result = balanceOf721(contractInstance, balanceId);
     result.then((msg) => setBalanceResult(msg));
@@ -57,8 +90,13 @@ const Panel_ERC721 = ({ contractInstance }) => {
     result.then((msg) => setOwnerResult(msg));
   };
 
+  const queryUri = async () => {
+    let result = uri721(contractInstance, uriId);
+    result.then((msg) => setUriResult(msg));
+  };
+
   const burnToken = () => {
-    let result = brun721token(contractInstance, burnId);
+    let result = brun721token(contractInstance, burnId, userAddress);
     result.then((msg) => setBurnResult(msg.transactionHash));
     result.catch(setBurnResult("transaction rejected"));
   };
@@ -68,15 +106,35 @@ const Panel_ERC721 = ({ contractInstance }) => {
       contractInstance,
       transferFrom,
       transferTo,
-      transferId
+      transferId,
+      userAddress
     );
     result.then((msg) => setTransferResult(msg.transactionHash));
     result.catch(setTransferResult("transaction rejected"));
   };
 
+  // let uriSection;
+  // if (uriResult !== null) {
+  //   uriSection = (
+  //     <div>
+  //       <Button variant="primary" onClick={onClickTester}>
+  //         Parse this uri
+  //       </Button>
+  //       <Card style={{ width: "18rem" }}>
+  //         <Card.Img variant="top" src={parsedImgLink} />
+  //         <Card.Body>
+  //           <Card.Title>{parsedName}</Card.Title>
+  //           <Card.Text>{parsedDescription}</Card.Text>
+  //           {/* <Button variant="primary">Go somewhere</Button> */}
+  //         </Card.Body>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="contractpanel">
-      <Accordion defaultActiveKey={["0"]} alwaysOpen>
+      <Accordion>
         <Accordion.Item eventKey="0">
           <Accordion.Header>balanceOf</Accordion.Header>
           <Accordion.Body>
@@ -129,14 +187,15 @@ const Panel_ERC721 = ({ contractInstance }) => {
                     placeholder="tokenId(unit256)"
                     aria-label="id(unit256)"
                     aria-describedby="basic-addon1"
-                    onChange={ownerIdOnChange}
+                    onChange={uriIdOnChange}
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryOwner}>
+              <Button variant="primary" onClick={queryUri}>
                 Query
               </Button>{" "}
-              <p className="result">{}</p>
+              <p className="result">{uriResult}</p>
+              {/* <div>{uriSection}</div> */}
             </div>
           </Accordion.Body>
         </Accordion.Item>
@@ -205,5 +264,6 @@ const Panel_ERC721 = ({ contractInstance }) => {
 
 Panel_ERC721.propTypes = {
   contractInstance: PropTypes.object.isRequired,
+  userAddress: PropTypes.string.isRequired,
 };
 export default Panel_ERC721;
