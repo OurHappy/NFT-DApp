@@ -90,7 +90,7 @@ export function isContractAddress(address) {
   return web3.utils.isAddress(address);
 }
 
-export async function makeContract(contractAddress, fromAddress) {
+export async function makeContract(contractAddress) {
   let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
 
   let ERC1155 = await isERC1155(contract);
@@ -99,16 +99,12 @@ export async function makeContract(contractAddress, fromAddress) {
   if (ERC1155) {
     return {
       contractInterface: "ERC1155",
-      contract: new web3.eth.Contract(OurSong1155Interface, contractAddress, {
-        from: fromAddress,
-      }),
+      contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
     };
   } else if (ERC721) {
     return {
       contractInterface: "ERC721",
-      contract: new web3.eth.Contract(OurSong721Interface, contractAddress, {
-        from: fromAddress,
-      }),
+      contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
     };
   } else {
     return {
@@ -116,6 +112,7 @@ export async function makeContract(contractAddress, fromAddress) {
       contract: null,
     };
     // throw new Error('unsupport contract type');
+    console.log("not supported");
   }
 }
 
