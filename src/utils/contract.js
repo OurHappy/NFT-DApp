@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
+let dataUrl = "https://stage.oursong.com/api/metadata";
 
 export async function getTokenMeta(contract, tokenId) {
   let ERC1155 = await isERC1155(contract);
@@ -23,13 +24,16 @@ export async function getTokenMeta(contract, tokenId) {
       tokenIdNew = "0" + tokenIdNew;
     }
     tokenURI = tokenURI.replace("{id}", tokenIdNew);
+    // tokenURI = "https%3A%2F%2Fcryptoskulls.com%2Fapi%2Ftoken%2F0";
     console.log(tokenURI);
 
     return sample1155Meta;  // for test, return sample 1155 token (because of CORS policy error)
 
-    await axios.get(tokenURI, {
+    let newDataUrl = dataUrl + "?uri=" + tokenURI;
+    await axios.get(newDataUrl, {
       responseType: "json",
     }).then((res) => {
+      console.log(res);
       return res;
     }).catch((err) => {
       console.log(err);
@@ -41,9 +45,11 @@ export async function getTokenMeta(contract, tokenId) {
 
     return sample721Meta;  // for test, return sample 721 token (because of CORS policy error)
 
-    await axios.get(tokenURI, {
+    let newDataUrl = dataUrl + "?uri=" + tokenURI;
+    await axios.get(newDataUrl, {
       responseType: "json",
     }).then((res) => {
+      console.log(res);
       return res;
     }).catch((err) => {
       console.log(err);
@@ -69,7 +75,8 @@ export async function getContractMeta(contract) {
   if (ERC1155) {
     return sampleOurSong1155ContractMeta; // for test, return sample 1155 contract meta (because of CORS policy error)
 
-    await axios.get(contractUri, {
+    let newDataUrl = dataUrl + "?uri=" + contractUri;
+    await axios.get(newDataUrl, {
       headers: {
         "Access-Control-Allow-Methods": "GET",
         "Access-Control-Allow-Origin": "*",
@@ -84,7 +91,8 @@ export async function getContractMeta(contract) {
   } else if (ERC721) {
     return sampleOurSong721ContractMeta;  // for test, return sample 721 contract meta (because of CORS policy error)
 
-    await axios.get(contractUri, {
+    let newDataUrl = dataUrl + "?uri=" + contractUri;
+    await axios.get(newDataUrl, {
       headers: {
         "Access-Control-Allow-Methods": "GET",
         "Access-Control-Allow-Origin": "*",

@@ -38,13 +38,6 @@ const Searchbox = (props) => {
   /* Render Function */
   return (
     <div className="divClass-search">
-      {/* <input
-        type="search"
-        placeholder="Contract address"
-        onKeyPress={handleKeyPress}
-        onChange={resetStates}
-        className={`searchBoxClass ${warnText ? "invalid" : ""}`}
-      /> */}
       <div>
         <InputGroup className="mb-3 searchbar">
           <FormControl

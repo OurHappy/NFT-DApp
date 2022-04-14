@@ -6,6 +6,7 @@ import { InputGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { balanceOf721 } from "../utils/contract";
 import { balanceOf, totalSupply } from "../utils/contract";
+import { Container, Row, Col} from "react-bootstrap";
 
 const Token = (props) => {
   /* Variables */
@@ -72,6 +73,7 @@ const Token = (props) => {
     contractInstance = contract;
 
     tokenMeta = await getTokenMeta(contract, ID);
+    console.log(tokenMeta);
     if (tokenMeta === null) {
       console.log("Fail to catch token meta data...");
       return false;
@@ -96,39 +98,45 @@ const Token = (props) => {
       <div>
         <span className="tokenText">Token:</span>
 
-        <InputGroup className="searchbar">
-          <FormControl
-            placeholder="Token ID"
-            aria-label="Token ID"
-            onKeyPress={handleKeyPress}
-            onChange={resetStates}
-            className="tokenSearchClass"
-          />
-        </InputGroup>
+        <div className="token-search">
+          <InputGroup className="searchbar">
+            <FormControl
+              placeholder="Token ID"
+              aria-label="Token ID"
+              onKeyPress={handleKeyPress}
+              onChange={resetStates}
+              className="tokenSearchClass"
+            />
+          </InputGroup>
+        </div>
+        
       </div>
       
 
       {/* if token exists, show the token */}
       <div>
         {showToken === 1 && (
-          <div className="container">
-            {/* Show token metadata if a valid token is provided */}
-            <div className="row">
-              {<img src={img} className="col tokenImg"></img>}
-              <div className="col tokenInfo">
-                Name: {name} <br />
-                Description: {description} <br />
-                <br />
-                External Link: {exLink} <br />
-                Other meta: {meta} <br />
-                <br />
-                {is1155 && 
-                  (<p>Total Supply: {supply}</p>)
-                }
-                You owned: {own}
-              </div>
-            </div>
-          </div>
+          <Container>
+            <Row>
+              <Col md={6}>
+                <img src={img} className="tokenImg"></img>
+              </Col>
+              <Col md={6}>
+                <div className="tokenInfo">
+                  Name: {name} <br />
+                  Description: {description} <br />
+                  <br />
+                  External Link: {exLink} <br />
+                  Other meta: {meta} <br />
+                  <br />
+                  {is1155 && 
+                    (<p>Total Supply: {supply}</p>)
+                  }
+                  You owned: {own}
+                </div>
+              </Col>
+            </Row>
+          </Container>
         )}
       </div>
     </div>
