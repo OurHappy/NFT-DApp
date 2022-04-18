@@ -24,13 +24,13 @@ export async function getTokenMeta(contract, tokenId) {
       tokenIdNew = "0" + tokenIdNew;
     }
     tokenURI = tokenURI.replace("{id}", tokenIdNew);
-    // tokenURI = "https%3A%2F%2Fcryptoskulls.com%2Fapi%2Ftoken%2F0";
+    tokenURI = "https%3A%2F%2Fcryptoskulls.com%2Fapi%2Ftoken%2F0";
     console.log(tokenURI);
 
-    return sample1155Meta;  // for test, return sample 1155 token (because of CORS policy error)
+    // return sample1155Meta;  // for test, return sample 1155 token (because of CORS policy error)
 
     let newDataUrl = dataUrl + "?uri=" + tokenURI;
-    await axios.get(newDataUrl, {
+    let tokenMeta = await axios.get(newDataUrl, {
       responseType: "json",
     }).then((res) => {
       console.log(res);
@@ -39,6 +39,7 @@ export async function getTokenMeta(contract, tokenId) {
       console.log(err);
       return null;
     });
+    return tokenMeta;
   } else if (ERC721) {
     let tokenURI = await contract.methods.tokenURI(tokenId).call();
     console.log(tokenURI);
