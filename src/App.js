@@ -57,7 +57,10 @@ function App() {
     <Router>
       <Fragment>
         <div className="App">
-          <Navbar clickChange={clickMenuAction} setUserAddress={setUserAddress} />
+          <Navbar
+            clickChange={clickMenuAction}
+            setUserAddress={setUserAddress}
+          />
 
           <Routes>
             {isContract === 0 && providerExist && (
