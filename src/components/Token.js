@@ -26,6 +26,8 @@ const Token = (props) => {
   const [own, setOwn] = useState(0);
   const [img, setImg] = useState("");
   const [is1155, setIs1155] = useState(false);
+  const [isImg, setIsImg] = useState(false);
+  const [isVideo, setIsVideo] = useState(false);
 
   /* Functions */
   const handleKeyPress = (event) => {
@@ -38,16 +40,30 @@ const Token = (props) => {
 
   // build token meta data
   let showTokenMeta = async (tokenMeta, tokenId) => {
+    // console.log(tokenMeta);
     const defaultType = ["id", "name", "description", "external_url", "image"];
-    for (let [key, value] of Object.entries(tokenMeta)) {
+
+    let tokenObject;
+    if (tokenMeta["data"]) tokenObject = tokenMeta["data"];
+    else tokenObject = tokenMeta;
+
+    for (let [key, value] of Object.entries(tokenObject)) {
       if (defaultType.includes(key)) {
         if (key === "name") setName(value);
         else if (key === "description") setDescription(value);
         else if (key === "external_url") setExLink(value);
-        else if (key === "image")
+        else if (key === "image") {
           setImg(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
+          setIsImg(true);
+
+          let ext = value.substr(value.lastIndexOf('.') + 1);
+          if (ext === "mp4" || ext === "webm") {
+            setIsVideo(true);
+            setIsImg(false);
+          }
+        }
       } else {
-        setMeta(...value);
+        // setMeta(...value);
       }
     }
 
@@ -73,7 +89,6 @@ const Token = (props) => {
     contractInstance = contract;
 
     tokenMeta = await getTokenMeta(contract, ID);
-    console.log(tokenMeta);
     if (tokenMeta === null) {
       console.log("Fail to catch token meta data...");
       return false;
@@ -118,7 +133,11 @@ const Token = (props) => {
           <Container>
             <Row>
               <Col md={6}>
-                <img src={img} className="tokenImg"></img>
+                {isImg && (<img src={img} className="tokenImg"></img>)}
+                {isVideo && 
+                  (<video controls className="tokenImg">
+                    <source src={img} type="video/mp4"></source>
+                  </video>)}
               </Col>
               <Col md={6}>
                 <div className="tokenInfo">

@@ -33,9 +33,6 @@ export async function getTokenMeta(contract, tokenId) {
       let ipfsdata = getIPFSdata(tokenURI);
       return ipfsdata;
     } else {
-      // for test, return sample 1155 token (because of CORS policy error)
-      return sample1155Meta;
-
       // replace the {id} with the actual token ID in lowercase, and leading zero padded to 64 hex characters
       let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
       let zeroNum = 64 - tokenIdNew.length;
@@ -43,8 +40,6 @@ export async function getTokenMeta(contract, tokenId) {
         tokenIdNew = "0" + tokenIdNew;
       }
       tokenURI = tokenURI.replace("{id}", tokenIdNew);
-      // tokenURI = "https%3A%2F%2Fcryptoskulls.com%2Fapi%2Ftoken%2F0";
-      console.log(tokenURI);
 
       // get metadata with Oursong API
       let newDataUrl = dataUrl + "?uri=" + tokenURI;
@@ -53,7 +48,6 @@ export async function getTokenMeta(contract, tokenId) {
           responseType: "json",
         })
         .then((res) => {
-          console.log(res);
           return res;
         })
         .catch((err) => {
@@ -69,22 +63,20 @@ export async function getTokenMeta(contract, tokenId) {
       let ipfsdata = getIPFSdata(tokenURI);
       return ipfsdata;
     } else {
-      // for test, return sample 721 token (because of CORS policy error)
-      return sample721Meta;
-
+      // get metadata with Oursong API
       let newDataUrl = dataUrl + "?uri=" + tokenURI;
-      await axios
+      let tokenMeta = await axios
         .get(newDataUrl, {
           responseType: "json",
         })
         .then((res) => {
-          console.log(res);
           return res;
         })
         .catch((err) => {
           console.log(err);
           return null;
         });
+      return tokenMeta;
     }
   }
 }
@@ -92,52 +84,47 @@ export async function getTokenMeta(contract, tokenId) {
 export async function getContractMeta(contract) {
   let ERC1155 = await isERC1155(contract);
   let ERC721 = await isERC721(contract);
-  // let contractUri = await contract.methods.contractURI().call((err, res) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return null;
-  //   }
-  //   contractUri = res;
-  // });
+  let contractUri = await contract.methods.contractURI().call((err, res) => {
+    if (err) {
+      console.log(err);
+      return null;
+    }
+    return res;
+  });
 
-  if (ERC1155) {
-    return sampleOurSong1155ContractMeta; // for test, return sample 1155 contract meta (because of CORS policy error)
-
-    let newDataUrl = dataUrl + "?uri=" + contractUri;
-    await axios
-      .get(newDataUrl, {
-        headers: {
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Origin": "*",
-        },
-        responseType: "json",
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
-  } else if (ERC721) {
-    return sampleOurSong721ContractMeta;  // for test, return sample 721 contract meta (because of CORS policy error)
-
-    let newDataUrl = dataUrl + "?uri=" + contractUri;
-    await axios
-      .get(newDataUrl, {
-        headers: {
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Origin": "*",
-        },
-        responseType: "json",
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
+  if (contractUri == null) {
+    return null;
+  } else {
+    if (ERC1155) {
+      let newDataUrl = dataUrl + "?uri=" + contractUri;
+      let contractMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return contractMeta;
+    } else if (ERC721) {
+      let newDataUrl = dataUrl + "?uri=" + contractUri;
+      let contractMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return contractMeta;
+    }
+    return null;
   }
 }
 
