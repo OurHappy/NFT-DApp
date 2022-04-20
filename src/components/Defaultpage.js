@@ -14,7 +14,7 @@ const Defaultpage = () => {
             target="_blank"
             rel="noreferrer"
           >
-           install MetaMask(chrome extension)
+            install MetaMask (chrome extension)
           </a>
         </p>
       </Alert>

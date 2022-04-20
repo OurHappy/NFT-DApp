@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Token from "./Token";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router";
 import { makeContract } from "../utils/web3Client";
 import { getContractOwner, name, symbol } from "../utils/contract";
 import { getContractMeta } from "../utils/contract";
@@ -8,10 +9,10 @@ import { getContractMeta } from "../utils/contract";
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
 import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
-// import './styleContract.css';
 
 const ContractPanel = ({ contractAddress, userAddress }) => {
   /* Variables */
+  let navigate = useNavigate();
   let contractMeta = null;
 
   /* States */
@@ -89,6 +90,7 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
         userAddress={userAddress}
       />
     );
+    // navigate(`/contract/${contractAddress}`);
   } else if (contractType === "ERC1155") {
     panel = (
       <Panel_ERC1155
@@ -96,6 +98,7 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
         userAddress={userAddress}
       />
     );
+    // navigate(`/contract/${contractAddress}`);
   }
 
   /* Render Function */

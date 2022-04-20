@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import { isContractAddress } from "../utils/web3Client";
 import { FormControl } from "react-bootstrap";
 import { InputGroup } from "react-bootstrap";
-
+import { useNavigate } from "react-router-dom";
 const Searchbox = (props) => {
+  let navigate = useNavigate();
   /* States */
   const [warnText, setWarnText] = useState("");
 
@@ -28,12 +29,11 @@ const Searchbox = (props) => {
 
     if (isValid) {
       props.searchChange(inputVal);
+      navigate(`contract/${inputVal}`);
     } else {
       setWarnText("This is not a valid contract address");
     }
   };
-
-
 
   /* Render Function */
   return (

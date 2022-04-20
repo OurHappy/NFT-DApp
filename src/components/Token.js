@@ -6,6 +6,7 @@ import { InputGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { balanceOf721 } from "../utils/contract";
 import { balanceOf, totalSupply } from "../utils/contract";
+import { useNavigate } from "react-router";
 
 const Token = (props) => {
   /* Variables */
@@ -13,6 +14,7 @@ const Token = (props) => {
   const accountAddress = props.accountAddr;
   let contractType, contractInstance;
   let tokenMeta = null;
+  let navigate = useNavigate();
 
   /* States */
   const [showToken, setShowToken] = useState(0);
@@ -26,15 +28,15 @@ const Token = (props) => {
   const [img, setImg] = useState("");
   const [is1155, setIs1155] = useState(false);
 
+  const [testLogic, setTestLogic] = useState();
   /* Functions */
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") searchToken(event);
-  };
 
   const resetStates = () => {
     setShowToken(0);
   };
-
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") searchToken(event);
+  };
   // build token meta data
   let showTokenMeta = async (tokenMeta, tokenId) => {
     const defaultType = ["id", "name", "description", "external_url", "image"];
@@ -85,6 +87,7 @@ const Token = (props) => {
     let val = await tokenValid(event.target.value);
     if (val) {
       setShowToken(1);
+      navigate(`${event.target.value}`);
     } else {
       setShowToken(0);
     }
