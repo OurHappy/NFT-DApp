@@ -27,6 +27,7 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
   const [externalLink, setExternalLink] = useState("No External Link");
   const [contractType, setContractType] = useState(null);
   const [contractInstance, setContractInstance] = useState("contract");
+  const [hasContractMeta, setHasContractMeta] = useState(false);
 
   useEffect(() => {
     getContractData();
@@ -62,13 +63,13 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
     } else {
     }
 
-    contractMeta = getContractMeta(contract);
+    contractMeta = await getContractMeta(contract);
     if (contractMeta != null) {
-      contractMeta.then((meta) => {
-        setExternalName(meta.name);
-        setExternalDescript(meta.description);
-        setExternalLink(meta.external_url);
-      });
+      setExternalName(contractMeta["data"].name);
+      setExternalDescript(contractMeta["data"].description);
+      setExternalLink(contractMeta["data"].external_url);
+      // show the contract metadata only when it exists
+      setHasContractMeta(true);
     }
   };
 
@@ -122,13 +123,14 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
               Owner: <span className="blueText">{contractOwner}</span>
             </div>
           </div>
-          <div className="col contractInfo">
-            <div>
-              Name: {exteralName} <br />
-              Description: {externalDescipt} <br />
-              <span className="blueText">{externalLink}</span>
-            </div>
-          </div>
+          { hasContractMeta &&
+              <div className="col contractInfo">
+                <div>
+                  Name: {exteralName} <br />
+                  Description: {externalDescipt} <br />
+                  <span className="blueText">{externalLink}</span>
+                </div>
+              </div> }
         </div>
       </div>
       <div>{panel}</div>

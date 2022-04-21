@@ -8,6 +8,7 @@ import * as IPFS from "ipfs-core";
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
+let dataUrl = "https://stage.oursong.com/api/metadata";
 
 export async function getIPFSdata(ipfsPath) {
   const ipfs = await IPFS.create();
@@ -32,34 +33,29 @@ export async function getTokenMeta(contract, tokenId) {
       let ipfsdata = getIPFSdata(tokenURI);
       return ipfsdata;
     } else {
-      // for test, return sample 721 token (because of CORS policy error)
-      return sample1155Meta;
+      // replace the {id} with the actual token ID in lowercase, and leading zero padded to 64 hex characters
+      let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
+      let zeroNum = 64 - tokenIdNew.length;
+      for (let i = 0; i < zeroNum; i++) {
+        tokenIdNew = "0" + tokenIdNew;
+      }
+      tokenURI = tokenURI.replace("{id}", tokenIdNew);
+
+      // get metadata with Oursong API
+      let newDataUrl = dataUrl + "?uri=" + tokenURI;
+      let tokenMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return tokenMeta;
     }
-
-    /* replace the {id} with the actual token ID in lowercase,
-       and leading zero padded to 64 hex characters
-    */
-    let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
-    let zeroNum = 64 - tokenIdNew.length;
-    for (let i = 0; i < zeroNum; i++) {
-      tokenIdNew = "0" + tokenIdNew;
-    }
-    tokenURI = tokenURI.replace("{id}", tokenIdNew);
-    console.log(tokenURI);
-
-    return sample1155Meta; // for test, return sample 1155 token (because of CORS policy error)
-
-    await axios
-      .get(tokenURI, {
-        responseType: "json",
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
   } else if (ERC721) {
     let tokenURI = await contract.methods.tokenURI(tokenId).call();
     if (tokenURI.includes("ipfs://")) {
@@ -67,71 +63,68 @@ export async function getTokenMeta(contract, tokenId) {
       let ipfsdata = getIPFSdata(tokenURI);
       return ipfsdata;
     } else {
-      // for test, return sample 721 token (because of CORS policy error)
-      return sample721Meta;
+      // get metadata with Oursong API
+      let newDataUrl = dataUrl + "?uri=" + tokenURI;
+      let tokenMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return tokenMeta;
     }
-
-    await axios
-      .get(tokenURI, {
-        responseType: "json",
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
   }
 }
 
 export async function getContractMeta(contract) {
   let ERC1155 = await isERC1155(contract);
   let ERC721 = await isERC721(contract);
-  // let contractUri = await contract.methods.contractURI().call((err, res) => {
-  //   if (err) {
-  //     console.log(err);
-  //     return null;
-  //   }
-  //   contractUri = res;
-  // });
+  let contractUri = await contract.methods.contractURI().call((err, res) => {
+    if (err) {
+      console.log(err);
+      return null;
+    }
+    return res;
+  });
 
-  if (ERC1155) {
-    return sampleOurSong1155ContractMeta; // for test, return sample 1155 contract meta (because of CORS policy error)
-
-    await axios
-      .get(contractUri, {
-        headers: {
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Origin": "*",
-        },
-        responseType: "json",
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
-  } else if (ERC721) {
-    return sampleOurSong721ContractMeta; // for test, return sample 721 contract meta (because of CORS policy error)
-
-    await axios
-      .get(contractUri, {
-        headers: {
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Origin": "*",
-        },
-        responseType: "json",
-      })
-      .then((res) => {
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        return null;
-      });
+  if (contractUri == null) {
+    return null;
+  } else {
+    if (ERC1155) {
+      let newDataUrl = dataUrl + "?uri=" + contractUri;
+      let contractMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return contractMeta;
+    } else if (ERC721) {
+      let newDataUrl = dataUrl + "?uri=" + contractUri;
+      let contractMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return contractMeta;
+    }
+    return null;
   }
 }
 
