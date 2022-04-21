@@ -10,6 +10,7 @@ import "./styles/style.css";
 import { init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
+import Panel_ERC1155 from "./components/Panel_ERC1155";
 
 function App() {
   /* States */
@@ -65,26 +66,25 @@ function App() {
           <Routes>
             {isContract === 0 && providerExist && (
               <Route
-                exact
                 path="/"
                 element={<Searchbox searchChange={onSearchChange} />}
               />
             )}
             {isContract && (
               <Route
-                exact
-                path="/"
+                path="contract/:address"
                 element={
                   <ContractPanel
                     contractAddress={address}
                     userAddress={userAddress}
                   />
                 }
-              />
+              >
+                <Route path=":tokenid"></Route>
+              </Route>
             )}
-            {!providerExist && (
-              <Route exact path="/" element={<Defaultpage />} />
-            )}
+
+            {!providerExist && <Route path="/" element={<Defaultpage />} />}
           </Routes>
         </div>
       </Fragment>
