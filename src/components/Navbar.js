@@ -77,7 +77,7 @@ export const Navbar = (props) => {
       </div>
       <div className="ms-auto chainBlock">
         {chainName} <br></br>
-        <span id="addressText">{address}</span>
+        <span>{address}</span>
       </div>
       <div>
         <Button variant="outline-light" onClick={clickAction}>
