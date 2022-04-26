@@ -8,7 +8,7 @@ import PropTypes from "prop-types";
 import { ContactsOutlined } from "@ant-design/icons";
 
 export const Navbar = (props) => {
-  const { setUserAddress } = props;
+  const { setUserAddress, setIsConnected } = props;
   /* States */
   const [isConnect, setIsConnect] = useState(0);
   const [connectText, setConnectText] = useState("Connect");
@@ -51,7 +51,8 @@ export const Navbar = (props) => {
   let clickAction = async () => {
     if (isConnect) {
       await disconnect();
-      setIsConnect(0);
+      setIsConnect(0);  // use for Navbar
+      setIsConnected(false);  // use for App
       setConnectText("Connect");
       setChainName("");
       setAddress("");
@@ -60,6 +61,7 @@ export const Navbar = (props) => {
       setAddress(result.address);
       setChainName(result.network);
       setIsConnect(true);
+      setIsConnected(true);
       setConnectText("Disconnect");
       setUserAddress(result.address);
     }
@@ -91,6 +93,7 @@ export const Navbar = (props) => {
 Navbar.propTypes = {
   clickChange: PropTypes.func,
   setUserAddress: PropTypes.func.isRequired,
+  setIsConnected: PropTypes.func.isRequired,
 };
 
 export default Navbar;

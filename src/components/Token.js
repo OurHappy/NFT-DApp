@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { balanceOf721 } from "../utils/contract";
 import { balanceOf, totalSupply } from "../utils/contract";
 import { useNavigate } from "react-router";
-import { Container, Row, Col} from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 
 const Token = (props) => {
   /* Variables */
@@ -42,7 +42,6 @@ const Token = (props) => {
   };
   // build token meta data
   let showTokenMeta = async (tokenMeta, tokenId) => {
-    // console.log(tokenMeta);
     const defaultType = ["id", "name", "description", "external_url", "image"];
 
     let tokenObject;
@@ -55,6 +54,7 @@ const Token = (props) => {
         else if (key === "description") setDescription(value);
         else if (key === "external_url") setExLink(value);
         else if (key === "image") {
+          // Since base64 image can be shown directly, no need to decode base64 for image
           setImg(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
           setIsImg(true);
 
@@ -165,7 +165,7 @@ const Token = (props) => {
 
 Token.propTypes = {
   contractAddr: PropTypes.string.isRequired,
-  accountAddr: PropTypes.string.isRequired,
+  accountAddr: PropTypes.string,
 };
 
 export default Token;

@@ -6,6 +6,7 @@ import {
   Accordion,
   Button,
   Card,
+  Alert,
 } from "react-bootstrap";
 import PropTypes from "prop-types";
 import {
@@ -17,7 +18,7 @@ import {
   getIPFSdata,
 } from "../utils/contract";
 
-const Panel_ERC721 = ({ contractInstance, userAddress }) => {
+const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
   const [balanceId, setBalanceId] = useState(null);
   const [balanceResult, setBalanceResult] = useState("uint256");
   const [ownerId, setOwnerId] = useState(null);
@@ -213,9 +214,21 @@ const Panel_ERC721 = ({ contractInstance, userAddress }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={burnToken}>
-                burn
-              </Button>{" "}
+              { isConnected && 
+                <Button variant="primary" onClick={burnToken}>
+                  burn
+                </Button>
+              }
+              { !isConnected &&
+                <Alert variant="danger" className="alertClass">
+                  Please connect your metamask wallet before burning.
+                </Alert>
+              }
+              { !isConnected && 
+                <Button variant="primary" onClick={burnToken} disabled>
+                  burn
+                </Button>
+              }
               <p className="result">{burnResult}</p>
             </div>
           </Accordion.Body>
@@ -250,9 +263,23 @@ const Panel_ERC721 = ({ contractInstance, userAddress }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={transferToken}>
-                transfer
-              </Button>{" "}
+              {
+                isConnected &&
+                <Button variant="primary" onClick={transferToken}>
+                  transfer
+                </Button>
+              }
+              { !isConnected &&
+                <Alert variant="danger" className="alertClass">
+                  Please connect your metamask wallet before transferring.
+                </Alert>
+              }
+              {
+                !isConnected &&
+                <Button variant="primary" onClick={transferToken} disabled>
+                  transfer
+                </Button>
+              }
               <p className="result">{transferResult}</p>
             </div>
           </Accordion.Body>
@@ -264,6 +291,7 @@ const Panel_ERC721 = ({ contractInstance, userAddress }) => {
 
 Panel_ERC721.propTypes = {
   contractInstance: PropTypes.object.isRequired,
-  userAddress: PropTypes.string.isRequired,
+  userAddress: PropTypes.string,
+  isConnected: PropTypes.bool.isRequired,
 };
 export default Panel_ERC721;

@@ -19,6 +19,7 @@ function App() {
   const [address, setAddress] = useState("test");
   const [providerExist, setProviderExist] = useState(false);
   const [userAddress, setUserAddress] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     initApp();
@@ -61,6 +62,7 @@ function App() {
           <Navbar
             clickChange={clickMenuAction}
             setUserAddress={setUserAddress}
+            setIsConnected={setIsConnected}
           />
 
           <Routes>
@@ -77,6 +79,7 @@ function App() {
                   <ContractPanel
                     contractAddress={address}
                     userAddress={userAddress}
+                    isConnected={isConnected}
                   />
                 }
               >
