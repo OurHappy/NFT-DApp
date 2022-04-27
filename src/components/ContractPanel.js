@@ -10,7 +10,7 @@ import CopyOutlined from "@ant-design/icons/CopyOutlined";
 import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
 
-const ContractPanel = ({ contractAddress, userAddress }) => {
+const ContractPanel = ({ contractAddress, userAddress, isConnected }) => {
   /* Variables */
   let navigate = useNavigate();
   let contractMeta = null;
@@ -89,6 +89,7 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
       <Panel_ERC721
         contractInstance={contractInstance}
         userAddress={userAddress}
+        isConnected={isConnected}
       />
     );
     // navigate(`/contract/${contractAddress}`);
@@ -97,6 +98,7 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
       <Panel_ERC1155
         contractInstance={contractInstance}
         userAddress={userAddress}
+        isConnected={isConnected}
       />
     );
     // navigate(`/contract/${contractAddress}`);
@@ -140,7 +142,8 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
 
 ContractPanel.propTypes = {
   contractAddress: PropTypes.string.isRequired,
-  userAddress: PropTypes.string.isRequired,
+  userAddress: PropTypes.string,
+  isConnected: PropTypes.bool.isRequired,
 };
 
 export default ContractPanel;
