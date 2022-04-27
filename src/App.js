@@ -11,14 +11,20 @@ import { init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
 import Panel_ERC1155 from "./components/Panel_ERC1155";
+import Token from "./components/Token";
 
 function App() {
+  /* Variables */
+
   /* States */
   const [appState, setAppState] = useState("initializing");
   const [isContract, setIsContract] = useState(0);
   const [address, setAddress] = useState("test");
   const [providerExist, setProviderExist] = useState(false);
-  const [userAddress, setUserAddress] = useState(null);
+  const [userAddress, setUserAddress] = useState("");
+  const [initAtAppjs, setInitAtAppjs] = useState(false);
+  const [isConnect, setIsConnect] = useState(false);
+  const [contractInstance, setContractInstance] = useState(null);
 
   useEffect(() => {
     initApp();
@@ -28,10 +34,15 @@ function App() {
   async function initApp() {
     const provider = await getProvider();
     if (provider) {
+      console.log("get a provider at App.js");
+      setInitAtAppjs(true);
       const initialized = init(provider);
       setProviderExist(true);
+
       if (initialized) {
         setAppState("ready");
+        console.log("inited web3 at App.js");
+
         return;
       }
     } else if (provider === null) {
@@ -41,7 +52,7 @@ function App() {
   }
 
   const onSearchChange = (addr) => {
-    setIsContract(1);
+    setIsContract(true);
     setAddress(addr);
   };
 
@@ -61,28 +72,62 @@ function App() {
           <Navbar
             clickChange={clickMenuAction}
             setUserAddress={setUserAddress}
+            isConnect={isConnect}
+            setIsConnect={setIsConnect}
           />
 
           <Routes>
-            {isContract === 0 && providerExist && (
+            {providerExist && (
               <Route
                 path="/"
                 element={<Searchbox searchChange={onSearchChange} />}
               />
             )}
-            {isContract && (
-              <Route
-                path="contract/:address"
-                element={
+            <Route
+              path="contract/:address"
+              element={
+                <Fragment>
+                  <Token
+                    contractAddress={address}
+                    accountAddress={userAddress}
+                    isConnect={isConnect}
+                    contractInstance={contractInstance}
+                    setContractInstance={setContractInstance}
+                  />
                   <ContractPanel
                     contractAddress={address}
+                    setContractAddress={setAddress}
                     userAddress={userAddress}
+                    initAtAppjs={initAtAppjs}
+                    contractInstance={contractInstance}
+                    setContractInstance={setContractInstance}
                   />
-                }
-              >
-                <Route path=":tokenid"></Route>
-              </Route>
-            )}
+                </Fragment>
+              }
+            ></Route>
+
+            <Route
+              path="contract/:address/:tokenid"
+              element={
+                <Fragment>
+                  <Token
+                    contractAddress={address}
+                    accountAddress={userAddress}
+                    isConnect={isConnect}
+                    contractInstance={contractInstance}
+                    setContractInstance={setContractInstance}
+                  />
+                  <ContractPanel
+                    contractAddress={address}
+                    setContractAddress={setAddress}
+                    userAddress={userAddress}
+                    initAtAppjs={initAtAppjs}
+                    setContractInstance={setContractInstance}
+                    contractInstance={contractInstance}
+                  />
+                </Fragment>
+              }
+            ></Route>
 
             {!providerExist && <Route path="/" element={<Defaultpage />} />}
           </Routes>

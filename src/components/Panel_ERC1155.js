@@ -283,7 +283,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress }) => {
 
 Panel_ERC1155.propTypes = {
   contractInstance: PropTypes.object.isRequired,
-  userAddress: PropTypes.string.isRequired,
+  userAddress: PropTypes.string,
 };
 
 export default Panel_ERC1155;

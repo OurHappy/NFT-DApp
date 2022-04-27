@@ -5,18 +5,20 @@ import { connect, disconnect, on, removeListener } from "../utils/web3Client";
 import { Spinner } from "react-bootstrap";
 import { triggerFocus } from "antd/lib/input/Input";
 import PropTypes from "prop-types";
+import { useParams } from "react-router";
 import { ContactsOutlined } from "@ant-design/icons";
 
 export const Navbar = (props) => {
+  // let params = useParams();
   const { setUserAddress } = props;
   /* States */
-  const [isConnect, setIsConnect] = useState(0);
   const [connectText, setConnectText] = useState("Connect");
   const [chainName, setChainName] = useState("");
   const [address, setAddress] = useState("");
 
   /* Listeners */
   useEffect(() => {
+    // props.setInitUri(params.address);
     const handleAccountsChanged = async (accounts) => {
       const result = await connect();
       setAddress(result.address);
@@ -28,30 +30,30 @@ export const Navbar = (props) => {
       setAddress(result.address);
       setChainName(result.network);
       setUserAddress(result.address);
-    };  
+    };
 
-    if (isConnect) {
+    if (props.isConnect) {
       on("accountsChanged", handleAccountsChanged);
       on("chainChanged", handleChainChanged);
     }
 
     // remove the listener when finishing listening
     return () => {
-      if (isConnect) {
+      if (props.isConnect) {
         removeListener("accountsChanged", handleAccountsChanged);
         removeListener("chainChanged", handleChainChanged);
       }
     };
-  }, [isConnect]);
+  }, [props.isConnect]);
 
   /* API calls */
 
   /* Functions */
 
   let clickAction = async () => {
-    if (isConnect) {
+    if (props.isConnect) {
       await disconnect();
-      setIsConnect(0);
+      props.setIsConnect(false);
       setConnectText("Connect");
       setChainName("");
       setAddress("");
@@ -59,13 +61,13 @@ export const Navbar = (props) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-      setIsConnect(true);
+      props.setIsConnect(true);
       setConnectText("Disconnect");
       setUserAddress(result.address);
     }
   };
 
-  let clickMenu = async() => {
+  let clickMenu = async () => {
     props.clickChange();
   };
 
@@ -91,6 +93,9 @@ export const Navbar = (props) => {
 Navbar.propTypes = {
   clickChange: PropTypes.func,
   setUserAddress: PropTypes.func.isRequired,
+  setInitUri: PropTypes.func,
+  isConnect: PropTypes.bool,
+  setIsConnect: PropTypes.func,
 };
 
 export default Navbar;

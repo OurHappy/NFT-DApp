@@ -19,9 +19,11 @@ export function init(givenProvider) {
 
   if (typeof Web3 !== undefined) {
     web3 = new Web3(provider);
+    console.log("inited web3 at init()");
+
     return true;
   } else {
-    throw new Error();
+    console.log("error");
   }
 }
 
@@ -91,28 +93,34 @@ export function isContractAddress(address) {
 }
 
 export async function makeContract(contractAddress) {
-  let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
+  if (web3 !== undefined) {
+    console.log("making");
+    let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
+    console.log("contract instacne=", contract);
 
-  let ERC1155 = await isERC1155(contract);
-  let ERC721 = await isERC721(contract);
+    let ERC1155 = await isERC1155(contract);
+    let ERC721 = await isERC721(contract);
 
-  if (ERC1155) {
-    return {
-      contractInterface: "ERC1155",
-      contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
-    };
-  } else if (ERC721) {
-    return {
-      contractInterface: "ERC721",
-      contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
-    };
-  } else {
-    return {
-      contractInterface: "unsupport_contract",
-      contract: null,
-    };
-    // throw new Error('unsupport contract type');
-    console.log("not supported");
+    if (ERC1155) {
+      return {
+        contractInterface: "ERC1155",
+        contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
+      };
+    } else if (ERC721) {
+      return {
+        contractInterface: "ERC721",
+        contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
+      };
+    } else {
+      console.log("not 1155 nor");
+
+      return {
+        contractInterface: "unsupport_contract",
+        contract: null,
+      };
+      // throw new Error('unsupport contract type');
+      console.log("not supported");
+    }
   }
 }
 

@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from "react";
 import Token from "./Token";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { makeContract } from "../utils/web3Client";
 import { getContractOwner, name, symbol } from "../utils/contract";
 import { getContractMeta } from "../utils/contract";
-// import { Icon, message } from 'antd';
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
 import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
+import { getProvider } from "../utils/provider";
+import { init } from "../utils/web3Client";
 
-const ContractPanel = ({ contractAddress, userAddress }) => {
+const ContractPanel = ({
+  contractAddress,
+  setContractAddress,
+  userAddress,
+  initAtAppjs,
+  isConnect,
+  contractInstance,
+  setContractInstance,
+}) => {
   /* Variables */
   let navigate = useNavigate();
+  let params = useParams();
   let contractMeta = null;
 
   /* States */
@@ -26,50 +36,80 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
   );
   const [externalLink, setExternalLink] = useState("No External Link");
   const [contractType, setContractType] = useState(null);
-  const [contractInstance, setContractInstance] = useState("contract");
   const [hasContractMeta, setHasContractMeta] = useState(false);
+  const [loading, setLoading] = useState("false");
+
+  const checkInitUri = () => {
+    return params.address;
+  };
+
+  useEffect(() => {
+    initApp();
+  }, []);
 
   useEffect(() => {
     getContractData();
-  }, []);
+    checkUri();
+  }, [contractAddress]);
 
   /* Functions */
-  const getContractData = async () => {
-    let { contractInterface, contract } = await makeContract(
-      contractAddress,
-      userAddress
-    );
-    setContractInstance(contract);
-    if (contractInterface === "ERC1155") {
-      const [parsedName, parsedSymbol, parsedOwner] = await Promise.all([
-        name(contract),
-        symbol(contract),
-        getContractOwner(contract),
-      ]);
-      setContractName(parsedName);
-      setContractSymbol(parsedSymbol);
-      setContractOwner(parsedOwner);
-      setContractType("ERC1155");
-    } else if (contractInterface === "ERC721") {
-      const [parsedName, parsedSymbol, parsedOwner] = await Promise.all([
-        name(contract),
-        symbol(contract),
-        getContractOwner(contract),
-      ]);
-      setContractName(parsedName);
-      setContractSymbol(parsedSymbol);
-      setContractOwner(parsedOwner);
-      setContractType("ERC721");
-    } else {
-    }
 
-    contractMeta = await getContractMeta(contract);
-    if (contractMeta != null) {
-      setExternalName(contractMeta["data"].name);
-      setExternalDescript(contractMeta["data"].description);
-      setExternalLink(contractMeta["data"].external_url);
-      // show the contract metadata only when it exists
-      setHasContractMeta(true);
+  async function initApp() {
+    if (!initAtAppjs) {
+      const provider = await getProvider();
+      if (provider) {
+        let result = init(provider);
+        console.log("init result", result);
+        setLoading("true");
+      }
+    }
+  }
+
+  const checkUri = () => {
+    let address = checkInitUri();
+    setContractAddress(address);
+  };
+
+  const getContractData = async () => {
+    console.log("in get contract data");
+
+    if (contractAddress !== "test" && contractAddress !== undefined) {
+      console.log("contractAddress at panel", contractAddress);
+      let { contractInterface, contract } = await makeContract(contractAddress);
+      setContractInstance(contract);
+      if (contractInterface === "ERC1155") {
+        const [parsedName, parsedSymbol, parsedOwner] = await Promise.all([
+          name(contract),
+          symbol(contract),
+          getContractOwner(contract),
+        ]);
+        setContractName(parsedName);
+        setContractSymbol(parsedSymbol);
+        setContractOwner(parsedOwner);
+        setContractType("ERC1155");
+      } else if (contractInterface === "ERC721") {
+        const [parsedName, parsedSymbol, parsedOwner] = await Promise.all([
+          name(contract),
+          symbol(contract),
+          getContractOwner(contract),
+        ]);
+        setContractName(parsedName);
+        setContractSymbol(parsedSymbol);
+        setContractOwner(parsedOwner);
+        setContractType("ERC721");
+      } else {
+      }
+
+      contractMeta = await getContractMeta(contract);
+      if (contractMeta != null) {
+        setExternalName(contractMeta["data"].name);
+        setExternalDescript(contractMeta["data"].description);
+        setExternalLink(contractMeta["data"].external_url);
+        // show the contract metadata only when it exists
+        setHasContractMeta(true);
+      } else {
+        console.log("no metadata");
+      }
     }
   };
 
@@ -91,6 +131,7 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
         userAddress={userAddress}
       />
     );
+
     // navigate(`/contract/${contractAddress}`);
   } else if (contractType === "ERC1155") {
     panel = (
@@ -99,13 +140,13 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
         userAddress={userAddress}
       />
     );
+
     // navigate(`/contract/${contractAddress}`);
   }
 
   /* Render Function */
   return (
     <div>
-      <Token contractAddr={contractAddress} accountAddr={userAddress} />
       {/* Show the contract and  you can copy it */}
       <div className="divClass">
         <span className="contractText">Contract:</span>
@@ -123,14 +164,15 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
               Owner: <span className="blueText">{contractOwner}</span>
             </div>
           </div>
-          { hasContractMeta &&
-              <div className="col contractInfo">
-                <div>
-                  Name: {exteralName} <br />
-                  Description: {externalDescipt} <br />
-                  <span className="blueText">{externalLink}</span>
-                </div>
-              </div> }
+          {hasContractMeta && (
+            <div className="col contractInfo">
+              <div>
+                Name: {exteralName} <br />
+                Description: {externalDescipt} <br />
+                <span className="blueText">{externalLink}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div>{panel}</div>
@@ -139,8 +181,13 @@ const ContractPanel = ({ contractAddress, userAddress }) => {
 };
 
 ContractPanel.propTypes = {
-  contractAddress: PropTypes.string.isRequired,
-  userAddress: PropTypes.string.isRequired,
+  contractAddress: PropTypes.string,
+  userAddress: PropTypes.string,
+  setContractAddress: PropTypes.func,
+  initAtAppjs: PropTypes.bool,
+  isConnect: PropTypes.bool,
+  contractInstance: PropTypes.object,
+  setContractInstance: PropTypes.any,
 };
 
 export default ContractPanel;
