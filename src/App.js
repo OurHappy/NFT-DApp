@@ -34,14 +34,13 @@ function App() {
   async function initApp() {
     const provider = await getProvider();
     if (provider) {
-      console.log("get a provider at App.js");
-      setInitAtAppjs(true);
       const initialized = init(provider);
       setProviderExist(true);
 
       if (initialized) {
         setAppState("ready");
         console.log("inited web3 at App.js");
+        setInitAtAppjs(true);
 
         return;
       }

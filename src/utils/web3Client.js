@@ -19,7 +19,7 @@ export function init(givenProvider) {
 
   if (typeof Web3 !== undefined) {
     web3 = new Web3(provider);
-    console.log("inited web3 at init()");
+    console.log("init web3!");
 
     return true;
   } else {
@@ -93,7 +93,7 @@ export function isContractAddress(address) {
 }
 
 export async function makeContract(contractAddress) {
-  if (web3 !== undefined) {
+  if (web3 !== undefined && web3 !== null) {
     console.log("making");
     let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
     console.log("contract instacne=", contract);

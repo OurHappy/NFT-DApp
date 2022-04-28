@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Token from "./Token";
 import PropTypes from "prop-types";
 import { useNavigate, useParams } from "react-router";
-import { makeContract } from "../utils/web3Client";
+import web3, { makeContract } from "../utils/web3Client";
 import { getContractOwner, name, symbol } from "../utils/contract";
 import { getContractMeta } from "../utils/contract";
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
@@ -15,7 +15,6 @@ const ContractPanel = ({
   contractAddress,
   setContractAddress,
   userAddress,
-  initAtAppjs,
   isConnect,
   contractInstance,
   setContractInstance,
@@ -38,6 +37,7 @@ const ContractPanel = ({
   const [contractType, setContractType] = useState(null);
   const [hasContractMeta, setHasContractMeta] = useState(false);
   const [loading, setLoading] = useState("false");
+  const [web3, setWeb3] = useState(null);
 
   const checkInitUri = () => {
     return params.address;
@@ -45,23 +45,21 @@ const ContractPanel = ({
 
   useEffect(() => {
     initApp();
+    checkUri();
   }, []);
 
   useEffect(() => {
     getContractData();
-    checkUri();
   }, [contractAddress]);
 
   /* Functions */
 
   async function initApp() {
-    if (!initAtAppjs) {
-      const provider = await getProvider();
-      if (provider) {
-        let result = init(provider);
-        console.log("init result", result);
-        setLoading("true");
-      }
+    const provider = await getProvider();
+    if (provider) {
+      let result = init(provider);
+      console.log("inited at contractpanel", result);
+      setLoading("true");
     }
   }
 
@@ -74,7 +72,7 @@ const ContractPanel = ({
     console.log("in get contract data");
 
     if (contractAddress !== "test" && contractAddress !== undefined) {
-      console.log("contractAddress at panel", contractAddress);
+      console.log("contract address=", contractAddress);
       let { contractInterface, contract } = await makeContract(contractAddress);
       setContractInstance(contract);
       if (contractInterface === "ERC1155") {
@@ -110,6 +108,8 @@ const ContractPanel = ({
       } else {
         console.log("no metadata");
       }
+    } else {
+      return;
     }
   };
 
