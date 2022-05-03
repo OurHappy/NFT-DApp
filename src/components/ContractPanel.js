@@ -10,6 +10,7 @@ import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
 import { getProvider } from "../utils/provider";
 import { init } from "../utils/web3Client";
+import { propTypes } from "react-bootstrap/esm/Image";
 
 const ContractPanel = ({
   contractAddress,
@@ -18,6 +19,9 @@ const ContractPanel = ({
   isConnect,
   contractInstance,
   setContractInstance,
+  appState,
+  web3Instance,
+  setWeb3Instance,
 }) => {
   /* Variables */
   let navigate = useNavigate();
@@ -37,7 +41,6 @@ const ContractPanel = ({
   const [contractType, setContractType] = useState(null);
   const [hasContractMeta, setHasContractMeta] = useState(false);
   const [loading, setLoading] = useState("false");
-  const [web3, setWeb3] = useState(null);
 
   const checkInitUri = () => {
     return params.address;
@@ -46,20 +49,24 @@ const ContractPanel = ({
   useEffect(() => {
     initApp();
     checkUri();
+    // getContractData();
   }, []);
 
   useEffect(() => {
     getContractData();
-  }, [contractAddress]);
+  }, [web3Instance]);
 
   /* Functions */
 
   async function initApp() {
-    const provider = await getProvider();
-    if (provider) {
-      let result = init(provider);
-      console.log("inited at contractpanel", result);
-      setLoading("true");
+    if (web3Instance === null) {
+      const provider = await getProvider();
+      if (provider) {
+        let result = init(provider);
+        setWeb3Instance(result.instance);
+        console.log("inited at contractPanel", result);
+        setLoading("true");
+      }
     }
   }
 
@@ -69,12 +76,16 @@ const ContractPanel = ({
   };
 
   const getContractData = async () => {
-    console.log("in get contract data");
-
-    if (contractAddress !== "test" && contractAddress !== undefined) {
-      console.log("contract address=", contractAddress);
+    console.log("get contract data");
+    if (
+      contractAddress !== "" &&
+      web3Instance !== null &&
+      contractInstance === null
+      // appState == "ready"
+    ) {
       let { contractInterface, contract } = await makeContract(contractAddress);
       setContractInstance(contract);
+
       if (contractInterface === "ERC1155") {
         const [parsedName, parsedSymbol, parsedOwner] = await Promise.all([
           name(contract),
@@ -187,7 +198,10 @@ ContractPanel.propTypes = {
   initAtAppjs: PropTypes.bool,
   isConnect: PropTypes.bool,
   contractInstance: PropTypes.object,
-  setContractInstance: PropTypes.any,
+  setContractInstance: PropTypes.func,
+  appState: PropTypes.string,
+  web3Instance: PropTypes.object,
+  setWeb3Instance: PropTypes.func,
 };
 
 export default ContractPanel;

@@ -23,18 +23,22 @@ export async function getIPFSdata(ipfsPath) {
 }
 
 export async function getTokenMeta(contract, tokenId) {
-  console.log("contract=",contract);
+  console.log("getting tokenMeta", contract);
   if (contract !== undefined) {
     let ERC1155 = await isERC1155(contract);
     let ERC721 = await isERC721(contract);
 
     if (ERC1155) {
+      console.log("erc1155 get meta");
+      console.log("check contract", contract, tokenId);
       let tokenURI = await contract.methods.uri(tokenId).call();
+      console.log("token URI=", tokenURI);
       if (tokenURI.includes("ipfs://")) {
         //the meta is stored in IPFS
         let ipfsdata = getIPFSdata(tokenURI);
         return ipfsdata;
       } else {
+        console.log("else condition");
         // replace the {id} with the actual token ID in lowercase, and leading zero padded to 64 hex characters
         let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
         let zeroNum = 64 - tokenIdNew.length;
@@ -59,6 +63,8 @@ export async function getTokenMeta(contract, tokenId) {
         return tokenMeta;
       }
     } else if (ERC721) {
+      console.log("erc721 get meta");
+
       let tokenURI = await contract.methods.tokenURI(tokenId).call();
       if (tokenURI.includes("ipfs://")) {
         //the meta is stored in IPFS

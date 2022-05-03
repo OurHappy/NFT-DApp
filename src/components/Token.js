@@ -9,8 +9,8 @@ import { balanceOf, totalSupply } from "../utils/contract";
 import { useNavigate } from "react-router";
 import { Container, Row, Col } from "react-bootstrap";
 import { useParams } from "react-router";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { init } from "../utils/web3Client";
+import { getProvider } from "../utils/provider";
 
 const Token = (props) => {
   /* Variables */
@@ -34,22 +34,28 @@ const Token = (props) => {
   const [is1155, setIs1155] = useState(false);
   const [isImg, setIsImg] = useState(false);
   const [isVideo, setIsVideo] = useState(false);
-  const [initToken, setInitToken] = useState(false);
-
-  const [testLogic, setTestLogic] = useState();
+  const [loadToken, setLoadToken] = useState(false);
+  const [provider, setProvider] = useState(null);
+  const [contractInstanceAtToken, setContractInstanceAtToken] = useState(null);
 
   useEffect(() => {
-    if (params.tokenid !== undefined) {
-      uriSearchToken(params.tokenid);
+    console.log("token useEffect");
+    if (params.tokenId !== undefined) {
+      console.log("go uriSearchToken");
+      if (!loadToken) {
+        uriSearchToken(params.tokenId);
+      }
     }
-  }, [props.contractInstance]);
+  }, [props.web3Instance]);
   /* Functions */
 
   const resetStates = () => {
     setShowToken(0);
   };
   const handleKeyPress = (event) => {
-    if (event.key === "Enter") searchToken(event);
+    if (event.key === "Enter") {
+      searchToken(event);
+    }
   };
   // build token meta data
   let showTokenMeta = async (tokenMeta, tokenId) => {
@@ -106,24 +112,69 @@ const Token = (props) => {
     }
   };
 
+  let uriTokenValid = async (ID) => {
+    console.log("Uri token valid!");
+    if (provider === null) {
+      const provider = await getProvider();
+      setProvider(provider);
+      if (provider) {
+        const result = init(provider);
+        if (result.result) {
+          props.setWeb3Instance(result.instance);
+          console.log("set provider at tokenValid");
+        }
+      }
+    }
+
+    if (contractAddress !== "" && props.contractInstance === null) {
+      let result = await makeContract(contractAddress);
+      // contractType = contract.contractInterface;
+      setContractInstanceAtToken(result.contract);
+
+      if (result.contract !== null && loadToken === false) {
+        let tokenMeta = await getTokenMeta(result.contract, ID);
+
+        if (tokenMeta === null) {
+          console.log("Fail to catch token meta data...");
+          return false;
+        } else {
+          showTokenMeta(tokenMeta, ID);
+          console.log("successfully get token meta!");
+          setLoadToken(true);
+          return true;
+        }
+      } else {
+        console.log("final error!");
+      }
+    }
+  };
+
   // to see whether it is a valid token
   let tokenValid = async (ID) => {
-    if (props.contractInstance == null && props.contractAddress !== "test") {
-      init();
-      console.log("null instance!");
+    if (loadToken === false) {
+      const provider = await getProvider();
+      console.log("provider", provider);
+      if (provider) {
+        const result = init(provider);
+        if (result.result) {
+          props.setWeb3Instance(result.instance);
+          console.log("set provider at tokenValid");
+        }
+      }
+    }
+
+    if (props.contractInstance === null && props.contractAddress !== "") {
       let { contractInterface, contract } = await makeContract(contractAddress);
+      console.log("making contract at token.js");
       contractType = contractInterface;
       props.setContractInstance(contract);
-      console.log("contractInstance at uri", contractInstance);
+      console.log("contractInstance done", contractInstance);
     } else {
       console.log("already gave contractInstnace");
     }
 
-    if (
-      props.contractInstance !== null &&
-      props.contractInstance !== undefined
-    ) {
-      console.log("double");
+    if (props.contractInstance !== null) {
+      console.log("start to  getTokenMeta");
       tokenMeta = await getTokenMeta(props.contractInstance, ID);
 
       if (tokenMeta === null) {
@@ -132,15 +183,16 @@ const Token = (props) => {
       } else {
         showTokenMeta(tokenMeta, ID);
         console.log("successfully get token meta!");
+        setLoadToken(true);
         return true;
       }
     }
   };
 
   let uriSearchToken = async (tokenid) => {
-    console.log("searching uri ");
-    if (props.contractInstance !== undefined) {
-      let val = await tokenValid(tokenid);
+    if (props.contractInstance === null) {
+      console.log("check valid at uriSearchToken");
+      let val = await uriTokenValid(tokenid);
 
       if (val) {
         console.log("inside val");
@@ -151,6 +203,7 @@ const Token = (props) => {
 
   let searchToken = async (event) => {
     let val = await tokenValid(event.target.value);
+    console.log("val=", val);
     if (val) {
       setShowToken(1);
       navigate(`${event.target.value}`);
@@ -213,11 +266,13 @@ const Token = (props) => {
 };
 
 Token.propTypes = {
-  contractAddress: PropTypes.string.isRequired,
+  contractAddress: PropTypes.string,
   accountAddress: PropTypes.string.isRequired,
   isConnect: PropTypes.bool,
   contractInstance: PropTypes.object,
   setContractInstance: PropTypes.func,
+  web3Instance: PropTypes.object,
+  setWeb3Instance: PropTypes.func,
 };
 
 export default Token;

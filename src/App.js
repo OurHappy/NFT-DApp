@@ -7,7 +7,7 @@ import Searchbox from "./components/Searchbox";
 import ContractPanel from "./components/ContractPanel";
 import "./styles/style.css";
 
-import { init } from "./utils/web3Client";
+import web3, { init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
 import Panel_ERC1155 from "./components/Panel_ERC1155";
@@ -19,12 +19,13 @@ function App() {
   /* States */
   const [appState, setAppState] = useState("initializing");
   const [isContract, setIsContract] = useState(0);
-  const [address, setAddress] = useState("test");
+  const [address, setAddress] = useState("");
   const [providerExist, setProviderExist] = useState(false);
   const [userAddress, setUserAddress] = useState("");
   const [initAtAppjs, setInitAtAppjs] = useState(false);
   const [isConnect, setIsConnect] = useState(false);
   const [contractInstance, setContractInstance] = useState(null);
+  const [web3Instance, setWeb3Instance] = useState(null);
 
   useEffect(() => {
     initApp();
@@ -32,22 +33,26 @@ function App() {
 
   /* Functions */
   async function initApp() {
-    const provider = await getProvider();
-    if (provider) {
-      const initialized = init(provider);
-      setProviderExist(true);
+    if (web3Instance === null) {
+      const provider = await getProvider();
+      if (provider) {
+        console.log("app.js provider");
+        const initialized = init(provider);
+        setWeb3Instance(initialized.instance);
+        setProviderExist(true);
 
-      if (initialized) {
-        setAppState("ready");
-        console.log("inited web3 at App.js");
-        setInitAtAppjs(true);
+        if (initialized.result) {
+          setAppState("ready");
+          console.log("inited web3 at App.js");
+          setInitAtAppjs(true);
 
-        return;
+          return;
+        }
+      } else if (provider === null) {
+        setProviderExist(false);
       }
-    } else if (provider === null) {
-      setProviderExist(false);
+      setAppState("no_provider");
     }
-    setAppState("no_provider");
   }
 
   const onSearchChange = (addr) => {
@@ -92,6 +97,8 @@ function App() {
                     isConnect={isConnect}
                     contractInstance={contractInstance}
                     setContractInstance={setContractInstance}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
                   />
                   <ContractPanel
                     contractAddress={address}
@@ -100,13 +107,16 @@ function App() {
                     initAtAppjs={initAtAppjs}
                     contractInstance={contractInstance}
                     setContractInstance={setContractInstance}
+                    appState={appState}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
                   />
                 </Fragment>
               }
             ></Route>
 
             <Route
-              path="contract/:address/:tokenid"
+              path="contract/:address/:tokenId"
               element={
                 <Fragment>
                   <Token
@@ -115,6 +125,8 @@ function App() {
                     isConnect={isConnect}
                     contractInstance={contractInstance}
                     setContractInstance={setContractInstance}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
                   />
                   <ContractPanel
                     contractAddress={address}
@@ -123,6 +135,9 @@ function App() {
                     initAtAppjs={initAtAppjs}
                     setContractInstance={setContractInstance}
                     contractInstance={contractInstance}
+                    appState={appState}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
                   />
                 </Fragment>
               }

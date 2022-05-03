@@ -19,9 +19,8 @@ export function init(givenProvider) {
 
   if (typeof Web3 !== undefined) {
     web3 = new Web3(provider);
-    console.log("init web3!");
 
-    return true;
+    return { result: true, instance: web3 };
   } else {
     console.log("error");
   }
@@ -93,20 +92,20 @@ export function isContractAddress(address) {
 }
 
 export async function makeContract(contractAddress) {
-  if (web3 !== undefined && web3 !== null) {
-    console.log("making");
+  if (contractAddress !== "") {
     let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
-    console.log("contract instacne=", contract);
 
     let ERC1155 = await isERC1155(contract);
     let ERC721 = await isERC721(contract);
 
     if (ERC1155) {
+      console.log("erc1155");
       return {
         contractInterface: "ERC1155",
         contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
       };
     } else if (ERC721) {
+      console.log("erc721");
       return {
         contractInterface: "ERC721",
         contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
