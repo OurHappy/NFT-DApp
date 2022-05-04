@@ -33,7 +33,6 @@ export async function getBase64data(str) {
 }
 
 export async function getTokenMeta(contract, tokenId) {
-  console.log("getting tokenMeta", contract);
   if (contract !== undefined) {
     let ERC1155 = await isERC1155(contract);
     let ERC721 = await isERC721(contract);

@@ -16,6 +16,8 @@ const Token = (props) => {
   /* Variables */
   const contractAddress = props.contractAddress;
   const accountAddress = props.accountAddress;
+  const currentNetwork = props.currentNetwork;
+
   let contractType, contractInstance;
   let tokenMeta = null;
   let navigate = useNavigate();
@@ -39,9 +41,7 @@ const Token = (props) => {
   const [contractInstanceAtToken, setContractInstanceAtToken] = useState(null);
 
   useEffect(() => {
-    console.log("token useEffect");
     if (params.tokenId !== undefined) {
-      console.log("go uriSearchToken");
       if (!loadToken) {
         uriSearchToken(params.tokenId);
       }
@@ -114,7 +114,6 @@ const Token = (props) => {
   };
 
   let uriTokenValid = async (ID) => {
-    console.log("Uri token valid!");
     if (provider === null) {
       const provider = await getProvider();
       setProvider(provider);
@@ -122,7 +121,6 @@ const Token = (props) => {
         const result = init(provider);
         if (result.result) {
           props.setWeb3Instance(result.instance);
-          console.log("set provider at tokenValid");
         }
       }
     }
@@ -136,16 +134,13 @@ const Token = (props) => {
         let tokenMeta = await getTokenMeta(result.contract, ID);
 
         if (tokenMeta === null) {
-          console.log("Fail to catch token meta data...");
           return false;
         } else {
           showTokenMeta(tokenMeta, ID);
-          console.log("successfully get token meta!");
           setLoadToken(true);
           return true;
         }
       } else {
-        console.log("final error!");
       }
     }
   };
@@ -154,36 +149,29 @@ const Token = (props) => {
   let tokenValid = async (ID) => {
     if (loadToken === false) {
       const provider = await getProvider();
-      console.log("provider", provider);
       if (provider) {
         const result = init(provider);
         if (result.result) {
           props.setWeb3Instance(result.instance);
-          console.log("set provider at tokenValid");
         }
       }
     }
 
     if (props.contractInstance === null && props.contractAddress !== "") {
       let { contractInterface, contract } = await makeContract(contractAddress);
-      console.log("making contract at token.js");
       contractType = contractInterface;
       props.setContractInstance(contract);
-      console.log("contractInstance done", contractInstance);
     } else {
       console.log("already gave contractInstnace");
     }
 
     if (props.contractInstance !== null) {
-      console.log("start to  getTokenMeta");
       tokenMeta = await getTokenMeta(props.contractInstance, ID);
 
       if (tokenMeta === null) {
-        console.log("Fail to catch token meta data...");
         return false;
       } else {
         showTokenMeta(tokenMeta, ID);
-        console.log("successfully get token meta!");
         setLoadToken(true);
         return true;
       }
@@ -192,11 +180,9 @@ const Token = (props) => {
 
   let uriSearchToken = async (tokenid) => {
     if (props.contractInstance === null) {
-      console.log("check valid at uriSearchToken");
       let val = await uriTokenValid(tokenid);
 
       if (val) {
-        console.log("inside val");
         setShowToken(1);
       }
     }
@@ -204,7 +190,6 @@ const Token = (props) => {
 
   let searchToken = async (event) => {
     let val = await tokenValid(event.target.value);
-    console.log("val=", val);
     if (val) {
       setShowToken(1);
       navigate(`${event.target.value}`);
@@ -213,6 +198,113 @@ const Token = (props) => {
     }
   };
 
+  let link = "";
+  switch (currentNetwork) {
+    case "Ethereum Mainnet":
+      link = (
+        <a
+          href={"https://etherscan.io/address/" + contractAddress}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on EtherScan
+        </a>
+      );
+      break;
+    case "Rinkeby Testnet":
+      link = (
+        <a
+          href={"https://rinkeby.etherscan.io/address/" + contractAddress}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on EtherScan
+        </a>
+      );
+      break;
+    case "Ropsten Testnet":
+      link = (
+        <a
+          href={"https://ropsten.etherscan.io/address/" + contractAddress}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on EtherScan
+        </a>
+      );
+      break;
+    case "ThunderCore Mainnet":
+      link = (
+        <a
+          href={"https://scan.thundercore.com/address/" + contractAddress}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on ThunderCore Scan
+        </a>
+      );
+      break;
+    case "ThunderCore Testnet":
+      link = (
+        <a
+          href={
+            "https://scan-testnet.thundercore.com/address/" + contractAddress
+          }
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on ThunderCore Scan
+        </a>
+      );
+      break;
+
+    case "Smart Chain Mainnet":
+      link = (
+        <a
+          href={"https://bscscan.com/address/" + contractAddress}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on BscScan
+        </a>
+      );
+      break;
+    case "Smart Chain Testnet":
+      link = (
+        <a
+          href={
+            "https://scan-testnet.thundercore.com/address/" + contractAddress
+          }
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on BscScan
+        </a>
+      );
+      break;
+    case "Polygon":
+      link = (
+        <a
+          href={"https://polygonscan.com/address/" + contractAddress}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on BscScan
+        </a>
+      );
+      break;
+    case "Polygon Testnet":
+      link = (
+        <a
+          href={"https://mumbai.polygonscan.com/address" + contractAddress}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View on BscScan
+        </a>
+      );
+      break;
+  }
   /* Render functions */
   return (
     <div className="divClass">
@@ -252,7 +344,10 @@ const Token = (props) => {
                   Description: {description} <br />
                   <br />
                   External Link: {exLink} <br />
+                  {link}
+                  <br />
                   {/* Other meta: {meta} <br /> */}
+                  <br />
                   <br />
                   {is1155 && <p>Total Supply: {supply}</p>}
                   You owned: {own}
@@ -276,6 +371,7 @@ Token.propTypes = {
   setWeb3Instance: PropTypes.func,
   contractAddr: PropTypes.string,
   accountAddr: PropTypes.string,
+  currentNetwork: PropTypes.string,
 };
 
 export default Token;

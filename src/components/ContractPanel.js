@@ -64,7 +64,6 @@ const ContractPanel = ({
       if (provider) {
         let result = init(provider);
         setWeb3Instance(result.instance);
-        console.log("inited at contractPanel", result);
         setLoading("true");
       }
     }
@@ -76,7 +75,6 @@ const ContractPanel = ({
   };
 
   const getContractData = async () => {
-    console.log("get contract data");
     if (
       contractAddress !== "" &&
       web3Instance !== null &&

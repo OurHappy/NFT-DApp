@@ -65,6 +65,7 @@ export const Navbar = (props) => {
       setIsConnected(true);
       setConnectText("Disconnect");
       setUserAddress(result.address);
+      props.setCurrentNetwork(result.network);
     }
   };
 
@@ -96,6 +97,7 @@ Navbar.propTypes = {
   setUserAddress: PropTypes.func.isRequired,
   setIsConnected: PropTypes.func.isRequired,
   isConnect: PropTypes.bool,
+  setCurrentNetwork: PropTypes.func,
 };
 
 export default Navbar;

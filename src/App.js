@@ -27,6 +27,7 @@ function App() {
   const [contractInstance, setContractInstance] = useState(null);
   const [web3Instance, setWeb3Instance] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [currentNetwork, setCurrentNetwork] = useState(null);
 
   useEffect(() => {
     initApp();
@@ -37,14 +38,12 @@ function App() {
     if (web3Instance === null) {
       const provider = await getProvider();
       if (provider) {
-        console.log("app.js provider");
         const initialized = init(provider);
         setWeb3Instance(initialized.instance);
         setProviderExist(true);
 
         if (initialized.result) {
           setAppState("ready");
-          console.log("inited web3 at App.js");
           setInitAtAppjs(true);
 
           return;
@@ -80,6 +79,7 @@ function App() {
             isConnect={isConnect}
             setIsConnect={setIsConnect}
             setIsConnected={setIsConnected}
+            setCurrentNetwork={setCurrentNetwork}
           />
 
           <Routes>
@@ -101,6 +101,7 @@ function App() {
                     setContractInstance={setContractInstance}
                     web3Instance={web3Instance}
                     setWeb3Instance={setWeb3Instance}
+                    currentNetwork={currentNetwork}
                   />
                   <ContractPanel
                     contractAddress={address}
@@ -130,6 +131,7 @@ function App() {
                     setContractInstance={setContractInstance}
                     web3Instance={web3Instance}
                     setWeb3Instance={setWeb3Instance}
+                    currentNetwork={currentNetwork}
                   />
                   <ContractPanel
                     contractAddress={address}

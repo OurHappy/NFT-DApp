@@ -46,6 +46,9 @@ export async function connect() {
     case 1:
       networkName = "Ethereum Mainnet";
       break;
+    case 3:
+      networkName = "Ropsten Testnet";
+      break;
     case 4:
       networkName = "Rinkeby Testnet";
       break;
@@ -61,17 +64,17 @@ export async function connect() {
     case 108:
       networkName = "ThunderCore Mainnet";
       break;
+    case 137:
+      networkName = "Polygon";
+      break;
+    case 80001:
+      networkName = "Polygon Testnet";
+      break;
 
     default:
       networkName = "Unknown";
       break;
   }
-
-  //store address, balance, networkname in and array
-  let wallectinformation = [];
-  wallectinformation.push(address[0]);
-  wallectinformation.push(balance[0]);
-  wallectinformation.push(networkName);
 
   return {
     address: address[0],
@@ -99,20 +102,16 @@ export async function makeContract(contractAddress) {
     let ERC721 = await isERC721(contract);
 
     if (ERC1155) {
-      console.log("erc1155");
       return {
         contractInterface: "ERC1155",
         contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
       };
     } else if (ERC721) {
-      console.log("erc721");
       return {
         contractInterface: "ERC721",
         contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
       };
     } else {
-      console.log("not 1155 nor");
-
       return {
         contractInterface: "unsupport_contract",
         contract: null,
