@@ -71,6 +71,7 @@ const Token = (props) => {
         else if (key === "description") setDescription(value);
         else if (key === "external_url") setExLink(value);
         else if (key === "image") {
+          // Since base64 image can be shown directly, no need to decode base64 for image
           setImg(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
           setIsImg(true);
 
@@ -273,6 +274,8 @@ Token.propTypes = {
   setContractInstance: PropTypes.func,
   web3Instance: PropTypes.object,
   setWeb3Instance: PropTypes.func,
+  contractAddr: PropTypes.string,
+  accountAddr: PropTypes.string,
 };
 
 export default Token;

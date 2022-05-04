@@ -9,8 +9,7 @@ import { useParams } from "react-router";
 import { ContactsOutlined } from "@ant-design/icons";
 
 export const Navbar = (props) => {
-  // let params = useParams();
-  const { setUserAddress } = props;
+  const { setUserAddress, setIsConnected } = props;
   /* States */
   const [connectText, setConnectText] = useState("Connect");
   const [chainName, setChainName] = useState("");
@@ -53,7 +52,8 @@ export const Navbar = (props) => {
   let clickAction = async () => {
     if (props.isConnect) {
       await disconnect();
-      props.setIsConnect(false);
+      // setIsConnect(0); // use for Navbar
+      setIsConnected(false); // use for App
       setConnectText("Connect");
       setChainName("");
       setAddress("");
@@ -61,7 +61,8 @@ export const Navbar = (props) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-      props.setIsConnect(true);
+      // setIsConnect(true);
+      setIsConnected(true);
       setConnectText("Disconnect");
       setUserAddress(result.address);
     }
@@ -93,9 +94,8 @@ export const Navbar = (props) => {
 Navbar.propTypes = {
   clickChange: PropTypes.func,
   setUserAddress: PropTypes.func.isRequired,
-  setInitUri: PropTypes.func,
+  setIsConnected: PropTypes.func.isRequired,
   isConnect: PropTypes.bool,
-  setIsConnect: PropTypes.func,
 };
 
 export default Navbar;

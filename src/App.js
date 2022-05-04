@@ -26,6 +26,7 @@ function App() {
   const [isConnect, setIsConnect] = useState(false);
   const [contractInstance, setContractInstance] = useState(null);
   const [web3Instance, setWeb3Instance] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     initApp();
@@ -78,6 +79,7 @@ function App() {
             setUserAddress={setUserAddress}
             isConnect={isConnect}
             setIsConnect={setIsConnect}
+            setIsConnected={setIsConnected}
           />
 
           <Routes>
@@ -110,6 +112,7 @@ function App() {
                     appState={appState}
                     web3Instance={web3Instance}
                     setWeb3Instance={setWeb3Instance}
+                    isConnected={isConnected}
                   />
                 </Fragment>
               }

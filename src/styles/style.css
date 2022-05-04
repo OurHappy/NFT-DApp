@@ -178,6 +178,11 @@
   margin-bottom: 10px;
 }
 
+.alertClass {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
 /* .tokenImgAdapt {
   width: 50px;
   padding: 40px;

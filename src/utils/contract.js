@@ -22,6 +22,16 @@ export async function getIPFSdata(ipfsPath) {
   return JSON.parse(info[1]);
 }
 
+export async function getBase64data(str) {
+  let index = str.search("base64,");
+  index = index + 7;
+  str = str.substr(index);
+
+  // decode base64 to string, then to JSON
+  let decodeStr = JSON.parse(atob(str));
+  return decodeStr;
+}
+
 export async function getTokenMeta(contract, tokenId) {
   console.log("getting tokenMeta", contract);
   if (contract !== undefined) {
@@ -29,16 +39,16 @@ export async function getTokenMeta(contract, tokenId) {
     let ERC721 = await isERC721(contract);
 
     if (ERC1155) {
-      console.log("erc1155 get meta");
-      console.log("check contract", contract, tokenId);
       let tokenURI = await contract.methods.uri(tokenId).call();
-      console.log("token URI=", tokenURI);
       if (tokenURI.includes("ipfs://")) {
         //the meta is stored in IPFS
         let ipfsdata = getIPFSdata(tokenURI);
         return ipfsdata;
+      } else if (tokenURI.includes("data:application/json;base64")) {
+        // the meta is base64 format
+        let base64data = getBase64data(tokenURI);
+        return base64data;
       } else {
-        console.log("else condition");
         // replace the {id} with the actual token ID in lowercase, and leading zero padded to 64 hex characters
         let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
         let zeroNum = 64 - tokenIdNew.length;
@@ -46,46 +56,49 @@ export async function getTokenMeta(contract, tokenId) {
           tokenIdNew = "0" + tokenIdNew;
         }
         tokenURI = tokenURI.replace("{id}", tokenIdNew);
-
-        // get metadata with Oursong API
-        let newDataUrl = dataUrl + "?uri=" + tokenURI;
-        let tokenMeta = await axios
-          .get(newDataUrl, {
-            responseType: "json",
-          })
-          .then((res) => {
-            return res;
-          })
-          .catch((err) => {
-            console.log(err);
-            return null;
-          });
-        return tokenMeta;
       }
-    } else if (ERC721) {
-      console.log("erc721 get meta");
 
-      let tokenURI = await contract.methods.tokenURI(tokenId).call();
-      if (tokenURI.includes("ipfs://")) {
-        //the meta is stored in IPFS
-        let ipfsdata = getIPFSdata(tokenURI);
-        return ipfsdata;
-      } else {
-        // get metadata with Oursong API
-        let newDataUrl = dataUrl + "?uri=" + tokenURI;
-        let tokenMeta = await axios
-          .get(newDataUrl, {
-            responseType: "json",
-          })
-          .then((res) => {
-            return res;
-          })
-          .catch((err) => {
-            console.log(err);
-            return null;
-          });
-        return tokenMeta;
-      }
+      // get metadata with Oursong API
+      let newDataUrl = dataUrl + "?uri=" + tokenURI;
+      let tokenMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return tokenMeta;
+    }
+  } else if (ERC721) {
+    let tokenURI = await contract.methods.tokenURI(tokenId).call();
+
+    if (tokenURI.includes("ipfs://")) {
+      //the meta is stored in IPFS
+      let ipfsdata = getIPFSdata(tokenURI);
+      return ipfsdata;
+    } else if (tokenURI.includes("data:application/json;base64")) {
+      // the meta is base64 format
+      let base64data = getBase64data(tokenURI);
+      return base64data;
+    } else {
+      // get metadata with Oursong API
+      let newDataUrl = dataUrl + "?uri=" + tokenURI;
+      let tokenMeta = await axios
+        .get(newDataUrl, {
+          responseType: "json",
+        })
+        .then((res) => {
+          return res;
+        })
+        .catch((err) => {
+          console.log(err);
+          return null;
+        });
+      return tokenMeta;
     }
   }
 }

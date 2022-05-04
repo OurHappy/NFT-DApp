@@ -16,7 +16,7 @@ const ContractPanel = ({
   contractAddress,
   setContractAddress,
   userAddress,
-  isConnect,
+  isConnected,
   contractInstance,
   setContractInstance,
   appState,
@@ -140,6 +140,7 @@ const ContractPanel = ({
       <Panel_ERC721
         contractInstance={contractInstance}
         userAddress={userAddress}
+        isConnected={isConnected}
       />
     );
 
@@ -149,6 +150,7 @@ const ContractPanel = ({
       <Panel_ERC1155
         contractInstance={contractInstance}
         userAddress={userAddress}
+        isConnected={isConnected}
       />
     );
 
@@ -196,7 +198,7 @@ ContractPanel.propTypes = {
   userAddress: PropTypes.string,
   setContractAddress: PropTypes.func,
   initAtAppjs: PropTypes.bool,
-  isConnect: PropTypes.bool,
+  isConnected: PropTypes.bool,
   contractInstance: PropTypes.object,
   setContractInstance: PropTypes.func,
   appState: PropTypes.string,
