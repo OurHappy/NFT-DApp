@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { isContractAddress } from "../utils/web3Client";
 import { FormControl } from "react-bootstrap";
@@ -11,7 +11,6 @@ const Searchbox = (props) => {
 
   /* States */
   const [warnText, setWarnText] = useState("");
-  const [initUri, setInitUri] = useState("");
 
   /* Functions */
 
@@ -32,7 +31,6 @@ const Searchbox = (props) => {
     const isValid = contractValid(inputVal);
 
     if (isValid) {
-      props.searchChange(inputVal);
       navigate(`contract/${inputVal}`);
     } else {
       setWarnText("This is not a valid contract address");

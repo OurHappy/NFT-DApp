@@ -71,34 +71,34 @@ export async function getTokenMeta(contract, tokenId) {
           return null;
         });
       return tokenMeta;
-    }
-  } else if (ERC721) {
-    let tokenURI = await contract.methods.tokenURI(tokenId).call();
-
-    if (tokenURI.includes("ipfs://")) {
-      //the meta is stored in IPFS
-      let ipfsdata = getIPFSdata(tokenURI);
-      return ipfsdata;
-    } else if (tokenURI.includes("data:application/json;base64")) {
-      // the meta is base64 format
-      let base64data = getBase64data(tokenURI);
-      return base64data;
-    } else {
-      // get metadata with Oursong API
-      let newDataUrl = dataUrl + "?uri=" + tokenURI;
-      let tokenMeta = await axios
-        .get(newDataUrl, {
-          responseType: "json",
-        })
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => {
-          console.log(err);
-          return null;
-        });
-      return tokenMeta;
-    }
+    } else if (ERC721) {
+      let tokenURI = await contract.methods.tokenURI(tokenId).call();
+  
+      if (tokenURI.includes("ipfs://")) {
+        //the meta is stored in IPFS
+        let ipfsdata = getIPFSdata(tokenURI);
+        return ipfsdata;
+      } else if (tokenURI.includes("data:application/json;base64")) {
+        // the meta is base64 format
+        let base64data = getBase64data(tokenURI);
+        return base64data;
+      } else {
+        // get metadata with Oursong API
+        let newDataUrl = dataUrl + "?uri=" + tokenURI;
+        let tokenMeta = await axios
+          .get(newDataUrl, {
+            responseType: "json",
+          })
+          .then((res) => {
+            return res;
+          })
+          .catch((err) => {
+            console.log(err);
+            return null;
+          });
+        return tokenMeta;
+      }
+    } 
   }
 }
 
