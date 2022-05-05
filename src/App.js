@@ -4,14 +4,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import Searchbox from "./components/Searchbox";
-import ContractPanel from "./components/ContractPanel";
 import "./styles/style.css";
 
-import web3, { init } from "./utils/web3Client";
+import { init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
-import Panel_ERC1155 from "./components/Panel_ERC1155";
-import Token from "./components/Token";
 import AppState from './context/appState';
 import UserWallet from './context/userWallet';
 import Detail from './pages/Detail';

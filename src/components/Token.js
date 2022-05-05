@@ -1,16 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { getTokenMeta } from "../utils/contract";
-import { makeContract } from "../utils/web3Client";
-import { FormControl } from "react-bootstrap";
-import { InputGroup } from "react-bootstrap";
+import { Container, Row, Col, FormControl, InputGroup } from "react-bootstrap";
+import { useParams, useNavigate } from "react-router";
 import PropTypes from "prop-types";
-import { balanceOf721 } from "../utils/contract";
-import { balanceOf, totalSupply } from "../utils/contract";
-import { useNavigate } from "react-router";
-import { Container, Row, Col } from "react-bootstrap";
-import { useParams } from "react-router";
-import { init } from "../utils/web3Client";
-import { getProvider } from "../utils/provider";
+import { balanceOf721, getTokenMeta, balanceOf, totalSupply } from "../utils/contract";
+import { makeContract } from "../utils/web3Client";
 import UserWallet from "../context/userWallet";
 
 const Token = (props) => {
@@ -297,6 +290,7 @@ const Token = (props) => {
         link = null;
         break;
     }
+    console.log("Network:", currentNetwork, link);
     return link;
   }
   /* Render functions */

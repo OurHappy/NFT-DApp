@@ -2,12 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import { connect, disconnect, on, removeListener } from "../utils/web3Client";
-import { Spinner } from "react-bootstrap";
-import { triggerFocus } from "antd/lib/input/Input";
-import PropTypes from "prop-types";
-import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { ContactsOutlined } from "@ant-design/icons";
 import UserWallet from '../context/userWallet';
 
 export const Navbar = (props) => {
