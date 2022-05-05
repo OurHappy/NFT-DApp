@@ -59,7 +59,7 @@ export async function connect() {
       networkName = "Smart Chain Mainnet";
       break;
     case 97:
-      networkName = "Smart Chain Testntet";
+      networkName = "Smart Chain Testnet";
       break;
     case 108:
       networkName = "ThunderCore Mainnet";

@@ -11,7 +11,6 @@ const Searchbox = (props) => {
 
   /* States */
   const [warnText, setWarnText] = useState("");
-  const [initUri, setInitUri] = useState("");
 
   /* Functions */
 
@@ -32,7 +31,6 @@ const Searchbox = (props) => {
     const isValid = contractValid(inputVal);
 
     if (isValid) {
-      props.searchChange(inputVal);
       navigate(`contract/${inputVal}`);
     } else {
       setWarnText("This is not a valid contract address");

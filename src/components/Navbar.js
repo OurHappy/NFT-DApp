@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import { connect, disconnect, on, removeListener } from "../utils/web3Client";
@@ -6,10 +6,17 @@ import { Spinner } from "react-bootstrap";
 import { triggerFocus } from "antd/lib/input/Input";
 import PropTypes from "prop-types";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { ContactsOutlined } from "@ant-design/icons";
+import UserWallet from '../context/userWallet';
 
 export const Navbar = (props) => {
-  const { setUserAddress, setIsConnected } = props;
+  /**
+   * Props and Constants
+   */
+  const navigate = useNavigate();
+  const userWallet = useContext(UserWallet);
+  const isConnect = userWallet.isConnected();
   /* States */
   const [connectText, setConnectText] = useState("Connect");
   const [chainName, setChainName] = useState("");
@@ -22,55 +29,52 @@ export const Navbar = (props) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-      setUserAddress(result.address);
+      userWallet.setAddress(result.address);
     };
     const handleChainChanged = async (chainId) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
-      setUserAddress(result.address);
+      userWallet.setAddress(result.address);
     };
 
-    if (props.isConnect) {
+    if (isConnect) {
       on("accountsChanged", handleAccountsChanged);
       on("chainChanged", handleChainChanged);
     }
 
     // remove the listener when finishing listening
     return () => {
-      if (props.isConnect) {
+      if (isConnect) {
         removeListener("accountsChanged", handleAccountsChanged);
         removeListener("chainChanged", handleChainChanged);
       }
     };
-  }, [props.isConnect]);
+  }, [isConnect]);
 
   /* API calls */
 
   /* Functions */
 
   let clickAction = async () => {
-    if (props.isConnect) {
+    if (isConnect) {
       await disconnect();
-      // setIsConnect(0); // use for Navbar
-      setIsConnected(false); // use for App
       setConnectText("Connect");
       setChainName("");
       setAddress("");
+      userWallet.setAddress(null);
     } else {
       const result = await connect();
+      userWallet.setAddress(result.address);
+      userWallet.setNetwork(result.network);
       setAddress(result.address);
       setChainName(result.network);
-      // setIsConnect(true);
-      setIsConnected(true);
       setConnectText("Disconnect");
-      setUserAddress(result.address);
-      props.setCurrentNetwork(result.network);
     }
   };
 
   let clickMenu = async () => {
-    props.clickChange();
+    navigate('/');
   };
 
   /* Render functions */
@@ -91,13 +95,4 @@ export const Navbar = (props) => {
     </Stack>
   );
 };
-
-Navbar.propTypes = {
-  clickChange: PropTypes.func,
-  setUserAddress: PropTypes.func.isRequired,
-  setIsConnected: PropTypes.func.isRequired,
-  isConnect: PropTypes.bool,
-  setCurrentNetwork: PropTypes.func,
-};
-
 export default Navbar;
