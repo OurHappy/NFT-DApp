@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { InputGroup, FormControl, Accordion, Button, Alert } from "react-bootstrap";
+import {
+  InputGroup,
+  FormControl,
+  Accordion,
+  Button,
+  Alert,
+} from "react-bootstrap";
 import { balanceOf, totalSupply, burn, transfer, uri } from "../utils/contract";
 import PropTypes from "prop-types";
 
@@ -216,21 +222,21 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              { isConnected && 
+              {isConnected && (
                 <Button variant="primary" onClick={burnToken}>
                   burn
                 </Button>
-              }
-              { !isConnected &&
+              )}
+              {!isConnected && (
                 <Alert variant="danger" className="alertClass">
                   Please connect your metamask wallet before burning.
                 </Alert>
-              }
-              { !isConnected && 
+              )}
+              {!isConnected && (
                 <Button variant="primary" onClick={burnToken} disabled>
                   burn
                 </Button>
-              }
+              )}
               <p className="result">{burnResult}</p>
             </div>
           </Accordion.Body>
@@ -281,23 +287,21 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              {
-                isConnected &&
+              {isConnected && (
                 <Button variant="primary" onClick={transferToken}>
                   transfer
                 </Button>
-              }
-              { !isConnected &&
+              )}
+              {!isConnected && (
                 <Alert variant="danger" className="alertClass">
                   Please connect your metamask wallet before transferring.
                 </Alert>
-              }
-              {
-                !isConnected &&
+              )}
+              {!isConnected && (
                 <Button variant="primary" onClick={transferToken} disabled>
                   transfer
                 </Button>
-              }
+              )}
               <p className="result">{transferResult}</p>
             </div>
           </Accordion.Body>
@@ -310,7 +314,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
 Panel_ERC1155.propTypes = {
   contractInstance: PropTypes.object.isRequired,
   userAddress: PropTypes.string,
-  isConnected: PropTypes.bool.isRequired,
+  isConnected: PropTypes.bool,
 };
 
 export default Panel_ERC1155;

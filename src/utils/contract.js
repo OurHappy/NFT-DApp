@@ -33,27 +33,29 @@ export async function getBase64data(str) {
 }
 
 export async function getTokenMeta(contract, tokenId) {
-  let ERC1155 = await isERC1155(contract);
-  let ERC721 = await isERC721(contract);
+  if (contract !== undefined) {
+    let ERC1155 = await isERC1155(contract);
+    let ERC721 = await isERC721(contract);
 
-  if (ERC1155) {
-    let tokenURI = await contract.methods.uri(tokenId).call();
-    if (tokenURI.includes("ipfs://")) {
-      //the meta is stored in IPFS
-      let ipfsdata = getIPFSdata(tokenURI);
-      return ipfsdata;
-    } else if (tokenURI.includes("data:application/json;base64")) {
-      // the meta is base64 format
-      let base64data = getBase64data(tokenURI);
-      return base64data;
-    } else {
-      // replace the {id} with the actual token ID in lowercase, and leading zero padded to 64 hex characters
-      let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
-      let zeroNum = 64 - tokenIdNew.length;
-      for (let i = 0; i < zeroNum; i++) {
-        tokenIdNew = "0" + tokenIdNew;
+    if (ERC1155) {
+      let tokenURI = await contract.methods.uri(tokenId).call();
+      if (tokenURI.includes("ipfs://")) {
+        //the meta is stored in IPFS
+        let ipfsdata = getIPFSdata(tokenURI);
+        return ipfsdata;
+      } else if (tokenURI.includes("data:application/json;base64")) {
+        // the meta is base64 format
+        let base64data = getBase64data(tokenURI);
+        return base64data;
+      } else {
+        // replace the {id} with the actual token ID in lowercase, and leading zero padded to 64 hex characters
+        let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
+        let zeroNum = 64 - tokenIdNew.length;
+        for (let i = 0; i < zeroNum; i++) {
+          tokenIdNew = "0" + tokenIdNew;
+        }
+        tokenURI = tokenURI.replace("{id}", tokenIdNew);
       }
-      tokenURI = tokenURI.replace("{id}", tokenIdNew);
 
       // get metadata with Oursong API
       let newDataUrl = dataUrl + "?uri=" + tokenURI;

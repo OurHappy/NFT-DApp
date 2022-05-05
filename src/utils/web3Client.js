@@ -19,9 +19,10 @@ export function init(givenProvider) {
 
   if (typeof Web3 !== undefined) {
     web3 = new Web3(provider);
-    return true;
+
+    return { result: true, instance: web3 };
   } else {
-    throw new Error();
+    console.log("error");
   }
 }
 
@@ -45,6 +46,9 @@ export async function connect() {
     case 1:
       networkName = "Ethereum Mainnet";
       break;
+    case 3:
+      networkName = "Ropsten Testnet";
+      break;
     case 4:
       networkName = "Rinkeby Testnet";
       break;
@@ -60,17 +64,17 @@ export async function connect() {
     case 108:
       networkName = "ThunderCore Mainnet";
       break;
+    case 137:
+      networkName = "Polygon";
+      break;
+    case 80001:
+      networkName = "Polygon Testnet";
+      break;
 
     default:
       networkName = "Unknown";
       break;
   }
-
-  //store address, balance, networkname in and array
-  let wallectinformation = [];
-  wallectinformation.push(address[0]);
-  wallectinformation.push(balance[0]);
-  wallectinformation.push(networkName);
 
   return {
     address: address[0],
@@ -91,28 +95,30 @@ export function isContractAddress(address) {
 }
 
 export async function makeContract(contractAddress) {
-  let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
+  if (contractAddress !== "") {
+    let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
 
-  let ERC1155 = await isERC1155(contract);
-  let ERC721 = await isERC721(contract);
+    let ERC1155 = await isERC1155(contract);
+    let ERC721 = await isERC721(contract);
 
-  if (ERC1155) {
-    return {
-      contractInterface: "ERC1155",
-      contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
-    };
-  } else if (ERC721) {
-    return {
-      contractInterface: "ERC721",
-      contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
-    };
-  } else {
-    return {
-      contractInterface: "unsupport_contract",
-      contract: null,
-    };
-    // throw new Error('unsupport contract type');
-    console.log("not supported");
+    if (ERC1155) {
+      return {
+        contractInterface: "ERC1155",
+        contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
+      };
+    } else if (ERC721) {
+      return {
+        contractInterface: "ERC721",
+        contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
+      };
+    } else {
+      return {
+        contractInterface: "unsupport_contract",
+        contract: null,
+      };
+      // throw new Error('unsupport contract type');
+      console.log("not supported");
+    }
   }
 }
 

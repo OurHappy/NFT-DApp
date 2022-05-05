@@ -7,19 +7,27 @@ import Searchbox from "./components/Searchbox";
 import ContractPanel from "./components/ContractPanel";
 import "./styles/style.css";
 
-import { init } from "./utils/web3Client";
+import web3, { init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
 import Panel_ERC1155 from "./components/Panel_ERC1155";
+import Token from "./components/Token";
 
 function App() {
+  /* Variables */
+
   /* States */
   const [appState, setAppState] = useState("initializing");
   const [isContract, setIsContract] = useState(0);
-  const [address, setAddress] = useState("test");
+  const [address, setAddress] = useState("");
   const [providerExist, setProviderExist] = useState(false);
-  const [userAddress, setUserAddress] = useState(null);
+  const [userAddress, setUserAddress] = useState("");
+  const [initAtAppjs, setInitAtAppjs] = useState(false);
+  const [isConnect, setIsConnect] = useState(false);
+  const [contractInstance, setContractInstance] = useState(null);
+  const [web3Instance, setWeb3Instance] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [currentNetwork, setCurrentNetwork] = useState(null);
 
   useEffect(() => {
     initApp();
@@ -27,22 +35,28 @@ function App() {
 
   /* Functions */
   async function initApp() {
-    const provider = await getProvider();
-    if (provider) {
-      const initialized = init(provider);
-      setProviderExist(true);
-      if (initialized) {
-        setAppState("ready");
-        return;
+    if (web3Instance === null) {
+      const provider = await getProvider();
+      if (provider) {
+        const initialized = init(provider);
+        setWeb3Instance(initialized.instance);
+        setProviderExist(true);
+
+        if (initialized.result) {
+          setAppState("ready");
+          setInitAtAppjs(true);
+
+          return;
+        }
+      } else if (provider === null) {
+        setProviderExist(false);
       }
-    } else if (provider === null) {
-      setProviderExist(false);
+      setAppState("no_provider");
     }
-    setAppState("no_provider");
   }
 
   const onSearchChange = (addr) => {
-    setIsContract(1);
+    setIsContract(true);
     setAddress(addr);
   };
 
@@ -62,30 +76,77 @@ function App() {
           <Navbar
             clickChange={clickMenuAction}
             setUserAddress={setUserAddress}
+            isConnect={isConnect}
+            setIsConnect={setIsConnect}
             setIsConnected={setIsConnected}
+            setCurrentNetwork={setCurrentNetwork}
           />
 
           <Routes>
-            {isContract === 0 && providerExist && (
+            {providerExist && (
               <Route
                 path="/"
                 element={<Searchbox searchChange={onSearchChange} />}
               />
             )}
-            {isContract && (
-              <Route
-                path="contract/:address"
-                element={
+            <Route
+              path="contract/:address"
+              element={
+                <Fragment>
+                  <Token
+                    contractAddress={address}
+                    accountAddress={userAddress}
+                    isConnect={isConnect}
+                    contractInstance={contractInstance}
+                    setContractInstance={setContractInstance}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
+                    currentNetwork={currentNetwork}
+                  />
                   <ContractPanel
                     contractAddress={address}
+                    setContractAddress={setAddress}
                     userAddress={userAddress}
+                    initAtAppjs={initAtAppjs}
+                    contractInstance={contractInstance}
+                    setContractInstance={setContractInstance}
+                    appState={appState}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
                     isConnected={isConnected}
                   />
-                }
-              >
-                <Route path=":tokenid"></Route>
-              </Route>
-            )}
+                </Fragment>
+              }
+            ></Route>
+
+            <Route
+              path="contract/:address/:tokenId"
+              element={
+                <Fragment>
+                  <Token
+                    contractAddress={address}
+                    accountAddress={userAddress}
+                    isConnect={isConnect}
+                    contractInstance={contractInstance}
+                    setContractInstance={setContractInstance}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
+                    currentNetwork={currentNetwork}
+                  />
+                  <ContractPanel
+                    contractAddress={address}
+                    setContractAddress={setAddress}
+                    userAddress={userAddress}
+                    initAtAppjs={initAtAppjs}
+                    setContractInstance={setContractInstance}
+                    contractInstance={contractInstance}
+                    appState={appState}
+                    web3Instance={web3Instance}
+                    setWeb3Instance={setWeb3Instance}
+                  />
+                </Fragment>
+              }
+            ></Route>
 
             {!providerExist && <Route path="/" element={<Defaultpage />} />}
           </Routes>

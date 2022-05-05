@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { isContractAddress } from "../utils/web3Client";
 import { FormControl } from "react-bootstrap";
 import { InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+
 const Searchbox = (props) => {
+  /* Variables */
   let navigate = useNavigate();
+
   /* States */
   const [warnText, setWarnText] = useState("");
+  const [initUri, setInitUri] = useState("");
 
   /* Functions */
-  // to see whether it is a valid contract
+
   const handleKeyPress = (event) => {
     if (event.key === "Enter") searchAction(event);
   };
