@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { isContractAddress } from "../utils/web3Client";
+import { isContractAddress, getChain, on, removeListener } from "../utils/web3Client";
 import { FormControl } from "react-bootstrap";
 import { InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +11,25 @@ const Searchbox = (props) => {
 
   /* States */
   const [warnText, setWarnText] = useState("");
+  const [chainName, setChainName] = useState("");
+  const [state, setState] = useState({});
+
+  useEffect(() => {
+    on("chainChanged", showCurrentChain);
+    return () => {
+      setState({});
+    };
+  }, []);
+
+  useEffect(() => {
+    showCurrentChain();
+  }, [chainName]);
 
   /* Functions */
+  async function showCurrentChain() {
+    let chainName = await getChain();
+    setChainName(chainName);
+  }
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") searchAction(event);
@@ -40,6 +57,9 @@ const Searchbox = (props) => {
   /* Render Function */
   return (
     <div className="divClass-search">
+      <div>
+        Current Chain: {chainName}
+      </div>
       <div>
         <InputGroup className="mb-3 searchbar">
           <FormControl

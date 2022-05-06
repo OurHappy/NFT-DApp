@@ -24,12 +24,14 @@ export const Navbar = (props) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
+      userWallet.setNetwork(result.network);
       userWallet.setAddress(result.address);
     };
     const handleChainChanged = async (chainId) => {
       const result = await connect();
       setAddress(result.address);
       setChainName(result.network);
+      userWallet.setNetwork(result.network);
       userWallet.setAddress(result.address);
     };
 
@@ -57,6 +59,7 @@ export const Navbar = (props) => {
       setConnectText("Connect");
       setChainName("");
       setAddress("");
+      userWallet.setNetwork(null);
       userWallet.setAddress(null);
     } else {
       const result = await connect();

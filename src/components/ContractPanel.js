@@ -9,7 +9,7 @@ import Panel_ERC721 from "./Panel_ERC721";
 import UserWallet from '../context/userWallet';
 
 const ContractPanel = ({
-  contractAddress,
+  contractAddress, isDisable
 }) => {
   /* Variables */
   let contractMeta = null;
@@ -95,6 +95,7 @@ const ContractPanel = ({
         contractInstance={contractInstance}
         userAddress={userWallet.address}
         isConnected={isConnected}
+        isDisable={isDisable}
       />
     );
 
@@ -105,6 +106,7 @@ const ContractPanel = ({
         contractInstance={contractInstance}
         userAddress={userWallet.address}
         isConnected={isConnected}
+        isDisable={isDisable}
       />
     );
 
@@ -149,6 +151,7 @@ const ContractPanel = ({
 
 ContractPanel.propTypes = {
   contractAddress: PropTypes.string,
+  isDisable: PropTypes.bool,
 };
 
 export default ContractPanel;

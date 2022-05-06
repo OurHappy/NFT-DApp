@@ -11,6 +11,7 @@ const Token = (props) => {
   const {
     contractAddress,
     tokenId,
+    isDisable,
   } = props;
 
   const userWallet = useContext(UserWallet);
@@ -297,8 +298,15 @@ const Token = (props) => {
   return (
     <div className="divClass">
       <div>
+        {isDisable && (
+          <div>
+            You have changed your chain, please return to the home page to search again.
+          </div>
+        )}
+      </div>
+      <div>
         <span className="tokenText">Token:</span>
-        {showToken === 0 && (
+        {showToken === 0 && isDisable === false && (
           <div className="token-search">
             <InputGroup className="searchbar">
               <FormControl
@@ -307,6 +315,20 @@ const Token = (props) => {
                 onKeyPress={handleKeyPress}
                 onChange={resetStates}
                 className="tokenSearchClass"
+              />
+            </InputGroup>
+          </div>
+        )}
+        {isDisable && (
+          <div className="token-search">
+            <InputGroup className="searchbar">
+              <FormControl
+                placeholder="Token ID"
+                aria-label="Token ID"
+                onKeyPress={handleKeyPress}
+                onChange={resetStates}
+                className="tokenSearchClass"
+                disabled
               />
             </InputGroup>
           </div>
@@ -355,6 +377,7 @@ Token.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
+  isDisable: PropTypes.bool,
 };
 
 export default Token;
