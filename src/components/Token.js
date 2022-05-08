@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Container, Row, Col, FormControl, InputGroup } from "react-bootstrap";
+import { Container, Row, Col, FormControl, InputGroup, Spinner } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router";
 import PropTypes from "prop-types";
 import { balanceOf721, getTokenMeta, balanceOf, totalSupply } from "../utils/contract";
@@ -40,6 +40,7 @@ const Token = (props) => {
   const [loadToken, setLoadToken] = useState(false);
   const [provider, setProvider] = useState(null);
   const [contractInstance, setContractInstance] = useState(null);
+  const [tokenLoading, setTokenLoading] = useState(false);
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -170,7 +171,9 @@ const Token = (props) => {
   };
 
   let searchToken = async (event) => {
+    setTokenLoading(true);
     let val = await tokenValid(event.target.value);
+    setTokenLoading(false);
     if (val) {
       setShowToken(1);
       navigate(`${event.target.value}`);
@@ -291,7 +294,7 @@ const Token = (props) => {
         link = null;
         break;
     }
-    console.log("Network:", currentNetwork, link);
+    // console.log("Network:", currentNetwork, link);
     return link;
   }
   /* Render functions */
@@ -319,6 +322,7 @@ const Token = (props) => {
             </InputGroup>
           </div>
         )}
+
         {isDisable && (
           <div className="token-search">
             <InputGroup className="searchbar">
@@ -335,7 +339,20 @@ const Token = (props) => {
         )}
       </div>
 
-      {/* if token exists, show the token */}
+      <div>
+        {tokenLoading && (
+          <Container>
+            <Row>
+              <Col md={{ offset: 6 }}>
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+              </Col>
+            </Row>
+          </Container>
+        )}
+      </div>
+    
       <div>
         {showToken === 1 && (
           <Container>

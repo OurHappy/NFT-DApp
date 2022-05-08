@@ -16,6 +16,7 @@ export const Navbar = (props) => {
   const [connectText, setConnectText] = useState("Connect");
   const [chainName, setChainName] = useState("");
   const [address, setAddress] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   /* Listeners */
   useEffect(() => {
@@ -62,11 +63,14 @@ export const Navbar = (props) => {
       userWallet.setNetwork(null);
       userWallet.setAddress(null);
     } else {
+      setIsLoading(true);
+      setConnectText("Connecting...");
       const result = await connect();
       userWallet.setAddress(result.address);
       userWallet.setNetwork(result.network);
       setAddress(result.address);
       setChainName(result.network);
+      setIsLoading(false);
       setConnectText("Disconnect");
     }
   };
@@ -86,7 +90,7 @@ export const Navbar = (props) => {
         <span>{address}</span>
       </div>
       <div>
-        <Button variant="outline-light" onClick={clickAction}>
+        <Button variant="outline-light" onClick={!isLoading? clickAction: null}>
           {connectText}
         </Button>
       </div>
