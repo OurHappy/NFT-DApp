@@ -18,7 +18,7 @@ import {
   getIPFSdata,
 } from "../utils/contract";
 
-const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
+const Panel_ERC721 = ({ contractInstance, userAddress, isConnected, isDisable }) => {
   const [balanceId, setBalanceId] = useState(null);
   const [balanceResult, setBalanceResult] = useState("uint256");
   const [ownerId, setOwnerId] = useState(null);
@@ -150,9 +150,16 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryBalance}>
-                Query
-              </Button>{" "}
+              {isDisable && (
+                <Button variant="primary" onClick={queryBalance} disabled>
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button variant="primary" onClick={queryBalance}>
+                  Query
+                </Button>
+              )}
               <p className="result">{balanceResult}</p>
             </div>
           </Accordion.Body>
@@ -171,9 +178,16 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryOwner}>
-                Query
-              </Button>{" "}
+              {isDisable && (
+                <Button variant="primary" onClick={queryOwner} disabled>
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button variant="primary" onClick={queryOwner}>
+                  Query
+                </Button>
+              )}
               <p className="result">{ownerResult}</p>
             </div>
           </Accordion.Body>
@@ -192,9 +206,16 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryUri}>
-                Query
-              </Button>{" "}
+              {isDisable && (
+                <Button variant="primary" onClick={queryUri} disabled>
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button variant="primary" onClick={queryUri}>
+                  Query
+                </Button>
+              )}
               <p className="result">{uriResult}</p>
               {/* <div>{uriSection}</div> */}
             </div>
@@ -214,7 +235,7 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              {isConnected && (
+              {isConnected && !isDisable && (
                 <Button variant="primary" onClick={burnToken}>
                   burn
                 </Button>
@@ -224,7 +245,7 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   Please connect your metamask wallet before burning.
                 </Alert>
               )}
-              {!isConnected && (
+              {(!isConnected || isDisable) && (
                 <Button variant="primary" onClick={burnToken} disabled>
                   burn
                 </Button>
@@ -263,7 +284,7 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              {isConnected && (
+              {isConnected && !isDisable && (
                 <Button variant="primary" onClick={transferToken}>
                   transfer
                 </Button>
@@ -273,7 +294,7 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   Please connect your metamask wallet before transferring.
                 </Alert>
               )}
-              {!isConnected && (
+              {(!isConnected || isDisable) && (
                 <Button variant="primary" onClick={transferToken} disabled>
                   transfer
                 </Button>
@@ -291,5 +312,6 @@ Panel_ERC721.propTypes = {
   contractInstance: PropTypes.object.isRequired,
   userAddress: PropTypes.string,
   isConnected: PropTypes.bool,
+  isDisable: PropTypes.bool,
 };
 export default Panel_ERC721;

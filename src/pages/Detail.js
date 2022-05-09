@@ -5,6 +5,7 @@ import Initializing from '../components/Initializing';
 import Token from '../components/Token';
 import ContractPanel from '../components/ContractPanel';
 import AppState from '../context/appState';
+import UserWallet from '../context/userWallet';
 import {isContractAddress} from '../utils/web3Client';
 
 export const Detail = props => {
@@ -12,6 +13,7 @@ export const Detail = props => {
    * Props and Constants
    */
   const appState = useContext(AppState);
+  const userWallet = useContext(UserWallet);
 
   const params = useParams();
 
@@ -22,6 +24,7 @@ export const Detail = props => {
   const [isValidAddress, setIsValidAddress] = useState(null);
   const [address] = useState(params.address);
   const [tokenId] = useState(params.tokenId);
+  const [isDisable, setIsDisable] = useState(false);
 
   useEffect(() => {
     if (appState === 'ready') {
@@ -30,6 +33,14 @@ export const Detail = props => {
       setIsChecking(false);
     }
   }, [appState, address]);
+
+  useEffect(() => {
+    setIsDisable(true);
+  }, [userWallet.network]);
+
+  useEffect(() => {
+    setIsDisable(false);
+  }, []);
 
   /**
    * Functions
@@ -55,8 +66,8 @@ export const Detail = props => {
   else {
     return (
       <>
-        <Token  contractAddress={address} tokenId={tokenId} />
-        <ContractPanel contractAddress={address}/>
+        <Token  contractAddress={address} tokenId={tokenId} isDisable={isDisable} />
+        <ContractPanel contractAddress={address} isDisable={isDisable}/>
       </>
     );
     // return (

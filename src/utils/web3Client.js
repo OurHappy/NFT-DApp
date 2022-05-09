@@ -26,6 +26,49 @@ export function init(givenProvider) {
   }
 }
 
+export async function getChain() {
+  // get chain ID without connect, and return chain name
+  let networkId = await provider.request({
+    method: "eth_chainId"
+  });
+  networkId = parseInt(networkId, 16);
+  let networkName;
+  switch (networkId) {
+    case 1:
+      networkName = "Ethereum Mainnet";
+      break;
+    case 3:
+      networkName = "Ropsten Testnet";
+      break;
+    case 4:
+      networkName = "Rinkeby Testnet";
+      break;
+    case 18:
+      networkName = "ThunderCore Testnet";
+      break;
+    case 56:
+      networkName = "Smart Chain Mainnet";
+      break;
+    case 97:
+      networkName = "Smart Chain Testnet";
+      break;
+    case 108:
+      networkName = "ThunderCore Mainnet";
+      break;
+    case 137:
+      networkName = "Polygon";
+      break;
+    case 80001:
+      networkName = "Polygon Testnet";
+      break;
+
+    default:
+      networkName = "Unknown";
+      break;
+  }
+  return networkName;
+}
+
 export async function disconnect() {
   // TODO: implement disconnect function
   await provider.request({
@@ -40,7 +83,7 @@ export async function connect() {
   let balance = await web3.eth.getBalance(address[0]);
 
   let networkId = await web3.eth.net.getId();
-
+  
   let networkName;
   switch (networkId) {
     case 1:
