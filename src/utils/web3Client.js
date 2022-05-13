@@ -4,6 +4,7 @@ import ERC165Interface from "../contracts/ERC165.json";
 import OurSong1155Interface from "../contracts/OurSong1155.json";
 import OurSong721Interface from "../contracts/OurSong721.json";
 import { isERC721, isERC1155 } from "../utils/contract.js";
+import { chains } from '../constants';
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
@@ -26,47 +27,19 @@ export function init(givenProvider) {
   }
 }
 
+export function getChainName(chainId) {
+  const networkId = parseInt(chainId, 16);
+
+  const name = chains.getChainNameById(networkId) ?? 'Unknown';
+  return name;
+}
+
 export async function getChain() {
   // get chain ID without connect, and return chain name
   let networkId = await provider.request({
     method: "eth_chainId"
   });
-  networkId = parseInt(networkId, 16);
-  let networkName;
-  switch (networkId) {
-    case 1:
-      networkName = "Ethereum Mainnet";
-      break;
-    case 3:
-      networkName = "Ropsten Testnet";
-      break;
-    case 4:
-      networkName = "Rinkeby Testnet";
-      break;
-    case 18:
-      networkName = "ThunderCore Testnet";
-      break;
-    case 56:
-      networkName = "Smart Chain Mainnet";
-      break;
-    case 97:
-      networkName = "Smart Chain Testnet";
-      break;
-    case 108:
-      networkName = "ThunderCore Mainnet";
-      break;
-    case 137:
-      networkName = "Polygon";
-      break;
-    case 80001:
-      networkName = "Polygon Testnet";
-      break;
-
-    default:
-      networkName = "Unknown";
-      break;
-  }
-  return networkName;
+  return getChainName(networkId);
 }
 
 export async function disconnect() {

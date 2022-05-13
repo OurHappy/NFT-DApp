@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar";
 import Searchbox from "./components/Searchbox";
 import "./styles/style.css";
 
-import { init } from "./utils/web3Client";
+import { getChain, init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
 import AppState from './context/appState';
@@ -37,8 +37,9 @@ function App() {
         setProviderExist(true);
 
         if (initialized.result) {
+          const network = await getChain();
+          setCurrentNetwork(network);
           setAppState("ready");
-
           return;
         }
       } else if (provider === null) {
