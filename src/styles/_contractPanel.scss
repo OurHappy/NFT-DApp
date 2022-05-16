@@ -1,42 +1,84 @@
-.contractText {
-  font-size: 1.5rem;
-}
+.contractPanel {
+  .topField {
+    padding: 30px 50px 50px 50px;
+    background-color: #F4F2F2;
 
-.divClass {
-  // padding: 30px 100px 30px 60px;
-  padding: 1rem 2rem 1rem 0rem;
-  flex-wrap: wrap;
-  flex-direction: column;
-}
+    .contractText {
+      margin-top: 30px;
+      margin-bottom: 60px;
+    }
 
-.container {
-  .contractInfo {
-    background-color: rgb(24, 37, 43);
-    color: rgb(255, 255, 255);
-    padding: 1.5rem;
-    margin: 1rem;
-    border-radius: 1.25rem;
-    font-size: 1rem;
+    .test {
+      // border:solid;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .imgBox {
+      width: 350px;
+      height: 350px;
+      margin-bottom: 20px;
+      
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+
+      .contractImg {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+
+    .contractInfo {
+      .contractName {
+        font-size: 20px;
+        font-weight: bold;
+        padding-bottom: 20px;
+      }
+
+      .contractDescription {
+        color: gray;
+        margin-bottom: 50px;
+      }
+
+      .contractCard {
+        margin-bottom: 15px;
+        .contractAddress {
+          .addressTitle {
+            background-color: white;
+            font-weight: bold;
+          }
+
+          .addressText {
+            color: gray;
+          }
+        }
+      }
+
+      .originalData {
+        margin-top: 15px;
+        font-size: 15px;
+        color: gray;
+      }
+    }
   }
-}
 
-.addrText {
-  font-size: 25px;
-  color: gray;
-  padding: 15px;
-}
+  .bottomField {
+    padding: 50px 50px 100px 50px;
+    margin-left: 40px;
+    margin-right: 40px;
 
-.blueText {
-  color: rgb(104, 185, 255);
-}
+    .actionText {
+      font-size: 30px;
+      padding-bottom: 20px;
+    }
 
-.contractpanel {
-  margin: 3rem;
-  font-size: 1.5rem;
-
-  p {
-    font-size: 1rem;
-    margin-top: 1rem;
-    color: gray;
+    .etherscanLink {
+      margin-top: 15px;
+      font-size: 15px;
+      color: gray;
+    }
   }
 }

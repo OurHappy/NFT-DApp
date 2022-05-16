@@ -4,14 +4,17 @@ import { makeContract } from "../utils/web3Client";
 import { getContractOwner, name, symbol } from "../utils/contract";
 import { getContractMeta } from "../utils/contract";
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
+import LinkOutlined from "@ant-design/icons/LinkOutlined";
 import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
 import UserWallet from '../context/userWallet';
+import {Container, Col, Row, Card, ListGroup} from 'react-bootstrap';
 
 const ContractPanel = ({
-  contractAddress, isDisable
+  contractAddress, isDisable, tokenImg
 }) => {
   /* Variables */
+  let contractInfo = null;
   let contractMeta = null;
   const userWallet = useContext(UserWallet);
   const isConnected = !!userWallet.address;
@@ -23,13 +26,12 @@ const ContractPanel = ({
   const [contractSymbol, setContractSymbol] = useState("test symbol");
   const [contractOwner, setContractOwner] = useState("test Owner");
   const [exteralName, setExternalName] = useState("No External Name");
-  const [externalDescipt, setExternalDescript] = useState(
-    "No External Description"
-  );
-  const [externalLink, setExternalLink] = useState("No External Link");
+  const [externalDescipt, setExternalDescript] = useState(null);
+  const [externalLink, setExternalLink] = useState(null);
   const [contractType, setContractType] = useState(null);
   const [hasContractMeta, setHasContractMeta] = useState(false);
   const [loading, setLoading] = useState("false");
+  const [contractUri, setContractUri] = useState(null);
 
   useEffect(() => {
     if (contractAddress) {
@@ -66,7 +68,12 @@ const ContractPanel = ({
     } else {
     }
 
-    contractMeta = await getContractMeta(contract);
+    contractInfo = await getContractMeta(contract);
+    if (contractInfo != null) {
+      contractMeta = contractInfo['contractMeta'];
+      setContractUri(contractInfo['contractUri']);
+    }
+    
     if (contractMeta != null) {
       setExternalName(contractMeta["data"].name);
       setExternalDescript(contractMeta["data"].description);
@@ -79,13 +86,26 @@ const ContractPanel = ({
   };
 
   const clickToCopy = () => {
-    const copyEle = document.querySelector(".addrText");
+    const copyEle = document.querySelector(".addressCopy");
     const range = document.createRange();
     window.getSelection().removeAllRanges();
     range.selectNode(copyEle);
     window.getSelection().addRange(range);
     document.execCommand("Copy");
     window.getSelection().removeAllRanges();
+  };
+
+  const clickToContractMeta = () => {
+    window.open(contractUri);
+  };
+
+  const clickToContractName = () => {
+    window.open(externalLink);
+  };
+
+  const clickToEtherscan = () => {
+    let etherscanAddr = "https://etherscan.io/address/" + contractAddress;
+    window.open(etherscanAddr);
   };
 
   let panel;
@@ -115,36 +135,51 @@ const ContractPanel = ({
 
   /* Render Function */
   return (
-    <div>
-      {/* Show the contract and  you can copy it */}
-      <div className="divClass">
-        <span className="contractText">Contract:</span>
-        <span className="addrText">{contractAddress}</span>
-        <CopyOutlined onClick={clickToCopy} />
-      </div>
-
-      {/* Show the contract interaction panel if a valid contract is provided */}
-      <div className="container">
-        <div className="row">
-          <div className="col contractInfo">
-            <div>
-              Name: {contractName} <br />
-              Symbol: {contractSymbol} <br />
-              Owner: <span className="blueText">{contractOwner}</span>
-            </div>
-          </div>
-          {hasContractMeta && (
-            <div className="col contractInfo">
-              <div>
-                Name: {exteralName} <br />
-                Description: {externalDescipt} <br />
-                <span className="blueText">{externalLink}</span>
+    <div className="contractPanel">
+      <div className="topField">
+        <h1 className="text-center contractText">Contract</h1>
+        <Container>
+          <Row>
+            <Col className="test">  
+              <div className="imgBox">
+                <img src={tokenImg} className="contractImg"></img>
               </div>
-            </div>
-          )}
+            </Col>
+            <Col>
+              <div className="contractInfo">
+                <div className="contractName">{contractName} {externalLink != null && <LinkOutlined onClick={clickToContractName}/>}</div>
+                {externalDescipt != null && <div className="contractDescription">{externalDescipt}</div>}
+                <div className="contractCard">
+                  <Card className="contractAddress">
+                    <Card.Header className="addressTitle">Contract Owner</Card.Header>
+                    <ListGroup variant="flush">
+                      <ListGroup.Item className="addressText">{contractOwner}</ListGroup.Item>
+                    </ListGroup>
+                  </Card>
+                </div>
+                <div className="contractCard">
+                  <Card className="contractAddress">
+                    <Card.Header className="addressTitle">Contract Address</Card.Header>
+                    <ListGroup variant="flush">
+                      <ListGroup.Item className="addressText addressCopy">{contractAddress}  <CopyOutlined onClick={clickToCopy} /></ListGroup.Item>
+                    </ListGroup>
+                  </Card>
+                </div>
+                <div className="originalData">
+                  Original data: <LinkOutlined onClick={clickToContractMeta}/>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <div className="bottomField">
+        <div className="actionText">Action</div>
+        <div>{panel}</div>
+        <div className="etherscanLink">
+          View on Etherscan <LinkOutlined onClick={clickToEtherscan}/>
         </div>
       </div>
-      <div>{panel}</div>
     </div>
   );
 };
@@ -152,6 +187,7 @@ const ContractPanel = ({
 ContractPanel.propTypes = {
   contractAddress: PropTypes.string,
   isDisable: PropTypes.bool,
+  tokenImg: PropTypes.string
 };
 
 export default ContractPanel;

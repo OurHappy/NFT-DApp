@@ -25,6 +25,7 @@ export const Detail = props => {
   const [address] = useState(params.address);
   const [tokenId] = useState(params.tokenId);
   const [isDisable, setIsDisable] = useState(false);
+  const [tokenImg, setTokenImg] = useState(null);
 
   useEffect(() => {
     if (appState === 'ready') {
@@ -45,6 +46,9 @@ export const Detail = props => {
   /**
    * Functions
    */
+  function passImage (img) {
+    setTokenImg(img);
+  }
 
   /**
    * Render functions
@@ -66,8 +70,8 @@ export const Detail = props => {
   else {
     return (
       <>
-        <Token  contractAddress={address} tokenId={tokenId} isDisable={isDisable} />
-        <ContractPanel contractAddress={address} isDisable={isDisable}/>
+        <Token  contractAddress={address} tokenId={tokenId} isDisable={isDisable} passImage={passImage}/>
+        <ContractPanel contractAddress={address} isDisable={isDisable} tokenImg={tokenImg}/>
       </>
     );
     // return (

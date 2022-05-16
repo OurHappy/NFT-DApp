@@ -122,7 +122,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
     <div className="contractpanel">
       <Accordion>
         <Accordion.Item eventKey="0">
-          <Accordion.Header>balanceOf</Accordion.Header>
+          <Accordion.Header>BalanceOf</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -144,12 +144,12 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </InputGroup>
               </>
               {isDisable && (
-                <Button variant="primary" onClick={queryBalance} disabled>
+                <Button variant="secondary" onClick={queryBalance} disabled>
                   Query
                 </Button>
               )}
               {!isDisable && (
-                <Button variant="primary" onClick={queryBalance}>
+                <Button variant="secondary" onClick={queryBalance}>
                   Query
                 </Button>
               )}
@@ -158,7 +158,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
-          <Accordion.Header>totalSupply</Accordion.Header>
+          <Accordion.Header>Total Supply</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -172,12 +172,12 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </InputGroup>
               </>
               {isDisable && (
-                <Button variant="primary" onClick={querySupply} disabled>
+                <Button variant="secondary" onClick={querySupply} disabled>
                   Query
                 </Button>
               )}
               {!isDisable && (
-                <Button variant="primary" onClick={querySupply}>
+                <Button variant="secondary" onClick={querySupply}>
                   Query
                 </Button>
               )}
@@ -200,12 +200,12 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </InputGroup>
               </>
               {isDisable && (
-                <Button variant="primary" onClick={queryUri} disabled>
+                <Button variant="secondary" onClick={queryUri} disabled>
                   Query
                 </Button>
               )}
               {!isDisable && (
-                <Button variant="primary" onClick={queryUri}>
+                <Button variant="secondary" onClick={queryUri}>
                   Query
                 </Button>
               )}
@@ -214,7 +214,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="3">
-          <Accordion.Header>burn</Accordion.Header>
+          <Accordion.Header>Burn</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -244,7 +244,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </InputGroup>
               </>
               {isConnected && !isDisable && (
-                <Button variant="primary" onClick={burnToken}>
+                <Button variant="secondary" onClick={burnToken}>
                   burn
                 </Button>
               )}
@@ -254,7 +254,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </Alert>
               )}
               {(!isConnected || isDisable) && (
-                <Button variant="primary" onClick={burnToken} disabled>
+                <Button variant="secondary" onClick={burnToken} disabled>
                   burn
                 </Button>
               )}
@@ -263,7 +263,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="4">
-          <Accordion.Header>transfer</Accordion.Header>
+          <Accordion.Header>Transfer</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -309,7 +309,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </InputGroup>
               </>
               {isConnected && !isDisable && (
-                <Button variant="primary" onClick={transferToken}>
+                <Button variant="secondary" onClick={transferToken}>
                   transfer
                 </Button>
               )}
@@ -319,7 +319,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </Alert>
               )}
               {(!isConnected || isDisable) && (
-                <Button variant="primary" onClick={transferToken} disabled>
+                <Button variant="secondary" onClick={transferToken} disabled>
                   transfer
                 </Button>
               )}

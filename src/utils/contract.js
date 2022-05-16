@@ -129,7 +129,7 @@ export async function getContractMeta(contract) {
           console.log(err);
           return null;
         });
-      return contractMeta;
+      return {contractMeta, contractUri};
     } else if (ERC721) {
       let newDataUrl = dataUrl + "?uri=" + contractUri;
       let contractMeta = await axios
@@ -143,7 +143,7 @@ export async function getContractMeta(contract) {
           console.log(err);
           return null;
         });
-      return contractMeta;
+      return {contractMeta, contractUri};
     }
     return null;
   }

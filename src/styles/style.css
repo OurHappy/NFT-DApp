@@ -5,47 +5,93 @@
           box-sizing: border-box;
 }
 
-.contractText {
+.contractPanel .topField {
+  padding: 30px 50px 50px 50px;
+  background-color: #F4F2F2;
+}
+
+.contractPanel .topField .contractText {
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
+.contractPanel .topField .test {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.contractPanel .topField .imgBox {
+  width: 350px;
+  height: 350px;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: white;
+}
+
+.contractPanel .topField .imgBox .contractImg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.contractPanel .topField .contractInfo .contractName {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+.contractPanel .topField .contractInfo .contractDescription {
+  color: gray;
   margin-bottom: 50px;
 }
 
-.divClass {
-  padding: 1rem 2rem 1rem 0rem;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+.contractPanel .topField .contractInfo .contractCard {
+  margin-bottom: 15px;
 }
 
-.container .contractInfo {
-  background-color: #18252b;
-  color: white;
-  padding: 1.5rem;
-  margin: 1rem;
-  border-radius: 1.25rem;
-  font-size: 1rem;
+.contractPanel .topField .contractInfo .contractCard .contractAddress .addressTitle {
+  background-color: white;
+  font-weight: bold;
 }
 
-.addrText {
-  font-size: 25px;
+.contractPanel .topField .contractInfo .contractCard .contractAddress .addressText {
   color: gray;
-  padding: 15px;
 }
 
-.blueText {
-  color: #68b9ff;
+.contractPanel .topField .contractInfo .originalData {
+  margin-top: 15px;
+  font-size: 15px;
+  color: gray;
 }
 
-.contractpanel {
-  margin: 3rem;
-  font-size: 1.5rem;
+.contractPanel .bottomField {
+  padding: 50px 50px 100px 50px;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
-.contractpanel p {
-  font-size: 1rem;
-  margin-top: 1rem;
+.contractPanel .bottomField .actionText {
+  font-size: 30px;
+  padding-bottom: 20px;
+}
+
+.contractPanel .bottomField .etherscanLink {
+  margin-top: 15px;
+  font-size: 15px;
   color: gray;
 }
 
@@ -162,7 +208,7 @@
 }
 
 .defaultPage .errorTitle {
-  background-color: #EAEAEA;
+  background-color: #F4F2F2;
   font-size: 40px;
   text-align: center;
   padding: 80px 30px 80px 30px;
@@ -172,5 +218,15 @@
   font-size: 20px;
   text-align: center;
   padding: 60px;
+}
+
+.accordion-button {
+  background-color: #eeeeee !important;
+  font-weight: bold;
+}
+
+.accordion-button:not(.collapsed) {
+  color: black;
+  font-weight: bold;
 }
 /*# sourceMappingURL=style.css.map */
