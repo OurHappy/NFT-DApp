@@ -6,7 +6,7 @@
 }
 
 .contractText {
-  font-size: 1.5rem;
+  margin-bottom: 50px;
 }
 
 .divClass {
@@ -17,9 +17,6 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-
-  word-wrap: break-word;
-  overflow: hidden;
 }
 
 .container .contractInfo {
@@ -29,9 +26,6 @@
   margin: 1rem;
   border-radius: 1.25rem;
   font-size: 1rem;
-
-  word-wrap: break-word;
-  overflow: hidden;
 }
 
 .addrText {
@@ -75,7 +69,7 @@
 }
 
 .navClass button {
-  /* margin: 0rem 2rem; */
+  margin: 0rem 2rem;
 }
 
 .navClass div.chainBlock {
@@ -87,12 +81,9 @@
       -ms-flex-direction: column;
           flex-direction: column;
   margin: 0rem 1rem;
-
-  word-wrap: break-word;
-  overflow: hidden;
 }
 
-.navClass div.chainBlock span {
+.navClass div.chainBlock span.addressText {
   color: lightblue;
   font-size: 1rem;
 }
@@ -100,7 +91,7 @@
 .searchBoxClass {
   margin: 1rem;
   text-align: center;
-  width: 80%;
+  width: 60%;
   height: 3rem;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -114,10 +105,7 @@
 
 .divClass-search {
   text-align: center;
-  padding-top: 100px;
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 100px 100px 0px 100px;
 }
 
 .warnClass {
@@ -143,49 +131,46 @@
           box-sizing: border-box;
 }
 
-.token-search {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .tokenText {
   font-size: 25px;
 }
 
 .divClass {
   text-align: left;
-  padding-left: 40px;
-  padding-right: 40px;
-  /* padding: 30px 100px 30px 60px; */
+  padding: 30px 100px 30px 60px;
 }
 
 .tokenInfo {
   background-color: rgba(214, 214, 215, 0.742);
   color: #3e3e3e;
   padding: 20px;
-  margin: 10px;
+  margin: 20px;
   border-radius: 10px;
   font-size: 15px;
 }
 
 .tokenImg {
-  max-width: 100%;
-  max-height: 100%;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
+  width: 40%;
+  padding: 10px;
+  margin: 10px;
 }
 
-.alertClass {
-  margin-top: 10px;
-  font-size: 20px;
-}
-
-/* .tokenImgAdapt {
+.tokenImgAdapt {
   width: 50px;
   padding: 40px;
   margin: 40px;
-} */
+}
+
+.defaultPage .errorTitle {
+  background-color: #EAEAEA;
+  font-size: 40px;
+  text-align: center;
+  padding: 80px 30px 80px 30px;
+}
+
+.defaultPage .errorText {
+  font-size: 20px;
+  text-align: center;
+  padding: 60px;
+}
 /*# sourceMappingURL=style.css.map */
