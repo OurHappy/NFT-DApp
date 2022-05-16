@@ -2,16 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { Container, Row, Col, FormControl, InputGroup } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router";
 import PropTypes from "prop-types";
-import { balanceOf721, getTokenMeta, balanceOf, totalSupply } from "../utils/contract";
+import {
+  balanceOf721,
+  getTokenMeta,
+  balanceOf,
+  totalSupply,
+} from "../utils/contract";
 import { makeContract } from "../utils/web3Client";
 import UserWallet from "../context/userWallet";
 
 const Token = (props) => {
   /* Variables */
-  const {
-    contractAddress,
-    tokenId,
-  } = props;
+  const { contractAddress, tokenId } = props;
 
   const userWallet = useContext(UserWallet);
   const currentNetwork = userWallet.network;
@@ -89,11 +91,7 @@ const Token = (props) => {
       supplyResult.then((msg) => setSupply(msg));
 
       if (isConnect) {
-        let ownResult = balanceOf(
-          contractInstance,
-          accountAddress,
-          tokenId
-        );
+        let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
         ownResult.then((msg) => setOwn(msg));
       } else {
         setOwn("Please connect the Metamask to check balance");
@@ -135,8 +133,7 @@ const Token = (props) => {
       let { contract } = await makeContract(contractAddress);
       setContractInstance(contract);
       return contract;
-    }
-    else {
+    } else {
       return null;
     }
   };
@@ -179,7 +176,6 @@ const Token = (props) => {
   };
 
   function renderScanLink() {
-
     let link = "";
     switch (currentNetwork) {
       case "Ethereum Mainnet":
@@ -239,7 +235,7 @@ const Token = (props) => {
           </a>
         );
         break;
-  
+
       case "Smart Chain Mainnet":
         link = (
           <a
@@ -254,9 +250,7 @@ const Token = (props) => {
       case "Smart Chain Testnet":
         link = (
           <a
-            href={
-              "https://testnet.bscscan.com/address/" + contractAddress
-            }
+            href={"https://testnet.bscscan.com/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
           >
@@ -351,10 +345,7 @@ const Token = (props) => {
 
 Token.propTypes = {
   contractAddress: PropTypes.string,
-  tokenId: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  tokenId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default Token;

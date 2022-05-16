@@ -1,22 +1,60 @@
-.searchBoxClass {
-  margin: 1rem;
-  text-align: center;
-
-  width: 60%;
-  height: 3rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+.searchStack{
+  justify-content: space-between;
+  height: 90vh;
 }
+
 
 .searchBoxClass.invalid {
   color: rgb(255, 93, 81);
 }
 
-.divClass-search {
-  text-align: center;
-  padding: 100px 100px 0px 100px;
+.leftcontent{
+  /* the right part of searchBox */
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background-color: #EDEDED;
+  color: black;
+  height: 100%;
+  width: 50%;
+
+  p{
+    font-size: 3rem;
+
+  }
+
 }
+
+.divClass-search {
+  /* the right part of searchBox */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  // padding: 100px 100px 0px 100px; 
+  width: 50%;
+
+  height: 100%;
+
+ 
+  .searchBoxClass {
+    /*input box*/
+    // background-color: black;
+    margin: 0.5rem;
+    text-align: center;
+    height: 3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+}
+
+
+
+
+
 
 .warnClass {
   color: rgb(255, 93, 81);

@@ -73,7 +73,7 @@ function App() {
 
                 <Route
                   path="/"
-                  element={ providerExist ? <Searchbox /> : <Defaultpage />}
+                  element={ providerExist ? <Searchbox currentNetwork={currentNetwork} /> : <Defaultpage />}
                 />
                 <Route path="contract/:address" element={<Detail/>}>
                   <Route path=":tokenId" element={<Detail/>}/>

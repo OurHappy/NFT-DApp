@@ -120,7 +120,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
 
   return (
     <div className="contractpanel">
-      <Accordion>
+      <Accordion className="dropDownMenu">
         <Accordion.Item eventKey="0">
           <Accordion.Header>balanceOf</Accordion.Header>
           <Accordion.Body>
@@ -143,7 +143,11 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryBalance}>
+              <Button
+                variant="primary"
+                className="btnPanel"
+                onClick={queryBalance}
+              >
                 Query
               </Button>{" "}
               <p className="result">{balanceResult}</p>

@@ -17,9 +17,6 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-
-  word-wrap: break-word;
-  overflow: hidden;
 }
 
 .container .contractInfo {
@@ -29,9 +26,6 @@
   margin: 1rem;
   border-radius: 1.25rem;
   font-size: 1rem;
-
-  word-wrap: break-word;
-  overflow: hidden;
 }
 
 .addrText {
@@ -55,6 +49,12 @@
   color: gray;
 }
 
+.btnPanel {
+  background-color: #687184;
+  border: none;
+  border-radius: 5px;
+}
+
 .navClass {
   padding: 2rem;
   display: -webkit-box;
@@ -62,8 +62,8 @@
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  background-color: #232629;
-  color: azure;
+  background-color: #F8F9FA;
+  color: #000000;
 }
 
 .navClass h2 {
@@ -75,7 +75,16 @@
 }
 
 .navClass button {
-  /* margin: 0rem 2rem; */
+  font-size: 1rem;
+  margin: 0rem 2rem;
+  color: #858484;
+  border: 1px solid #858484;
+  border-radius: 10px;
+}
+
+.navClass button:hover {
+  color: white;
+  background-color: #858484;
 }
 
 .navClass div.chainBlock {
@@ -87,37 +96,75 @@
       -ms-flex-direction: column;
           flex-direction: column;
   margin: 0rem 1rem;
-
-  word-wrap: break-word;
-  overflow: hidden;
 }
 
-.navClass div.chainBlock span {
+.navClass div.chainBlock span.addressText {
   color: lightblue;
   font-size: 1rem;
 }
 
-.searchBoxClass {
-  margin: 1rem;
-  text-align: center;
-  width: 80%;
-  height: 3rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+.searchStack {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  height: 90vh;
 }
 
 .searchBoxClass.invalid {
   color: #ff5d51;
 }
 
+.leftcontent {
+  /* the right part of searchBox */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #EDEDED;
+  color: black;
+  height: 100%;
+  width: 50%;
+}
+
+.leftcontent p {
+  font-size: 3rem;
+}
+
 .divClass-search {
+  /* the right part of searchBox */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 50%;
+  height: 100%;
+}
+
+.divClass-search .searchBoxClass {
+  /*input box*/
+  margin: 0.5rem;
   text-align: center;
-  padding-top: 100px;
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
+  height: 3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 .warnClass {
@@ -143,49 +190,33 @@
           box-sizing: border-box;
 }
 
-.token-search {
-  width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .tokenText {
   font-size: 25px;
 }
 
 .divClass {
   text-align: left;
-  padding-left: 40px;
-  padding-right: 40px;
-  /* padding: 30px 100px 30px 60px; */
+  padding: 30px 100px 30px 60px;
 }
 
 .tokenInfo {
   background-color: rgba(214, 214, 215, 0.742);
   color: #3e3e3e;
   padding: 20px;
-  margin: 10px;
+  margin: 20px;
   border-radius: 10px;
   font-size: 15px;
 }
 
 .tokenImg {
-  max-width: 100%;
-  max-height: 100%;
-  margin-top: 10px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10px;
+  width: 40%;
+  padding: 10px;
+  margin: 10px;
 }
 
-.alertClass {
-  margin-top: 10px;
-  font-size: 20px;
-}
-
-/* .tokenImgAdapt {
+.tokenImgAdapt {
   width: 50px;
   padding: 40px;
   margin: 40px;
-} */
+}
 /*# sourceMappingURL=style.css.map */

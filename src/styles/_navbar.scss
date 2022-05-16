@@ -2,8 +2,8 @@
   padding: 2rem;
   display: flex;
   flex-wrap: wrap;
-  background-color: rgb(35, 38, 41);
-  color: azure;
+  background-color: #F8F9FA;
+  color: #000000;
 
   h2 {
     font-size: 2rem;
@@ -14,7 +14,17 @@
   }
 
   button {
+    font-size: 1rem;
+
     margin: 0rem 2rem;
+    color: rgb(133, 132, 132);
+    border: 1px solid rgb(133, 132, 132);
+    border-radius: 10px;
+  }
+
+  button:hover{
+    color: white;
+    background-color: rgb(133, 132, 132);
   }
 
   div.chainBlock {
