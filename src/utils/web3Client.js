@@ -113,27 +113,34 @@ export function isContractAddress(address) {
 export async function makeContract(contractAddress) {
   if (contractAddress !== "") {
     let contract = new web3.eth.Contract(ERC165Interface, contractAddress);
-
     let ERC1155 = await isERC1155(contract);
     let ERC721 = await isERC721(contract);
-
-    if (ERC1155) {
+    
+    if (ERC1155 === null || ERC721 === null) {  // error in makeContract
       return {
-        contractInterface: "ERC1155",
-        contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
+        contractInterface: null,
+        contract: null
       };
-    } else if (ERC721) {
-      return {
-        contractInterface: "ERC721",
-        contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
-      };
+      
     } else {
-      return {
-        contractInterface: "unsupport_contract",
-        contract: null,
-      };
-      // throw new Error('unsupport contract type');
-      console.log("not supported");
+      if (ERC1155) {
+        return {
+          contractInterface: "ERC1155",
+          contract: new web3.eth.Contract(OurSong1155Interface, contractAddress),
+        };
+      } else if (ERC721) {
+        return {
+          contractInterface: "ERC721",
+          contract: new web3.eth.Contract(OurSong721Interface, contractAddress),
+        };
+      } else {
+        return {
+          contractInterface: "unsupport_contract",
+          contract: null,
+        };
+        // throw new Error('unsupport contract type');
+        console.log("not supported");
+      }
     }
   }
 }

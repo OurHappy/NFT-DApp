@@ -150,17 +150,29 @@ export async function getContractMeta(contract) {
 }
 
 export async function isERC721(contract) {
-  let result = await contract.methods
-    .supportsInterface(ERC721InterfaceID)
-    .call();
-  return result;
+  let result = null;
+  try {
+    result = await contract.methods
+      .supportsInterface(ERC721InterfaceID)
+      .call();
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 export async function isERC1155(contract) {
-  let result = await contract.methods
-    .supportsInterface(ERC1155InterfaceID)
-    .call();
-  return result;
+  let result = null;
+  try {
+    result = await contract.methods
+      .supportsInterface(ERC1155InterfaceID)
+      .call();
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 export async function burn(contract, account, id, amount, accountAddress) {

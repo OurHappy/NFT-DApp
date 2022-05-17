@@ -1,4 +1,22 @@
 .contractPanel {
+  .failArea {
+    background-color: #F4F2F2;
+    padding: 100px;
+    padding-bottom: 400px;
+
+    .failTitle {
+      padding-bottom: 50px; 
+    }
+  
+    .failText {
+      padding: 10px;
+
+      .highlight {
+        color: #a06a6a;
+      }
+    }
+  }
+
   .topField {
     padding: 30px 50px 50px 50px;
     background-color: #F4F2F2;
