@@ -20,6 +20,7 @@ export const Detail = props => {
   /**
    * States
    */
+  const [initialNetwork, setInitialNetwork] = useState(userWallet.network);
   const [isChecking, setIsChecking] = useState(true);
   const [isValidAddress, setIsValidAddress] = useState(null);
   const [address] = useState(params.address);
@@ -36,12 +37,14 @@ export const Detail = props => {
   }, [appState, address]);
 
   useEffect(() => {
-    setIsDisable(true);
+    if (initialNetwork === null) {
+      setInitialNetwork(userWallet.network);
+    }
+    else {
+      const disabled = initialNetwork !== userWallet.network;
+      setIsDisable(disabled);
+    }
   }, [userWallet.network]);
-
-  useEffect(() => {
-    setIsDisable(false);
-  }, []);
 
   /**
    * Functions

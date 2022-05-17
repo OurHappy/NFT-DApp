@@ -31,7 +31,6 @@ const Token = (props) => {
   const [name, setName] = useState("None");
   const [description, setDescription] = useState("None");
   const [exLink, setExLink] = useState("None");
-  const [meta, setMeta] = useState("None");
   const [supply, setSupply] = useState(0);
   const [own, setOwn] = useState(0);
   const [img, setImg] = useState("");
@@ -39,7 +38,6 @@ const Token = (props) => {
   const [isImg, setIsImg] = useState(false);
   const [isVideo, setIsVideo] = useState(false);
   const [loadToken, setLoadToken] = useState(false);
-  const [provider, setProvider] = useState(null);
   const [contractInstance, setContractInstance] = useState(null);
   const [tokenLoading, setTokenLoading] = useState(false);
 
@@ -320,21 +318,6 @@ const Token = (props) => {
                 onKeyPress={handleKeyPress}
                 onChange={resetStates}
                 className="tokenSearchClass"
-              />
-            </InputGroup>
-          </div>
-        )}
-
-        {isDisable && (
-          <div className="token-search">
-            <InputGroup className="searchbar">
-              <FormControl
-                placeholder="Token ID"
-                aria-label="Token ID"
-                onKeyPress={handleKeyPress}
-                onChange={resetStates}
-                className="tokenSearchClass"
-                disabled
               />
             </InputGroup>
           </div>
