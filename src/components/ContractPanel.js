@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import { makeContract } from "../utils/web3Client";
+import { makeContract, getChain } from "../utils/web3Client";
 import { getContractOwner, name, symbol } from "../utils/contract";
 import { getContractMeta } from "../utils/contract";
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
+import LinkOutlined from "@ant-design/icons/LinkOutlined";
 import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
 import UserWallet from '../context/userWallet';
+import {Container, Col, Row, Card, ListGroup, Spinner} from 'react-bootstrap';
 
 const ContractPanel = ({
-  contractAddress, isDisable
+  contractAddress, isDisable, tokenImg
 }) => {
   /* Variables */
+  let contractInfo = null;
   let contractMeta = null;
   const userWallet = useContext(UserWallet);
   const isConnected = !!userWallet.address;
@@ -23,13 +26,15 @@ const ContractPanel = ({
   const [contractSymbol, setContractSymbol] = useState("test symbol");
   const [contractOwner, setContractOwner] = useState("test Owner");
   const [exteralName, setExternalName] = useState("No External Name");
-  const [externalDescipt, setExternalDescript] = useState(
-    "No External Description"
-  );
-  const [externalLink, setExternalLink] = useState("No External Link");
+  const [externalDescipt, setExternalDescript] = useState(null);
+  const [externalLink, setExternalLink] = useState(null);
   const [contractType, setContractType] = useState(null);
   const [hasContractMeta, setHasContractMeta] = useState(false);
   const [loading, setLoading] = useState("false");
+  const [contractUri, setContractUri] = useState(null);
+  const [validContract, setValidContract] = useState(true);
+  const [chainName, setChainName] = useState("");
+  const [contractLoading, setContractLoading] = useState(true);
 
   useEffect(() => {
     if (contractAddress) {
@@ -37,7 +42,15 @@ const ContractPanel = ({
     }
   }, [contractAddress]);
 
+  useEffect(() => {
+    showCurrentChain();
+  }, [chainName]);
+  
   /* Functions */
+  async function showCurrentChain() {
+    let chainName = await getChain();
+    setChainName(chainName);
+  }
 
   const getContractData = async () => {
     let { contractInterface, contract } = await makeContract(contractAddress);
@@ -53,6 +66,7 @@ const ContractPanel = ({
       setContractSymbol(parsedSymbol);
       setContractOwner(parsedOwner);
       setContractType("ERC1155");
+      setContractLoading(false);
     } else if (contractInterface === "ERC721") {
       const [parsedName, parsedSymbol, parsedOwner] = await Promise.all([
         name(contract),
@@ -63,29 +77,52 @@ const ContractPanel = ({
       setContractSymbol(parsedSymbol);
       setContractOwner(parsedOwner);
       setContractType("ERC721");
-    } else {
+      setContractLoading(false);
+    } else {  // null
+      setContractLoading(false);
+      setValidContract(false);
     }
 
-    contractMeta = await getContractMeta(contract);
-    if (contractMeta != null) {
-      setExternalName(contractMeta["data"].name);
-      setExternalDescript(contractMeta["data"].description);
-      setExternalLink(contractMeta["data"].external_url);
-      // show the contract metadata only when it exists
-      setHasContractMeta(true);
-    } else {
-      console.log("no metadata");
+    if (contractInterface != null) {
+      contractInfo = await getContractMeta(contract);
+      if (contractInfo != null) {
+        contractMeta = contractInfo['contractMeta'];
+        setContractUri(contractInfo['contractUri']);
+      }
+      
+      if (contractMeta != null) {
+        setExternalName(contractMeta["data"].name);
+        setExternalDescript(contractMeta["data"].description);
+        setExternalLink(contractMeta["data"].external_url);
+        // show the contract metadata only when it exists
+        setHasContractMeta(true);
+      } else {
+        console.log("no metadata");
+      }
     }
   };
 
   const clickToCopy = () => {
-    const copyEle = document.querySelector(".addrText");
+    const copyEle = document.querySelector(".addressCopy");
     const range = document.createRange();
     window.getSelection().removeAllRanges();
     range.selectNode(copyEle);
     window.getSelection().addRange(range);
     document.execCommand("Copy");
     window.getSelection().removeAllRanges();
+  };
+
+  const clickToContractMeta = () => {
+    window.open(contractUri);
+  };
+
+  const clickToContractName = () => {
+    window.open(externalLink);
+  };
+
+  const clickToEtherscan = () => {
+    let etherscanAddr = "https://etherscan.io/address/" + contractAddress;
+    window.open(etherscanAddr);
   };
 
   let panel;
@@ -116,42 +153,85 @@ const ContractPanel = ({
   /* Render Function */
   return (
     <div>
-      {/* Show the contract and  you can copy it */}
-      <div className="divClass">
-        <span className="contractText">Contract:</span>
-        <span className="addrText">{contractAddress}</span>
-        <CopyOutlined onClick={clickToCopy} />
-      </div>
-
-      {/* Show the contract interaction panel if a valid contract is provided */}
-      <div className="container">
-        <div className="row">
-          <div className="col contractInfo">
+      {contractLoading && (
+        <Container>
+          <Row>
+            <Col md={{ offset: 6 }}>
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </Col>
+          </Row>
+        </Container>
+      )}
+      { !contractLoading && !validContract && (
+        <div className="contractPanel">
+          <div className="failArea">
+            <h1 className="failTitle text-center">Fail to read contract data</h1>
             <div>
-              Name: {contractName} <br />
-              Symbol: {contractSymbol} <br />
-              Owner: <span className="blueText">{contractOwner}</span>
+              <h3 className="failText text-center">Please check you enter the correct address and you are on the correct chain network.</h3>
+              <h3 className="failText text-center">Current chain: <span className="highlight">{chainName}</span></h3>
             </div>
           </div>
-          {hasContractMeta && (
-            <div className="col contractInfo">
-              <div>
-                Name: {exteralName} <br />
-                Description: {externalDescipt} <br />
-                <span className="blueText">{externalLink}</span>
-              </div>
-            </div>
-          )}
         </div>
-      </div>
-      <div>{panel}</div>
+      )}
+      { !contractLoading && validContract && (
+        <div className="contractPanel">
+          <div className="topField">
+            <h1 className="text-center contractText">Contract</h1>
+            <Container>
+              <Row>
+                <Col className="test">  
+                  <div className="imgBox">
+                    <img src={tokenImg} className="contractImg"></img>
+                  </div>
+                </Col>
+                <Col>
+                  <div className="contractInfo">
+                    <div className="contractName">{contractName} {externalLink != null && <LinkOutlined onClick={clickToContractName}/>}</div>
+                    {externalDescipt != null && <div className="contractDescription">{externalDescipt}</div>}
+                    <div className="contractCard">
+                      <Card className="contractAddress">
+                        <Card.Header className="addressTitle">Contract Owner</Card.Header>
+                        <ListGroup variant="flush">
+                          <ListGroup.Item className="addressText">{contractOwner}</ListGroup.Item>
+                        </ListGroup>
+                      </Card>
+                    </div>
+                    <div className="contractCard">
+                      <Card className="contractAddress">
+                        <Card.Header className="addressTitle">Contract Address</Card.Header>
+                        <ListGroup variant="flush">
+                          <ListGroup.Item className="addressText addressCopy">{contractAddress}  <CopyOutlined onClick={clickToCopy} /></ListGroup.Item>
+                        </ListGroup>
+                      </Card>
+                    </div>
+                    <div className="originalData">
+                      Original data: <LinkOutlined onClick={clickToContractMeta}/>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Container>
+          </div>
+          <div className="bottomField">
+            <div className="actionText">Action</div>
+            <div>{panel}</div>
+            <div className="etherscanLink">
+              View on Etherscan <LinkOutlined onClick={clickToEtherscan}/>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
+    
   );
 };
 
 ContractPanel.propTypes = {
   contractAddress: PropTypes.string,
   isDisable: PropTypes.bool,
+  tokenImg: PropTypes.string
 };
 
 export default ContractPanel;

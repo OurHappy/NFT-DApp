@@ -12,6 +12,7 @@ const Token = (props) => {
     contractAddress,
     tokenId,
     isDisable,
+    passImage
   } = props;
 
   const userWallet = useContext(UserWallet);
@@ -71,6 +72,7 @@ const Token = (props) => {
         else if (key === "image") {
           // Since base64 image can be shown directly, no need to decode base64 for image
           setImg(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
+          passImage(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
           setIsImg(true);
 
           let ext = value.substr(value.lastIndexOf(".") + 1);
@@ -353,7 +355,7 @@ const Token = (props) => {
                   Name: {name} <br />
                   Description: {description} <br />
                   <br />
-                  External Link: {exLink} <br />
+                  External Link:  <br />
                   {renderScanLink()}
                   <br />
                   {/* Other meta: {meta} <br /> */}
@@ -378,6 +380,7 @@ Token.propTypes = {
     PropTypes.number
   ]),
   isDisable: PropTypes.bool,
+  passImage: PropTypes.func
 };
 
 export default Token;
