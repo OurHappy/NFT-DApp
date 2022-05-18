@@ -19,18 +19,9 @@
           flex-direction: column;
 }
 
-.container .contractInfo {
-  background-color: #18252b;
-  color: white;
-  padding: 1.5rem;
-  margin: 1rem;
-  border-radius: 1.25rem;
-  font-size: 1rem;
-}
-
 .addrText {
   font-size: 25px;
-  color: gray;
+  color: #E6E6E6;
   padding: 15px;
 }
 
@@ -53,6 +44,107 @@
   background-color: #687184;
   border: none;
   border-radius: 5px;
+}
+
+.panelTitle {
+  padding: 0.75rem 0rem;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.customAccordition .accordion-button {
+  padding: 0.5rem 1.25rem;
+}
+
+.customAccordition .accordion-button:not(.collapsed) {
+  color: black;
+  background-color: #E6E6E6;
+}
+
+.customAccordition .accordion-button::after {
+  background-image: url(../triangle.png);
+}
+
+.customAccordition .accordion-button:not(.collapsed)::after {
+  background-image: url(../triangle.png);
+}
+
+.customAccordition .accordion-button:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.contractunit .btnClick {
+  background-color: #6C757D;
+  color: white;
+  border: none;
+}
+
+.Accordion {
+  border-radius: 0;
+}
+
+.Accordion .accordionItem {
+  border: 1px solid #6C757D;
+}
+
+.Accordion .accordionItemNext {
+  border: 1px solid #6C757D;
+  border-top: none;
+}
+
+.contractInfo {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 1rem;
+  margin-top: 3rem;
+}
+
+.contractInfo .contractTitle {
+  text-align: center;
+  font-weight: 400;
+  color: gray;
+}
+
+.contractInfo .contractText {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0rem 0.5rem;
+}
+
+.contractAddress {
+  margin: 0;
+  padding: 0;
+  border: 1px solid black;
+}
+
+.contractAddress .tokenHr {
+  border: 1px solid black;
+  border-top: none;
+  opacity: 100%;
+}
+
+.contractAddress .tokenBody {
+  padding: 1rem 0rem;
+}
+
+.alert-danger {
+  border: none;
+  padding: 0.25rem 1rem;
+  font-size: 1rem;
+}
+
+.btn-check:focus + .btn-primary, .btn-primary:focus {
+  -webkit-box-shadow: 0 0 0 .1rem black;
+          box-shadow: 0 0 0 .1rem black;
 }
 
 .navClass {
@@ -103,6 +195,15 @@
   font-size: 1rem;
 }
 
+.chainBlock {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: row;
+      -ms-flex: row;
+          flex: row;
+}
+
 .searchStack {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
@@ -112,6 +213,11 @@
 
 .searchBoxClass.invalid {
   color: #ff5d51;
+}
+
+.searchBoxClass:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem #EDEDED;
+          box-shadow: 0 0 0 0.2rem #EDEDED;
 }
 
 .leftcontent {
@@ -149,19 +255,20 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
   width: 50%;
   height: 100%;
 }
 
 .divClass-search .searchBoxClass {
   /*input box*/
+  padding: 0;
   margin: 0.5rem;
   text-align: center;
   height: 3rem;
-  border: 1px solid #ccc;
+  border: 2px solid gray;
   border-radius: 4px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -178,16 +285,32 @@
   font-size: 15px;
 }
 
+#btnSearch {
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 6px;
+  margin-left: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 2rem;
+}
+
 .tokenSearchClass {
   margin: 20px;
   text-align: center;
   font-size: 20px;
-  width: 30%;
+  width: 100%;
   height: 50px;
-  border: 1px solid #ccc;
+  border: 1px solid #6C757D;
   border-radius: 5px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+.tokenSearchClass:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem #EDEDED;
+          box-shadow: 0 0 0 0.2rem #EDEDED;
 }
 
 .tokenText {
@@ -197,26 +320,127 @@
 .divClass {
   text-align: left;
   padding: 30px 100px 30px 60px;
+  background-color: #EDEDED;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .tokenInfo {
-  background-color: rgba(214, 214, 215, 0.742);
   color: #3e3e3e;
   padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
   font-size: 15px;
 }
 
+.tokenInfo .nameSection {
+  font-weight: 600;
+  font-size: 2rem;
+  color: black;
+  margin-left: 1rem;
+}
+
+.tokenInfo .desSection {
+  color: gray;
+  margin-left: 1rem;
+  font-size: 1.25rem;
+}
+
+.leftTokenSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .tokenImg {
-  width: 40%;
+  width: 100%;
   padding: 10px;
-  margin: 10px;
+  background-color: white;
 }
 
 .tokenImgAdapt {
   width: 50px;
   padding: 40px;
   margin: 40px;
+}
+
+.cardsSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.cardsSection .tokenCard {
+  padding: 0rem;
+  margin: 1rem;
+  border: 1px solid black;
+  border-radius: 6px;
+  margin-left: 1rem;
+  margin-right: 2rem;
+}
+
+.cardsSection .tokenCard .tokenBody {
+  padding: 1rem 0rem;
+}
+
+.cardsSection .cardTitle {
+  text-align: center;
+  font-size: 1rem;
+  margin: 0rem 0.5rem;
+}
+
+.cardsSection .cardText {
+  text-align: center;
+  font-size: 1rem;
+}
+
+.cardsSection .tokenHr {
+  border: 1px solid black;
+  border-top: none;
+  opacity: 100%;
+}
+
+.form-control:focus {
+  border-color: black;
+  border: 1.5px solid black;
+}
+
+.viewLink {
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.scanLink {
+  margin-left: 1rem;
+}
+
+.linkIcon {
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 /*# sourceMappingURL=style.css.map */

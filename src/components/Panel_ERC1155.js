@@ -9,15 +9,18 @@ import {
 import { balanceOf, totalSupply, burn, transfer, uri } from "../utils/contract";
 import PropTypes from "prop-types";
 
-const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
+const Panel_ERC1155 = ({
+  contractInstance,
+  userAddress,
+  isConnected,
+  isDisable,
+}) => {
   const [balanceAccount, setBalanceAccount] = useState(null);
   const [balanceId, setBalanceid] = useState(null);
   const [supplyId, setSupplyId] = useState(null);
   const [uriId, setUriId] = useState(null);
   const [uriResult, setUriResult] = useState();
-  const [burnAccount, setBurnAccount] = useState("unit256");
-  const [burnId, setBurnId] = useState("uint256");
-  const [burnAmount, setBurnAmount] = useState("uint256");
+ 
   const [transferFrom, setTransferFrom] = useState();
   const [transferTo, setTransferTo] = useState();
   const [transferId, setTransferId] = useState();
@@ -26,6 +29,9 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
   const [supplyResult, setSupplyResult] = useState("unit256");
   const [balanceResult, setBalanceResult] = useState("unit256");
   const [burnResult, setBurnresult] = useState("result");
+  const [burnAccount, setBurnAccount] = useState("unit256");
+  const [burnId, setBurnId] = useState("uint256");
+  const [burnAmount, setBurnAmount] = useState("uint256");
   const [transferResult, setTransferResult] = useState("result");
 
   const balanceAccountOnChange = (e) => {
@@ -120,84 +126,12 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
 
   return (
     <div className="contractpanel">
-      <Accordion className="dropDownMenu">
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>balanceOf</Accordion.Header>
-          <Accordion.Body>
-            <div className="contractunit">
-              <>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="Account(address)"
-                    aria-label="Account"
-                    aria-describedby="basic-addon1"
-                    onChange={balanceAccountOnChange}
-                  />
-                </InputGroup>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="id(unit256)"
-                    aria-label="id(unit256)"
-                    aria-describedby="basic-addon1"
-                    onChange={balanceIdOnChange}
-                  />
-                </InputGroup>
-              </>
-              <Button
-                variant="primary"
-                className="btnPanel"
-                onClick={queryBalance}
-              >
-                Query
-              </Button>{" "}
-              <p className="result">{balanceResult}</p>
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>totalSupply</Accordion.Header>
-          <Accordion.Body>
-            <div className="contractunit">
-              <>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="id(unit256)"
-                    aria-label="id(unit256)"
-                    aria-describedby="basic-addon1"
-                    onChange={supplyIdOnChange}
-                  />
-                </InputGroup>
-              </>
-              <Button variant="primary" onClick={querySupply}>
-                Query
-              </Button>{" "}
-              <p className="result">{supplyResult}</p>
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="2">
-          <Accordion.Header>uri</Accordion.Header>
-          <Accordion.Body>
-            <div className="contractunit">
-              <>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="<input>(uint256)"
-                    aria-label="<input>(uint256)"
-                    aria-describedby="basic-addon1"
-                    onChange={uriIdOnChange}
-                  />
-                </InputGroup>
-              </>
-              <Button variant="primary" onClick={queryUri}>
-                Query
-              </Button>{" "}
-              <p className="result">{uriResult}</p>
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="3">
-          <Accordion.Header>burn</Accordion.Header>
+      <h1 className="panelTitle">Action</h1>
+      <Accordion className="Accordion">
+        <Accordion.Item eventKey="0" className="accordionItem">
+          <Accordion.Header className="customAccordition">
+            Burn
+          </Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -226,18 +160,27 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              {isConnected && (
-                <Button variant="primary" onClick={burnToken}>
+              {isConnected && !isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={burnToken}
+                  className="btnClick"
+                >
                   burn
                 </Button>
               )}
               {!isConnected && (
-                <Alert variant="danger" className="alertClass">
+                <Alert variant="danger" className="alertClass alert-danger">
                   Please connect your metamask wallet before burning.
                 </Alert>
               )}
-              {!isConnected && (
-                <Button variant="primary" onClick={burnToken} disabled>
+              {(!isConnected || isDisable) && (
+                <Button
+                  variant="primary"
+                  onClick={burnToken}
+                  disabled
+                  className="btnClick"
+                >
                   burn
                 </Button>
               )}
@@ -245,8 +188,10 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="4">
-          <Accordion.Header>transfer</Accordion.Header>
+        <Accordion.Item eventKey="1" className="accordionItemNext">
+          <Accordion.Header className="customAccordition">
+            Transfer
+          </Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -291,8 +236,12 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              {isConnected && (
-                <Button variant="primary" onClick={transferToken}>
+              {isConnected && !isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={transferToken}
+                  className="btnClick"
+                >
                   transfer
                 </Button>
               )}
@@ -301,12 +250,144 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected }) => {
                   Please connect your metamask wallet before transferring.
                 </Alert>
               )}
-              {!isConnected && (
-                <Button variant="primary" onClick={transferToken} disabled>
+              {(!isConnected || isDisable) && (
+                <Button
+                  variant="primary"
+                  onClick={transferToken}
+                  disabled
+                  className="btnClick"
+                >
                   transfer
                 </Button>
               )}
               <p className="result">{transferResult}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+
+      <h1 className="panelTitle">Contract</h1>
+      <Accordion className="Accordion">
+        <Accordion.Item eventKey="0" className="accordionItem">
+          <Accordion.Header className="customAccordition">
+            BalanceOf
+          </Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Account(address)"
+                    aria-label="Account"
+                    aria-describedby="basic-addon1"
+                    onChange={balanceAccountOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="id(unit256)"
+                    aria-label="id(unit256)"
+                    aria-describedby="basic-addon1"
+                    onChange={balanceIdOnChange}
+                  />
+                </InputGroup>
+              </>
+              {isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryBalance}
+                  disabled
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryBalance}
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              <p className="result">{balanceResult}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1" className="accordionItemNext">
+          <Accordion.Header className="customAccordition">
+            TotalSupply
+          </Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="id(unit256)"
+                    aria-label="id(unit256)"
+                    aria-describedby="basic-addon1"
+                    onChange={supplyIdOnChange}
+                  />
+                </InputGroup>
+              </>
+              {isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={querySupply}
+                  disabled
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={querySupply}
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              <p className="result">{supplyResult}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="2" className="accordionItemNext">
+          <Accordion.Header className="customAccordition">Uri</Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="<input>(uint256)"
+                    aria-label="<input>(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={uriIdOnChange}
+                  />
+                </InputGroup>
+              </>
+              {isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryUri}
+                  disabled
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryUri}
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              <p className="result">{uriResult}</p>
             </div>
           </Accordion.Body>
         </Accordion.Item>
@@ -319,6 +400,7 @@ Panel_ERC1155.propTypes = {
   contractInstance: PropTypes.object.isRequired,
   userAddress: PropTypes.string,
   isConnected: PropTypes.bool,
+  isDisable: PropTypes.bool,
 };
 
 export default Panel_ERC1155;

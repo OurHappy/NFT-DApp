@@ -18,7 +18,12 @@ import {
   getIPFSdata,
 } from "../utils/contract";
 
-const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
+const Panel_ERC721 = ({
+  contractInstance,
+  userAddress,
+  isConnected,
+  isDisable,
+}) => {
   const [balanceId, setBalanceId] = useState(null);
   const [balanceResult, setBalanceResult] = useState("uint256");
   const [ownerId, setOwnerId] = useState(null);
@@ -135,9 +140,13 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
 
   return (
     <div className="contractpanel">
-      <Accordion>
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>balanceOf</Accordion.Header>
+      <h1 className="panelTitle">Action</h1>
+
+      <Accordion className="Accordion">
+        <Accordion.Item eventKey="0" className="accordionItem">
+          <Accordion.Header className="customAccordition">
+            BalanceOf
+          </Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -150,15 +159,33 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryBalance}>
-                Query
-              </Button>{" "}
+              {isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryBalance}
+                  disabled
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryBalance}
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
               <p className="result">{balanceResult}</p>
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>ownerOf</Accordion.Header>
+        <Accordion.Item eventKey="1" className="accordionItemNext">
+          <Accordion.Header className="customAccordition">
+            OwnerOf
+          </Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -171,15 +198,33 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryOwner}>
-                Query
-              </Button>{" "}
+              {isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryOwner}
+                  disabled
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryOwner}
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
               <p className="result">{ownerResult}</p>
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="2">
-          <Accordion.Header>tokenURI</Accordion.Header>
+        <Accordion.Item eventKey="2" className="accordionItemNext">
+          <Accordion.Header className="customAccordition">
+            TokenURI
+          </Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -192,16 +237,37 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              <Button variant="primary" onClick={queryUri}>
-                Query
-              </Button>{" "}
+              {isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryUri}
+                  disabled
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={queryUri}
+                  className="btnClick"
+                >
+                  Query
+                </Button>
+              )}
               <p className="result">{uriResult}</p>
               {/* <div>{uriSection}</div> */}
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="3">
-          <Accordion.Header>burn</Accordion.Header>
+      </Accordion>
+      <h1 className="panelTitle">Contract</h1>
+      <Accordion className="Accordion">
+        <Accordion.Item eventKey="0" className="accordionItem">
+          <Accordion.Header className="customAccordition">
+            Burn
+          </Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -214,18 +280,27 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              {isConnected && (
-                <Button variant="primary" onClick={burnToken}>
+              {isConnected && !isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={burnToken}
+                  className="btnClick"
+                >
                   burn
                 </Button>
               )}
               {!isConnected && (
-                <Alert variant="danger" className="alertClass">
+                <Alert variant="danger" className="alertClass .alert-danger">
                   Please connect your metamask wallet before burning.
                 </Alert>
               )}
-              {!isConnected && (
-                <Button variant="primary" onClick={burnToken} disabled>
+              {(!isConnected || isDisable) && (
+                <Button
+                  variant="primary"
+                  onClick={burnToken}
+                  disabled
+                  className="btnClick"
+                >
                   burn
                 </Button>
               )}
@@ -233,8 +308,10 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="4">
-          <Accordion.Header>transferFrom</Accordion.Header>
+        <Accordion.Item eventKey="1" className="accordionItemNext">
+          <Accordion.Header className="customAccordition">
+            TransferFrom
+          </Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -263,18 +340,27 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected }) => {
                   />
                 </InputGroup>
               </>
-              {isConnected && (
-                <Button variant="primary" onClick={transferToken}>
+              {isConnected && !isDisable && (
+                <Button
+                  variant="primary"
+                  onClick={transferToken}
+                  className="btnClick"
+                >
                   transfer
                 </Button>
               )}
               {!isConnected && (
-                <Alert variant="danger" className="alertClass">
+                <Alert variant="danger" className="alertClass .alert-danger">
                   Please connect your metamask wallet before transferring.
                 </Alert>
               )}
-              {!isConnected && (
-                <Button variant="primary" onClick={transferToken} disabled>
+              {(!isConnected || isDisable) && (
+                <Button
+                  variant="primary"
+                  onClick={transferToken}
+                  disabled
+                  className="btnClick"
+                >
                   transfer
                 </Button>
               )}
@@ -291,5 +377,6 @@ Panel_ERC721.propTypes = {
   contractInstance: PropTypes.object.isRequired,
   userAddress: PropTypes.string,
   isConnected: PropTypes.bool,
+  isDisable: PropTypes.bool,
 };
 export default Panel_ERC721;

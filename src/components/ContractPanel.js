@@ -6,11 +6,10 @@ import { getContractMeta } from "../utils/contract";
 import CopyOutlined from "@ant-design/icons/CopyOutlined";
 import Panel_ERC1155 from "./Panel_ERC1155";
 import Panel_ERC721 from "./Panel_ERC721";
-import UserWallet from '../context/userWallet';
+import UserWallet from "../context/userWallet";
+import { Card } from "react-bootstrap";
 
-const ContractPanel = ({
-  contractAddress,
-}) => {
+const ContractPanel = ({ contractAddress, isDisable }) => {
   /* Variables */
   let contractMeta = null;
   const userWallet = useContext(UserWallet);
@@ -95,6 +94,7 @@ const ContractPanel = ({
         contractInstance={contractInstance}
         userAddress={userWallet.address}
         isConnected={isConnected}
+        isDisable={isDisable}
       />
     );
 
@@ -105,6 +105,7 @@ const ContractPanel = ({
         contractInstance={contractInstance}
         userAddress={userWallet.address}
         isConnected={isConnected}
+        isDisable={isDisable}
       />
     );
 
@@ -115,14 +116,24 @@ const ContractPanel = ({
   return (
     <div>
       {/* Show the contract and  you can copy it */}
-      <div className="divClass">
+      {/* <div className="divClass">
         <span className="contractText">Contract:</span>
         <span className="addrText">{contractAddress}</span>
         <CopyOutlined onClick={clickToCopy} />
+      </div> */}
+      <div className="contractInfo">
+        <Card style={{ width: "50%" }} className="contractAddress">
+          <Card.Body className="tokenBody">
+            <Card.Title className="contractTitle">Contract Address</Card.Title>
+            <hr className="tokenHr" />
+
+            <Card.Text className="contractText">{contractAddress}</Card.Text>
+          </Card.Body>
+        </Card>
       </div>
 
       {/* Show the contract interaction panel if a valid contract is provided */}
-      <div className="container">
+      {/* <div className="container">
         <div className="row">
           <div className="col contractInfo">
             <div>
@@ -141,7 +152,7 @@ const ContractPanel = ({
             </div>
           )}
         </div>
-      </div>
+      </div> */}
       <div>{panel}</div>
     </div>
   );
@@ -149,6 +160,7 @@ const ContractPanel = ({
 
 ContractPanel.propTypes = {
   contractAddress: PropTypes.string,
+  isDisable: PropTypes.bool,
 };
 
 export default ContractPanel;

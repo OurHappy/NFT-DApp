@@ -4,6 +4,7 @@ import ERC165Interface from "../contracts/ERC165.json";
 import OurSong1155Interface from "../contracts/OurSong1155.json";
 import OurSong721Interface from "../contracts/OurSong721.json";
 import { isERC721, isERC1155 } from "../utils/contract.js";
+import { chains } from '../constants';
 
 const ERC721InterfaceID = "0x5b5e139f"; // ERC721Metadata
 const ERC1155InterfaceID = "0xd9b67a26"; // ERC1155
@@ -26,6 +27,21 @@ export function init(givenProvider) {
   }
 }
 
+export function getChainName(chainId) {
+  const networkId = parseInt(chainId, 16);
+
+  const name = chains.getChainNameById(networkId) ?? 'Unknown';
+  return name;
+}
+
+export async function getChain() {
+  // get chain ID without connect, and return chain name
+  let networkId = await provider.request({
+    method: "eth_chainId"
+  });
+  return getChainName(networkId);
+}
+
 export async function disconnect() {
   // TODO: implement disconnect function
   await provider.request({
@@ -40,7 +56,7 @@ export async function connect() {
   let balance = await web3.eth.getBalance(address[0]);
 
   let networkId = await web3.eth.net.getId();
-
+  
   let networkName;
   switch (networkId) {
     case 1:

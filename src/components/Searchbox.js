@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { isContractAddress } from "../utils/web3Client";
-import { FormControl, Form } from "react-bootstrap";
-import { InputGroup } from "react-bootstrap";
+import {
+  isContractAddress,
+  getChain,
+  on,
+  removeListener,
+} from "../utils/web3Client";
+import {
+  FormControl,
+  InputGroup,
+  Spinner,
+  Container,
+  Row,
+  Col,
+  Button,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Stack from "react-bootstrap/Stack";
 
@@ -12,11 +24,54 @@ const Searchbox = (props) => {
 
   /* States */
   const [warnText, setWarnText] = useState("");
+  const [chainName, setChainName] = useState("");
+  const [state, setState] = useState({});
+  const [contractLoading, setContractLoading] = useState(false);
+  const [inputContract, setInputContract] = useState(null);
+  const [inputId, setInputId] = useState(null);
+
+  useEffect(() => {
+    on("chainChanged", showCurrentChain);
+    return () => {
+      setState({});
+    };
+  }, []);
+
+  useEffect(() => {
+    showCurrentChain();
+  }, [chainName]);
 
   /* Functions */
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") searchAction(event);
+  async function showCurrentChain() {
+    let chainName = await getChain();
+    setChainName(chainName);
+  }
+
+  // const handleKeyPress = (event) => {
+  //   if (event.key === "Enter") searchAction(event);
+  // };
+
+  const inputContractOnChange = (e) => {
+    setInputContract(e.target.value);
+    setWarnText("");
+  };
+
+  const inputIdOnChange = (e) => {
+    setInputId(e.target.value);
+  };
+
+  const handleBtnClick = () => {
+    setContractLoading(true);
+    const inputVal = inputContract;
+    const isValid = contractValid(inputVal);
+    setContractLoading(false);
+
+    if (isValid) {
+      navigate(`contract/${inputVal}/${inputId}`);
+    } else {
+      setWarnText("This is not a valid contract address");
+    }
   };
 
   const resetStates = () => {
@@ -28,8 +83,10 @@ const Searchbox = (props) => {
   };
 
   const searchAction = (event) => {
+    setContractLoading(true);
     const inputVal = event.target.value;
     const isValid = contractValid(inputVal);
+    setContractLoading(false);
 
     if (isValid) {
       navigate(`contract/${inputVal}`);
@@ -40,40 +97,63 @@ const Searchbox = (props) => {
 
   /* Render Function */
   return (
-    <Stack direction="horizontal" gap="3" className="searchStack">
-      <div className="leftcontent">
-        <p>
-          <b>
-            {" "}
-            Current Chain: <br />
-            {props.currentNetwork}
-          </b>
-        </p>
+    <div>
+      <Stack direction="horizontal" gap="3" className="searchStack">
+        <div className="leftcontent">
+          <p>
+            <b>
+              {" "}
+              Current Chain: <br />
+              {props.currentNetwork}
+            </b>
+          </p>
+        </div>
+        <div className="divClass-search">
+          <InputGroup className="mb-3">
+            <FormControl
+              placeholder="Contract Address"
+              aria-label="Username"
+              aria-describedby="basic-addon1"
+              onChange={inputContractOnChange}
+              className={`searchBoxClass ${warnText ? "invalid" : ""}`}
+            />
+          </InputGroup>
+          <InputGroup>
+            <FormControl
+              placeholder="Token Id"
+              aria-label="Username"
+              aria-describedby="basic-addon1"
+              onChange={inputIdOnChange}
+              className={`searchBoxClass ${warnText ? "invalid" : ""}`}
+            />
+          </InputGroup>
+
+          <Button
+            variant="outline-dark"
+            id="btnSearch"
+            onClick={handleBtnClick}
+          >
+            Search
+          </Button>
+
+          <div className="warnClass">{warnText}</div>
+        </div>
+      </Stack>
+
+      <div>
+        {contractLoading && (
+          <Container>
+            <Row>
+              <Col md={{ offset: 6 }}>
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+              </Col>
+            </Row>
+          </Container>
+        )}
       </div>
-      <div className="divClass-search">
-        <InputGroup className="mb-3 ">
-          <FormControl
-            placeholder="Contract Address"
-            aria-label="Username"
-            aria-describedby="basic-addon1"
-            onKeyPress={handleKeyPress}
-            onChange={resetStates}
-            className={`searchBoxClass ${warnText ? "invalid" : ""}`}
-          />
-        </InputGroup>
-        <InputGroup>
-          <FormControl
-            placeholder="Token Id"
-            aria-label="Username"
-            aria-describedby="basic-addon1"
-            onKeyPress={handleKeyPress}
-            onChange={resetStates}
-            className={`searchBoxClass ${warnText ? "invalid" : ""}`}
-          />
-        </InputGroup>
-        <div className="warnClass">{warnText}</div>
-      </div>
-    </Stack>
+    </div>
   );
 };
 
