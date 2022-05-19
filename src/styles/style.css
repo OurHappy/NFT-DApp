@@ -5,10 +5,13 @@
           box-sizing: border-box;
 }
 
-.contractText {
-  font-size: 1.5rem;
+.contractPanel .failArea {
+  background-color: #F4F2F2;
+  padding: 100px;
+  padding-bottom: 400px;
 }
 
+<<<<<<< HEAD
 .divClass {
   padding: 1rem 2rem 1rem 0rem;
   -ms-flex-wrap: wrap;
@@ -23,20 +26,107 @@
   font-size: 25px;
   color: #E6E6E6;
   padding: 15px;
+=======
+.contractPanel .failArea .failTitle {
+  padding-bottom: 50px;
 }
 
-.blueText {
-  color: #68b9ff;
+.contractPanel .failArea .failText {
+  padding: 10px;
 }
 
-.contractpanel {
-  margin: 3rem;
-  font-size: 1.5rem;
+.contractPanel .failArea .failText .highlight {
+  color: #a06a6a;
 }
 
-.contractpanel p {
-  font-size: 1rem;
-  margin-top: 1rem;
+.contractPanel .topField {
+  padding: 30px 50px 50px 50px;
+  background-color: #F4F2F2;
+}
+
+.contractPanel .topField .contractText {
+  margin-top: 30px;
+  margin-bottom: 60px;
+}
+
+.contractPanel .topField .test {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.contractPanel .topField .imgBox {
+  width: 350px;
+  height: 350px;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: white;
+}
+
+.contractPanel .topField .imgBox .contractImg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.contractPanel .topField .contractInfo .contractName {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+.contractPanel .topField .contractInfo .contractDescription {
+  color: gray;
+  margin-bottom: 50px;
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
+}
+
+.contractPanel .topField .contractInfo .contractCard {
+  margin-bottom: 15px;
+}
+
+.contractPanel .topField .contractInfo .contractCard .contractAddress .addressTitle {
+  background-color: white;
+  font-weight: bold;
+}
+
+.contractPanel .topField .contractInfo .contractCard .contractAddress .addressText {
+  color: gray;
+}
+
+.contractPanel .topField .contractInfo .originalData {
+  margin-top: 15px;
+  font-size: 15px;
+  color: gray;
+}
+
+.contractPanel .bottomField {
+  padding: 50px 50px 100px 50px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.contractPanel .bottomField .actionText {
+  font-size: 30px;
+  padding-bottom: 20px;
+}
+
+.contractPanel .bottomField .etherscanLink {
+  margin-top: 15px;
+  font-size: 15px;
   color: gray;
 }
 
@@ -167,6 +257,7 @@
 }
 
 .navClass button {
+<<<<<<< HEAD
   font-size: 1rem;
   margin: 0rem 2rem;
   color: #858484;
@@ -177,6 +268,9 @@
 .navClass button:hover {
   color: white;
   background-color: #858484;
+=======
+  margin: 0rem 2rem;
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 }
 
 .navClass div.chainBlock {
@@ -195,6 +289,7 @@
   font-size: 1rem;
 }
 
+<<<<<<< HEAD
 .chainBlock {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -209,6 +304,17 @@
       -ms-flex-pack: justify;
           justify-content: space-between;
   height: 90vh;
+=======
+.searchBoxClass {
+  margin: 1rem;
+  text-align: center;
+  width: 60%;
+  height: 3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 }
 
 .searchBoxClass.invalid {
@@ -267,11 +373,15 @@
   padding: 0;
   margin: 0.5rem;
   text-align: center;
+<<<<<<< HEAD
   height: 3rem;
   border: 2px solid gray;
   border-radius: 4px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+=======
+  padding: 100px 100px 0px 100px;
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 }
 
 .warnClass {
@@ -308,11 +418,14 @@
           box-sizing: border-box;
 }
 
+<<<<<<< HEAD
 .tokenSearchClass:focus {
   -webkit-box-shadow: 0 0 0 0.2rem #EDEDED;
           box-shadow: 0 0 0 0.2rem #EDEDED;
 }
 
+=======
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 .tokenText {
   font-size: 25px;
 }
@@ -320,6 +433,7 @@
 .divClass {
   text-align: left;
   padding: 30px 100px 30px 60px;
+<<<<<<< HEAD
   background-color: #EDEDED;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -334,11 +448,18 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+=======
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 }
 
 .tokenInfo {
   color: #3e3e3e;
   padding: 20px;
+<<<<<<< HEAD
+=======
+  margin: 20px;
+  border-radius: 10px;
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
   font-size: 15px;
 }
 
@@ -372,9 +493,15 @@
 }
 
 .tokenImg {
+<<<<<<< HEAD
   width: 100%;
   padding: 10px;
   background-color: white;
+=======
+  width: 40%;
+  padding: 10px;
+  margin: 10px;
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 }
 
 .tokenImgAdapt {
@@ -383,6 +510,7 @@
   margin: 40px;
 }
 
+<<<<<<< HEAD
 .cardsSection {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -442,5 +570,28 @@
 .linkIcon {
   margin-left: 0.5rem;
   margin-bottom: 0.5rem;
+=======
+.defaultPage .errorTitle {
+  background-color: #F4F2F2;
+  font-size: 40px;
+  text-align: center;
+  padding: 80px 30px 80px 30px;
+}
+
+.defaultPage .errorText {
+  font-size: 20px;
+  text-align: center;
+  padding: 60px;
+}
+
+.accordion-button {
+  background-color: #eeeeee !important;
+  font-weight: bold;
+}
+
+.accordion-button:not(.collapsed) {
+  color: black;
+  font-weight: bold;
+>>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 }
 /*# sourceMappingURL=style.css.map */

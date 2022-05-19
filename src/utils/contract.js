@@ -129,7 +129,7 @@ export async function getContractMeta(contract) {
           console.log(err);
           return null;
         });
-      return contractMeta;
+      return {contractMeta, contractUri};
     } else if (ERC721) {
       let newDataUrl = dataUrl + "?uri=" + contractUri;
       let contractMeta = await axios
@@ -143,24 +143,36 @@ export async function getContractMeta(contract) {
           console.log(err);
           return null;
         });
-      return contractMeta;
+      return {contractMeta, contractUri};
     }
     return null;
   }
 }
 
 export async function isERC721(contract) {
-  let result = await contract.methods
-    .supportsInterface(ERC721InterfaceID)
-    .call();
-  return result;
+  let result = null;
+  try {
+    result = await contract.methods
+      .supportsInterface(ERC721InterfaceID)
+      .call();
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 export async function isERC1155(contract) {
-  let result = await contract.methods
-    .supportsInterface(ERC1155InterfaceID)
-    .call();
-  return result;
+  let result = null;
+  try {
+    result = await contract.methods
+      .supportsInterface(ERC1155InterfaceID)
+      .call();
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 export async function burn(contract, account, id, amount, accountAddress) {

@@ -24,7 +24,12 @@ import LinkOutlined from "@ant-design/icons/LinkOutlined";
 
 const Token = (props) => {
   /* Variables */
-  const { contractAddress, tokenId, isDisable } = props;
+  const {
+    contractAddress,
+    tokenId,
+    isDisable,
+    passImage
+  } = props;
 
   const userWallet = useContext(UserWallet);
   const currentNetwork = userWallet.network;
@@ -85,6 +90,7 @@ const Token = (props) => {
         else if (key === "image") {
           // Since base64 image can be shown directly, no need to decode base64 for image
           setImg(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
+          passImage(value.replace("ipfs://", "https://ipfs.io/ipfs/"));
           setIsImg(true);
 
           let ext = value.substr(value.lastIndexOf(".") + 1);
@@ -454,6 +460,7 @@ Token.propTypes = {
   tokenId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isDisable: PropTypes.bool,
   setTokenId: PropTypes.func,
+  passImage: PropTypes.func
 };
 
 export default Token;

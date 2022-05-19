@@ -140,13 +140,9 @@ const Panel_ERC721 = ({
 
   return (
     <div className="contractpanel">
-      <h1 className="panelTitle">Action</h1>
-
-      <Accordion className="Accordion">
-        <Accordion.Item eventKey="0" className="accordionItem">
-          <Accordion.Header className="customAccordition">
-            BalanceOf
-          </Accordion.Header>
+      <Accordion>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Balance Of</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -160,21 +156,12 @@ const Panel_ERC721 = ({
                 </InputGroup>
               </>
               {isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryBalance}
-                  disabled
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={queryBalance} disabled>
                   Query
                 </Button>
               )}
               {!isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryBalance}
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={queryBalance}>
                   Query
                 </Button>
               )}
@@ -182,10 +169,8 @@ const Panel_ERC721 = ({
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="1" className="accordionItemNext">
-          <Accordion.Header className="customAccordition">
-            OwnerOf
-          </Accordion.Header>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>Owner Of</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -199,21 +184,12 @@ const Panel_ERC721 = ({
                 </InputGroup>
               </>
               {isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryOwner}
-                  disabled
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={queryOwner} disabled>
                   Query
                 </Button>
               )}
               {!isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryOwner}
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={queryOwner}>
                   Query
                 </Button>
               )}
@@ -221,10 +197,8 @@ const Panel_ERC721 = ({
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="2" className="accordionItemNext">
-          <Accordion.Header className="customAccordition">
-            TokenURI
-          </Accordion.Header>
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>Token URI</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -238,21 +212,12 @@ const Panel_ERC721 = ({
                 </InputGroup>
               </>
               {isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryUri}
-                  disabled
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={queryUri} disabled>
                   Query
                 </Button>
               )}
               {!isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryUri}
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={queryUri}>
                   Query
                 </Button>
               )}
@@ -261,13 +226,8 @@ const Panel_ERC721 = ({
             </div>
           </Accordion.Body>
         </Accordion.Item>
-      </Accordion>
-      <h1 className="panelTitle">Contract</h1>
-      <Accordion className="Accordion">
-        <Accordion.Item eventKey="0" className="accordionItem">
-          <Accordion.Header className="customAccordition">
-            Burn
-          </Accordion.Header>
+        <Accordion.Item eventKey="3">
+          <Accordion.Header>Burn</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -281,11 +241,7 @@ const Panel_ERC721 = ({
                 </InputGroup>
               </>
               {isConnected && !isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={burnToken}
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={burnToken}>
                   burn
                 </Button>
               )}
@@ -295,12 +251,7 @@ const Panel_ERC721 = ({
                 </Alert>
               )}
               {(!isConnected || isDisable) && (
-                <Button
-                  variant="primary"
-                  onClick={burnToken}
-                  disabled
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={burnToken} disabled>
                   burn
                 </Button>
               )}
@@ -308,10 +259,8 @@ const Panel_ERC721 = ({
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="1" className="accordionItemNext">
-          <Accordion.Header className="customAccordition">
-            TransferFrom
-          </Accordion.Header>
+        <Accordion.Item eventKey="4">
+          <Accordion.Header>Transfer From</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -341,11 +290,7 @@ const Panel_ERC721 = ({
                 </InputGroup>
               </>
               {isConnected && !isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={transferToken}
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={transferToken}>
                   transfer
                 </Button>
               )}
@@ -355,12 +300,7 @@ const Panel_ERC721 = ({
                 </Alert>
               )}
               {(!isConnected || isDisable) && (
-                <Button
-                  variant="primary"
-                  onClick={transferToken}
-                  disabled
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={transferToken} disabled>
                   transfer
                 </Button>
               )}

@@ -126,12 +126,101 @@ const Panel_ERC1155 = ({
 
   return (
     <div className="contractpanel">
-      <h1 className="panelTitle">Action</h1>
-      <Accordion className="Accordion">
-        <Accordion.Item eventKey="0" className="accordionItem">
-          <Accordion.Header className="customAccordition">
-            Burn
-          </Accordion.Header>
+      <Accordion>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>BalanceOf</Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="Account(address)"
+                    aria-label="Account"
+                    aria-describedby="basic-addon1"
+                    onChange={balanceAccountOnChange}
+                  />
+                </InputGroup>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="id(unit256)"
+                    aria-label="id(unit256)"
+                    aria-describedby="basic-addon1"
+                    onChange={balanceIdOnChange}
+                  />
+                </InputGroup>
+              </>
+              {isDisable && (
+                <Button variant="secondary" onClick={queryBalance} disabled>
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button variant="secondary" onClick={queryBalance}>
+                  Query
+                </Button>
+              )}
+              <p className="result">{balanceResult}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>Total Supply</Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="id(unit256)"
+                    aria-label="id(unit256)"
+                    aria-describedby="basic-addon1"
+                    onChange={supplyIdOnChange}
+                  />
+                </InputGroup>
+              </>
+              {isDisable && (
+                <Button variant="secondary" onClick={querySupply} disabled>
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button variant="secondary" onClick={querySupply}>
+                  Query
+                </Button>
+              )}
+              <p className="result">{supplyResult}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="2">
+          <Accordion.Header>uri</Accordion.Header>
+          <Accordion.Body>
+            <div className="contractunit">
+              <>
+                <InputGroup className="mb-3">
+                  <FormControl
+                    placeholder="<input>(uint256)"
+                    aria-label="<input>(uint256)"
+                    aria-describedby="basic-addon1"
+                    onChange={uriIdOnChange}
+                  />
+                </InputGroup>
+              </>
+              {isDisable && (
+                <Button variant="secondary" onClick={queryUri} disabled>
+                  Query
+                </Button>
+              )}
+              {!isDisable && (
+                <Button variant="secondary" onClick={queryUri}>
+                  Query
+                </Button>
+              )}
+              <p className="result">{uriResult}</p>
+            </div>
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="3">
+          <Accordion.Header>Burn</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -161,11 +250,7 @@ const Panel_ERC1155 = ({
                 </InputGroup>
               </>
               {isConnected && !isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={burnToken}
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={burnToken}>
                   burn
                 </Button>
               )}
@@ -175,12 +260,7 @@ const Panel_ERC1155 = ({
                 </Alert>
               )}
               {(!isConnected || isDisable) && (
-                <Button
-                  variant="primary"
-                  onClick={burnToken}
-                  disabled
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={burnToken} disabled>
                   burn
                 </Button>
               )}
@@ -188,10 +268,8 @@ const Panel_ERC1155 = ({
             </div>
           </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="1" className="accordionItemNext">
-          <Accordion.Header className="customAccordition">
-            Transfer
-          </Accordion.Header>
+        <Accordion.Item eventKey="4">
+          <Accordion.Header>Transfer</Accordion.Header>
           <Accordion.Body>
             <div className="contractunit">
               <>
@@ -237,11 +315,7 @@ const Panel_ERC1155 = ({
                 </InputGroup>
               </>
               {isConnected && !isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={transferToken}
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={transferToken}>
                   transfer
                 </Button>
               )}
@@ -251,12 +325,7 @@ const Panel_ERC1155 = ({
                 </Alert>
               )}
               {(!isConnected || isDisable) && (
-                <Button
-                  variant="primary"
-                  onClick={transferToken}
-                  disabled
-                  className="btnClick"
-                >
+                <Button variant="secondary" onClick={transferToken} disabled>
                   transfer
                 </Button>
               )}
