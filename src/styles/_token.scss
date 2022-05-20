@@ -31,7 +31,6 @@
 }
 
 .tokenInfo {
-    // background-color: rgba(214, 214, 215, 0.742);
     color: rgb(62, 62, 62);
     padding: 20px;
     // margin: 20px;
@@ -39,6 +38,7 @@
     font-size: 15px;
     
     .nameSection{
+        text-align: center;
         font-weight: 600;
         font-size: 2rem;
         color: black;
@@ -46,10 +46,46 @@
 
     }
     .desSection{
+        text-align: center;
         color: gray;
         margin-left: 1rem;
         font-size: 1.25rem;
 
+    }
+    // Card Info Section
+    .cardsSection{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: start;
+    
+        .tokenCard{
+            width:8rem;
+            padding: 0rem;
+            margin: 1rem;
+            border:1px solid black;
+            border-radius: 6px;
+            margin-left: 1rem;
+            margin-right:1rem;
+            .tokenBody{
+             padding: 1rem 0rem;
+            }
+        }
+        .cardTitle{
+            text-align: center;
+            font-size: 1rem;
+            margin:0rem 0.5rem;
+        }
+        .cardText{
+            text-align: center;
+            font-size: 1rem;
+        }
+        .tokenHr{
+            border: 1px solid black;
+            border-top: none;
+            opacity: 100%;
+            
+        }
     }
 }
 
@@ -75,42 +111,7 @@
     margin: 40px;
 }
 
-.cardsSection{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
 
-    
-    .tokenCard{
-
-        padding: 0rem;
-        margin: 1rem;
-        border:1px solid black;
-        border-radius: 6px;
-        margin-left: 1rem;
-        margin-right:2rem;
-        .tokenBody{
-         padding: 1rem 0rem;
-        }
-    }
-    .cardTitle{
-        text-align: center;
-        font-size: 1rem;
-        margin:0rem 0.5rem;
-    }
-    .cardText{
-        text-align: center;
-        font-size: 1rem;
-
-
-    }
-    .tokenHr{
-        border: 1px solid black;
-        border-top: none;
-        opacity: 100%;
-        
-    }
-}
 
 .form-control:focus{
     border-color: black;
@@ -129,4 +130,22 @@
 .linkIcon{
     margin-left: 0.5rem;
     margin-bottom:0.5rem;
+}
+
+
+.imgBox {
+    width: 350px;
+    height: 350px;
+    margin-bottom: 20px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+
+    .contractImg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
 }

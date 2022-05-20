@@ -48,7 +48,7 @@ export const Detail = (props) => {
   /**
    * Functions
    */
-  function passImage (img) {
+  function passImage(img) {
     setTokenImg(img);
   }
 
@@ -70,8 +70,18 @@ export const Detail = (props) => {
   } else {
     return (
       <>
-        <Token  contractAddress={address} tokenId={tokenId} isDisable={isDisable} passImage={passImage}/>
-        <ContractPanel contractAddress={address} isDisable={isDisable} tokenImg={tokenImg}/>
+        <Token
+          contractAddress={address}
+          tokenId={tokenId}
+          isDisable={isDisable}
+          passImage={passImage}
+          setTokenId={setTokenId}
+        />
+        <ContractPanel
+          contractAddress={address}
+          isDisable={isDisable}
+          tokenImg={tokenImg}
+        />
       </>
     );
     // return (

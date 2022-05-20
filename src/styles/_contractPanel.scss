@@ -11,24 +11,6 @@
     .failText {
       padding: 10px;
 
-<<<<<<< HEAD
-// .container {
-//   .contractInfo {
-//     background-color: rgb(24, 37, 43);
-//     color: rgb(255, 255, 255);
-//     padding: 1.5rem;
-//     margin: 1rem;
-//     border-radius: 1.25rem;
-//     font-size: 1rem;
-//   }
-// }
-
-.addrText {
-  font-size: 25px;
-  color: #E6E6E6;
-  padding: 15px;
-}
-=======
       .highlight {
         color: #a06a6a;
       }
@@ -38,7 +20,6 @@
   .topField {
     padding: 30px 50px 50px 50px;
     background-color: #F4F2F2;
->>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 
     .contractText {
       margin-top: 30px;
@@ -101,7 +82,6 @@
       }
     }
   }
-<<<<<<< HEAD
 }
 
 .btnPanel{
@@ -166,24 +146,24 @@
  
 }
 
-.contractInfo{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 1rem;
-  margin-top: 3rem;
-  .contractTitle{
-    text-align: center;
-    font-weight: 400;
-    color: gray;
-  }
-  .contractText{
-    text-align: center;
-    font-size: 1.25rem;
-    font-weight: 600;
-    padding :0rem 0.5rem;
-  }
-}
+// .contractInfo{
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   margin: 1rem;
+//   margin-top: 3rem;
+//   .contractTitle{
+//     text-align: center;
+//     font-weight: 400;
+//     color: gray;
+//   }
+//   .contractText{
+//     text-align: center;
+//     font-size: 1.25rem;
+//     font-weight: 600;
+//     padding :0rem 0.5rem;
+//   }
+
 
 .contractAddress{
   margin: 0;
@@ -209,7 +189,6 @@
 
 .btn-check:focus + .btn-primary, .btn-primary:focus{
   box-shadow: 0 0 0 .1rem black;
-=======
 
   .bottomField {
     padding: 50px 50px 100px 50px;
@@ -227,5 +206,4 @@
       color: gray;
     }
   }
->>>>>>> 8f9c961d32ce241b47a69debf0365c8191e45513
 }

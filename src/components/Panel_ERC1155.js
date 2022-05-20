@@ -20,7 +20,7 @@ const Panel_ERC1155 = ({
   const [supplyId, setSupplyId] = useState(null);
   const [uriId, setUriId] = useState(null);
   const [uriResult, setUriResult] = useState();
- 
+
   const [transferFrom, setTransferFrom] = useState();
   const [transferTo, setTransferTo] = useState();
   const [transferId, setTransferId] = useState();
@@ -330,133 +330,6 @@ const Panel_ERC1155 = ({
                 </Button>
               )}
               <p className="result">{transferResult}</p>
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-
-      <h1 className="panelTitle">Contract</h1>
-      <Accordion className="Accordion">
-        <Accordion.Item eventKey="0" className="accordionItem">
-          <Accordion.Header className="customAccordition">
-            BalanceOf
-          </Accordion.Header>
-          <Accordion.Body>
-            <div className="contractunit">
-              <>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="Account(address)"
-                    aria-label="Account"
-                    aria-describedby="basic-addon1"
-                    onChange={balanceAccountOnChange}
-                  />
-                </InputGroup>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="id(unit256)"
-                    aria-label="id(unit256)"
-                    aria-describedby="basic-addon1"
-                    onChange={balanceIdOnChange}
-                  />
-                </InputGroup>
-              </>
-              {isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryBalance}
-                  disabled
-                  className="btnClick"
-                >
-                  Query
-                </Button>
-              )}
-              {!isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryBalance}
-                  className="btnClick"
-                >
-                  Query
-                </Button>
-              )}
-              <p className="result">{balanceResult}</p>
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="1" className="accordionItemNext">
-          <Accordion.Header className="customAccordition">
-            TotalSupply
-          </Accordion.Header>
-          <Accordion.Body>
-            <div className="contractunit">
-              <>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="id(unit256)"
-                    aria-label="id(unit256)"
-                    aria-describedby="basic-addon1"
-                    onChange={supplyIdOnChange}
-                  />
-                </InputGroup>
-              </>
-              {isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={querySupply}
-                  disabled
-                  className="btnClick"
-                >
-                  Query
-                </Button>
-              )}
-              {!isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={querySupply}
-                  className="btnClick"
-                >
-                  Query
-                </Button>
-              )}
-              <p className="result">{supplyResult}</p>
-            </div>
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="2" className="accordionItemNext">
-          <Accordion.Header className="customAccordition">Uri</Accordion.Header>
-          <Accordion.Body>
-            <div className="contractunit">
-              <>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="<input>(uint256)"
-                    aria-label="<input>(uint256)"
-                    aria-describedby="basic-addon1"
-                    onChange={uriIdOnChange}
-                  />
-                </InputGroup>
-              </>
-              {isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryUri}
-                  disabled
-                  className="btnClick"
-                >
-                  Query
-                </Button>
-              )}
-              {!isDisable && (
-                <Button
-                  variant="primary"
-                  onClick={queryUri}
-                  className="btnClick"
-                >
-                  Query
-                </Button>
-              )}
-              <p className="result">{uriResult}</p>
             </div>
           </Accordion.Body>
         </Accordion.Item>

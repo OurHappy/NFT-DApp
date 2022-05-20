@@ -91,13 +91,16 @@ export const Navbar = (props) => {
       <div id="titleText" onClick={clickMenu}>
         OurSong NFT Viewer
       </div>
-      <div className="ms-auto chainBlock">
-        {chainName}
-        {address ? (
-          <Button variant="link" onClick={copyAddress}>
-            {renderShortenAddress()}
-          </Button>
-        ) : null}
+      {/* <div className="ms-auto chainBlock"> */}
+      <div className="ms-auto">
+        <div>{chainName}</div>
+        <div>
+          {address ? (
+            <Button variant="link" onClick={copyAddress} className="addressBtn">
+              {renderShortenAddress()}
+            </Button>
+          ) : null}
+        </div>
       </div>
       {appState === "ready" ? (
         <div>

@@ -24,12 +24,7 @@ import LinkOutlined from "@ant-design/icons/LinkOutlined";
 
 const Token = (props) => {
   /* Variables */
-  const {
-    contractAddress,
-    tokenId,
-    isDisable,
-    passImage
-  } = props;
+  const { contractAddress, tokenId, isDisable, passImage } = props;
 
   const userWallet = useContext(UserWallet);
   const currentNetwork = userWallet.network;
@@ -57,7 +52,7 @@ const Token = (props) => {
   const [loadToken, setLoadToken] = useState(false);
   const [contractInstance, setContractInstance] = useState(null);
   const [tokenLoading, setTokenLoading] = useState(false);
-  const [standard, setStandard] = useState();
+  const [standard, setStandard] = useState("");
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -65,6 +60,13 @@ const Token = (props) => {
     }
   }, [contractAddress, tokenId]);
   /* Functions */
+
+  useEffect(() => {
+    if (isConnect) {
+      let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
+      ownResult.then((msg) => setOwn(msg));
+    }
+  }, [isConnect]);
 
   const resetStates = () => {
     setShowToken(0);
@@ -102,7 +104,14 @@ const Token = (props) => {
         // check standard type
         let result = await makeContract(contractAddress);
         setStandard(result.contractInterface);
+        setContractInstance(result.contract);
+        if (result.contractInterface === "ERC1155") {
+          let supplyResult = totalSupply(result.contract, tokenId);
+          supplyResult.then((msg) => setSupply(msg));
+        }
+
         if (isConnect) {
+          console.log("connected!");
           let ownResult = balanceOf(result.contract, accountAddress, tokenId);
           ownResult.then((msg) => setOwn(msg));
         }
@@ -111,10 +120,10 @@ const Token = (props) => {
       }
     }
 
-    if (contractType === "ERC1155") {
-      console.log("contractType=", contracttype);
+    if (standard === "ERC1155") {
+      console.log("1155");
       let supplyResult = totalSupply(contractInstance, tokenId);
-      supplyResult.then((msg) => setSupply(msg));
+      supplyResult.then((msg) => console.log("supply=", msg));
 
       if (isConnect) {
         let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
@@ -125,7 +134,7 @@ const Token = (props) => {
 
       // only 1155 can see the token's total supply
       setIs1155(true);
-    } else if (contractType === "ERC721") {
+    } else if (standard === "ERC721") {
       if (isConnect) {
         let ownResult = balanceOf721(contractInstance, accountAddress);
         ownResult.then((msg) => setOwn(msg));
@@ -370,8 +379,12 @@ const Token = (props) => {
         {showToken === 1 && (
           <Container>
             <Row>
-              <Col md={5} className="leftTokenSection">
-                {isImg && <img src={img} className="tokenImg"></img>}
+              <Col md={4} className="leftTokenSection">
+                {isImg && (
+                  <div className="imgBox">
+                    <img src={img} className="contractImg"></img>
+                  </div>
+                )}
                 {isVideo && (
                   <video controls className="tokenImg">
                     <source src={img} type="video/mp4"></source>
@@ -388,55 +401,86 @@ const Token = (props) => {
                   <br />
                   {/* External Link: {exLink} <br /> */}
                   <div className="cardsSection">
-                    <Card style={{ width: "8rem" }} className="tokenCard">
-                      <Card.Body className="tokenBody">
-                        <Card.Title className="cardTitle">
-                          Blockchain
-                        </Card.Title>
-                        <hr className="tokenHr" />
-                        <Card.Text className="cardText">{chainName}</Card.Text>
-                      </Card.Body>
-                    </Card>
-                    <Card style={{ width: "8rem" }} className="tokenCard">
-                      <Card.Body className="tokenBody">
-                        <Card.Title className="cardTitle">Standard</Card.Title>
-                        <hr className="tokenHr" />
+                    <Container>
+                      <Row>
+                        <Col>
+                          <Card className="tokenCard">
+                            <Card.Body className="tokenBody">
+                              <Card.Title className="cardTitle">
+                                Blockchain
+                              </Card.Title>
+                              <hr className="tokenHr" />
+                              <Card.Text className="cardText">
+                                {chainName}
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                        <Col>
+                          <Card className="tokenCard">
+                            <Card.Body className="tokenBody">
+                              <Card.Title className="cardTitle">
+                                Standard
+                              </Card.Title>
+                              <hr className="tokenHr" />
 
-                        <Card.Text className="cardText">{standard}</Card.Text>
-                      </Card.Body>
-                    </Card>
-                    <Card style={{ width: "8rem" }} className="tokenCard">
-                      <Card.Body className="tokenBody">
-                        <Card.Title className="cardTitle">Token Id</Card.Title>
-                        <hr className="tokenHr" />
+                              <Card.Text className="cardText">
+                                {standard}
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                        <Col>
+                          <Card className="tokenCard">
+                            <Card.Body className="tokenBody">
+                              <Card.Title className="cardTitle">
+                                Token Id
+                              </Card.Title>
+                              <hr className="tokenHr" />
 
-                        <Card.Text className="cardText">{tokenId}</Card.Text>
-                      </Card.Body>
-                    </Card>
-                    {is1155 && (
-                      <Card style={{ width: "8rem" }} className="tokenCard">
-                        <Card.Body className="tokenBody">
-                          <Card.Title className="cardTitle">
-                            Total Supply
-                          </Card.Title>
-                          <hr className="tokenHr" />
+                              <Card.Text className="cardText">
+                                {tokenId}
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          {standard == "ERC1155" && (
+                            <Card className="tokenCard">
+                              <Card.Body className="tokenBody">
+                                <Card.Title className="cardTitle">
+                                  Total Supply
+                                </Card.Title>
+                                <hr className="tokenHr" />
 
-                          <Card.Text className="cardText">{supply}</Card.Text>
-                        </Card.Body>
-                      </Card>
-                    )}
-                    {isConnect && (
-                      <Card style={{ width: "8rem" }} className="tokenCard">
-                        <Card.Body className="tokenBody">
-                          <Card.Title className="cardTitle">
-                            You Owned
-                          </Card.Title>
-                          <hr className="tokenHr" />
+                                <Card.Text className="cardText">
+                                  {supply}
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          )}
+                        </Col>
+                        <Col>
+                          {isConnect && (
+                            <Card className="tokenCard">
+                              <Card.Body className="tokenBody">
+                                <Card.Title className="cardTitle">
+                                  You Owned
+                                </Card.Title>
+                                <hr className="tokenHr" />
 
-                          <Card.Text className="cardText">{own}</Card.Text>
-                        </Card.Body>
-                      </Card>
-                    )}
+                                <Card.Text className="cardText">
+                                  {own}
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          )}
+                        </Col>
+                        <Col></Col>
+                      </Row>
+                    </Container>
                   </div>
                   <div className="scanLink"> {renderScanLink()}</div>
                   <br />
@@ -460,7 +504,7 @@ Token.propTypes = {
   tokenId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isDisable: PropTypes.bool,
   setTokenId: PropTypes.func,
-  passImage: PropTypes.func
+  passImage: PropTypes.func,
 };
 
 export default Token;

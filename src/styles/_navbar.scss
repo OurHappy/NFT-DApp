@@ -5,18 +5,15 @@
   background-color: #F8F9FA;
   color: #000000;
 
-  h2 {
-    font-size: 2rem;
-  }
-
   #titleText:hover {
     color:rgb(137, 168, 187);
+    cursor: pointer;
   }
 
   button {
     font-size: 1rem;
 
-    margin: 0rem 2rem;
+    // margin: 0rem 2rem;
     color: rgb(133, 132, 132);
     border: 1px solid rgb(133, 132, 132);
     border-radius: 10px;
@@ -27,19 +24,20 @@
     background-color: rgb(133, 132, 132);
   }
 
-  div.chainBlock {
-    display: flex;
-    flex-direction: column;
-    margin: 0rem 1rem;
+  // div.chainBlock {
+  //   // display: flex;
+  //   // flex-wrap: wrap;
+  //   // flex-direction: row;
+  //   // margin: 0rem 1rem;
 
-    span.addressText {
-      color: lightblue;
-      font-size: 1rem;
-    }
-  }
+  //   span.addressText {
+  //     color: lightblue;
+  //     font-size: 1rem;
+  //   }
+  // }
 }
 
-.chainBlock{
-  display: flex;
-  flex: row;  
+
+.addressBtn{
+margin: 0;  
 }

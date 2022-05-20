@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import {
   isContractAddress,
@@ -97,48 +97,54 @@ const Searchbox = (props) => {
 
   /* Render Function */
   return (
-    <div>
-      <Stack direction="horizontal" gap="3" className="searchStack">
-        <div className="leftcontent">
-          <p>
-            <b>
-              {" "}
-              Current Chain: <br />
-              {props.currentNetwork}
-            </b>
-          </p>
-        </div>
-        <div className="divClass-search">
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="Contract Address"
-              aria-label="Username"
-              aria-describedby="basic-addon1"
-              onChange={inputContractOnChange}
-              className={`searchBoxClass ${warnText ? "invalid" : ""}`}
-            />
-          </InputGroup>
-          <InputGroup>
-            <FormControl
-              placeholder="Token Id"
-              aria-label="Username"
-              aria-describedby="basic-addon1"
-              onChange={inputIdOnChange}
-              className={`searchBoxClass ${warnText ? "invalid" : ""}`}
-            />
-          </InputGroup>
+    <Fragment>
+      {/* <div> */}
+      {/* <Stack direction="horizontal" className="searchStack"> */}
+      <Container className="c1">
+        <Row className="r1">
+          <Col>
+            <div className="leftcontent">
+              <p>
+                Current Chain: <br />
+                {props.currentNetwork}
+              </p>
+            </div>
+          </Col>
+          <Col>
+            <div className="divClass-search">
+              <InputGroup className="mb-3">
+                <FormControl
+                  placeholder="Contract Address"
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  onChange={inputContractOnChange}
+                  className={`searchBoxClass ${warnText ? "invalid" : ""}`}
+                />
+              </InputGroup>
+              <InputGroup>
+                <FormControl
+                  placeholder="Token Id"
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  onChange={inputIdOnChange}
+                  className={`searchBoxClass ${warnText ? "invalid" : ""}`}
+                />
+              </InputGroup>
 
-          <Button
-            variant="outline-dark"
-            id="btnSearch"
-            onClick={handleBtnClick}
-          >
-            Search
-          </Button>
+              <Button
+                variant="outline-dark"
+                id="btnSearch"
+                onClick={handleBtnClick}
+              >
+                Search
+              </Button>
 
-          <div className="warnClass">{warnText}</div>
-        </div>
-      </Stack>
+              <div className="warnClass">{warnText}</div>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+      {/* </Stack> */}
 
       <div>
         {contractLoading && (
@@ -153,7 +159,8 @@ const Searchbox = (props) => {
           </Container>
         )}
       </div>
-    </div>
+      {/* </div> */}
+    </Fragment>
   );
 };
 
