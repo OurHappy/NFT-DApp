@@ -35,6 +35,7 @@ const ContractPanel = ({
   const [validContract, setValidContract] = useState(true);
   const [chainName, setChainName] = useState("");
   const [contractLoading, setContractLoading] = useState(true);
+  const [contractImg, setContractImg] = useState(null);
 
   useEffect(() => {
     if (contractAddress) {
@@ -94,6 +95,7 @@ const ContractPanel = ({
         setExternalName(contractMeta["data"].name);
         setExternalDescript(contractMeta["data"].description);
         setExternalLink(contractMeta["data"].external_url);
+        setContractImg(contractMeta["data"].image);
         // show the contract metadata only when it exists
         setHasContractMeta(true);
       } else {
@@ -181,11 +183,13 @@ const ContractPanel = ({
             <h1 className="text-center contractText">Contract</h1>
             <Container>
               <Row>
-                <Col className="test">  
-                  <div className="imgBox">
-                    <img src={tokenImg} className="contractImg"></img>
-                  </div>
-                </Col>
+                { contractImg != null && (
+                  <Col className="test">  
+                    <div className="imgBox">
+                      <img src={contractImg} className="contractImg"></img>
+                    </div>
+                  </Col>
+                )}
                 <Col>
                   <div className="contractInfo">
                     <div className="contractName">{contractName} {externalLink != null && <LinkOutlined onClick={clickToContractName}/>}</div>
