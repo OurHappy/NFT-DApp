@@ -92,3 +92,10 @@
 .mainContainer{
 max-width: 13000px;
 }
+
+@media(max-width:500px) {
+  .divClass-search{
+    height:20rem;
+  }
+  
+}
