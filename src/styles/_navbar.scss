@@ -40,4 +40,15 @@
 
 .addressBtn{
 margin: 0;  
+border: none;
+}
+
+@media (max-width:500px){
+
+  .navClass{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  
 }

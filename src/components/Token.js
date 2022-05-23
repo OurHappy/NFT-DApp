@@ -108,6 +108,7 @@ const Token = (props) => {
         if (result.contractInterface === "ERC1155") {
           let supplyResult = totalSupply(result.contract, tokenId);
           supplyResult.then((msg) => setSupply(msg));
+          setIs1155(true);
         }
 
         if (isConnect) {
@@ -377,9 +378,9 @@ const Token = (props) => {
 
       <div>
         {showToken === 1 && (
-          <Container>
+          <Container className="p-0 mx-auto">
             <Row>
-              <Col md={4} className="leftTokenSection">
+              <Col md={5} className="leftTokenSection">
                 {isImg && (
                   <div className="imgBox">
                     <img src={img} className="contractImg"></img>
@@ -391,7 +392,7 @@ const Token = (props) => {
                   </video>
                 )}
               </Col>
-              <Col md={7}>
+              <Col md={5}>
                 <div className="tokenInfo">
                   <div className="nameSection">{name}</div>
                   <br />
@@ -401,9 +402,9 @@ const Token = (props) => {
                   <br />
                   {/* External Link: {exLink} <br /> */}
                   <div className="cardsSection">
-                    <Container>
+                    <Container className="p-0">
                       <Row>
-                        <Col>
+                        <Col className="p-0">
                           <Card className="tokenCard">
                             <Card.Body className="tokenBody">
                               <Card.Title className="cardTitle">
@@ -416,7 +417,7 @@ const Token = (props) => {
                             </Card.Body>
                           </Card>
                         </Col>
-                        <Col>
+                        <Col className="p-0">
                           <Card className="tokenCard">
                             <Card.Body className="tokenBody">
                               <Card.Title className="cardTitle">
@@ -430,7 +431,7 @@ const Token = (props) => {
                             </Card.Body>
                           </Card>
                         </Col>
-                        <Col>
+                        <Col className="p-0">
                           <Card className="tokenCard">
                             <Card.Body className="tokenBody">
                               <Card.Title className="cardTitle">
@@ -446,7 +447,7 @@ const Token = (props) => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col>
+                        <Col className="p-0">
                           {standard == "ERC1155" && (
                             <Card className="tokenCard">
                               <Card.Body className="tokenBody">
@@ -462,7 +463,7 @@ const Token = (props) => {
                             </Card>
                           )}
                         </Col>
-                        <Col>
+                        <Col className="p-0">
                           {isConnect && (
                             <Card className="tokenCard">
                               <Card.Body className="tokenBody">
@@ -478,7 +479,7 @@ const Token = (props) => {
                             </Card>
                           )}
                         </Col>
-                        <Col></Col>
+                        <Col className="p-0"></Col>
                       </Row>
                     </Container>
                   </div>

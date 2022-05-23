@@ -100,17 +100,17 @@ const Searchbox = (props) => {
     <Fragment>
       {/* <div> */}
       {/* <Stack direction="horizontal" className="searchStack"> */}
-      <Container className="c1">
-        <Row className="r1">
-          <Col>
-            <div className="leftcontent">
+      <Container className="vh-100  m-0 mainContainer">
+        <Row className="vh-100 ">
+          <Col className="m-0 p-0">
+            <div className="leftcontent ">
               <p>
                 Current Chain: <br />
                 {props.currentNetwork}
               </p>
             </div>
           </Col>
-          <Col>
+          <Col className="p-0 m-0">
             <div className="divClass-search">
               <InputGroup className="mb-3">
                 <FormControl
