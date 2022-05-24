@@ -1,14 +1,14 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import PropTypes from "prop-types";
-import Initializing from '../components/Initializing';
-import Token from '../components/Token';
-import ContractPanel from '../components/ContractPanel';
-import AppState from '../context/appState';
-import UserWallet from '../context/userWallet';
-import {isContractAddress} from '../utils/web3Client';
+import Initializing from "../components/Initializing";
+import Token from "../components/Token";
+import ContractPanel from "../components/ContractPanel";
+import AppState from "../context/appState";
+import UserWallet from "../context/userWallet";
+import { isContractAddress } from "../utils/web3Client";
 
-export const Detail = props => {
+export const Detail = (props) => {
   /**
    * Props and Constants
    */
@@ -24,12 +24,12 @@ export const Detail = props => {
   const [isChecking, setIsChecking] = useState(true);
   const [isValidAddress, setIsValidAddress] = useState(null);
   const [address] = useState(params.address);
-  const [tokenId] = useState(params.tokenId);
+  const [tokenId, setTokenId] = useState(params.tokenId);
   const [isDisable, setIsDisable] = useState(false);
   const [tokenImg, setTokenImg] = useState(null);
 
   useEffect(() => {
-    if (appState === 'ready') {
+    if (appState === "ready") {
       const validAddresss = address && isContractAddress(address);
       setIsValidAddress(validAddresss);
       setIsChecking(false);
@@ -39,8 +39,7 @@ export const Detail = props => {
   useEffect(() => {
     if (initialNetwork === null) {
       setInitialNetwork(userWallet.network);
-    }
-    else {
+    } else {
       const disabled = initialNetwork !== userWallet.network;
       setIsDisable(disabled);
     }
@@ -49,7 +48,7 @@ export const Detail = props => {
   /**
    * Functions
    */
-  function passImage (img) {
+  function passImage(img) {
     setTokenImg(img);
   }
 
@@ -57,24 +56,32 @@ export const Detail = props => {
    * Render functions
    */
 
-  if (appState !== 'ready') {
-    return <Initializing appState/>;
-  }
-  else if (isChecking) {
+  if (appState !== "ready") {
+    return <Initializing appState />;
+  } else if (isChecking) {
+    return <div>Checking contract address...</div>;
+  } else if (!isValidAddress) {
     return (
-      <div>Checking contract address...</div>
+      <div>
+        No data found for this contract address, please check your address and
+        the current chain.
+      </div>
     );
-  }
-  else if (!isValidAddress) {
-    return (
-      <div>No data found for this contract address, please check your address and the current chain.</div>
-    );
-  }
-  else {
+  } else {
     return (
       <>
-        <Token  contractAddress={address} tokenId={tokenId} isDisable={isDisable} passImage={passImage}/>
-        <ContractPanel contractAddress={address} isDisable={isDisable} tokenImg={tokenImg}/>
+        <Token
+          contractAddress={address}
+          tokenId={tokenId}
+          isDisable={isDisable}
+          passImage={passImage}
+          setTokenId={setTokenId}
+        />
+        <ContractPanel
+          contractAddress={address}
+          isDisable={isDisable}
+          tokenImg={tokenImg}
+        />
       </>
     );
     // return (

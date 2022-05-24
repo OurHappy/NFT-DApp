@@ -18,7 +18,12 @@ import {
   getIPFSdata,
 } from "../utils/contract";
 
-const Panel_ERC721 = ({ contractInstance, userAddress, isConnected, isDisable }) => {
+const Panel_ERC721 = ({
+  contractInstance,
+  userAddress,
+  isConnected,
+  isDisable,
+}) => {
   const [balanceId, setBalanceId] = useState(null);
   const [balanceResult, setBalanceResult] = useState("uint256");
   const [ownerId, setOwnerId] = useState(null);
@@ -241,7 +246,7 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected, isDisable })
                 </Button>
               )}
               {!isConnected && (
-                <Alert variant="danger" className="alertClass">
+                <Alert variant="danger" className="alertClass .alert-danger">
                   Please connect your metamask wallet before burning.
                 </Alert>
               )}
@@ -290,7 +295,7 @@ const Panel_ERC721 = ({ contractInstance, userAddress, isConnected, isDisable })
                 </Button>
               )}
               {!isConnected && (
-                <Alert variant="danger" className="alertClass">
+                <Alert variant="danger" className="alertClass .alert-danger">
                   Please connect your metamask wallet before transferring.
                 </Alert>
               )}

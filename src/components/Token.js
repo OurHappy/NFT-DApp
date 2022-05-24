@@ -1,24 +1,36 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Container, Row, Col, FormControl, InputGroup, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  FormControl,
+  InputGroup,
+  Spinner,
+  Card,
+} from "react-bootstrap";
 import { useParams, useNavigate } from "react-router";
 import PropTypes from "prop-types";
-import { balanceOf721, getTokenMeta, balanceOf, totalSupply } from "../utils/contract";
+import {
+  balanceOf721,
+  getTokenMeta,
+  balanceOf,
+  totalSupply,
+  isERC1155,
+  isERC721,
+} from "../utils/contract";
 import { makeContract } from "../utils/web3Client";
 import UserWallet from "../context/userWallet";
+import LinkOutlined from "@ant-design/icons/LinkOutlined";
 
 const Token = (props) => {
   /* Variables */
-  const {
-    contractAddress,
-    tokenId,
-    isDisable,
-    passImage
-  } = props;
+  const { contractAddress, tokenId, isDisable, passImage } = props;
 
   const userWallet = useContext(UserWallet);
   const currentNetwork = userWallet.network;
   const accountAddress = userWallet.address;
   const isConnect = userWallet.isConnected();
+  const chainName = userWallet.network;
 
   let contractType;
   let tokenMeta = null;
@@ -40,6 +52,7 @@ const Token = (props) => {
   const [loadToken, setLoadToken] = useState(false);
   const [contractInstance, setContractInstance] = useState(null);
   const [tokenLoading, setTokenLoading] = useState(false);
+  const [standard, setStandard] = useState("");
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -47,6 +60,13 @@ const Token = (props) => {
     }
   }, [contractAddress, tokenId]);
   /* Functions */
+
+  useEffect(() => {
+    if (isConnect) {
+      let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
+      ownResult.then((msg) => setOwn(msg));
+    }
+  }, [isConnect]);
 
   const resetStates = () => {
     setShowToken(0);
@@ -81,21 +101,33 @@ const Token = (props) => {
             setIsImg(false);
           }
         }
+        // check standard type
+        let result = await makeContract(contractAddress);
+        setStandard(result.contractInterface);
+        setContractInstance(result.contract);
+        if (result.contractInterface === "ERC1155") {
+          let supplyResult = totalSupply(result.contract, tokenId);
+          supplyResult.then((msg) => setSupply(msg));
+          setIs1155(true);
+        }
+
+        if (isConnect) {
+          console.log("connected!");
+          let ownResult = balanceOf(result.contract, accountAddress, tokenId);
+          ownResult.then((msg) => setOwn(msg));
+        }
       } else {
         // setMeta(...value);
       }
     }
 
-    if (contractType === "ERC1155") {
+    if (standard === "ERC1155") {
+      console.log("1155");
       let supplyResult = totalSupply(contractInstance, tokenId);
-      supplyResult.then((msg) => setSupply(msg));
+      supplyResult.then((msg) => console.log("supply=", msg));
 
       if (isConnect) {
-        let ownResult = balanceOf(
-          contractInstance,
-          accountAddress,
-          tokenId
-        );
+        let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
         ownResult.then((msg) => setOwn(msg));
       } else {
         setOwn("Please connect the Metamask to check balance");
@@ -103,7 +135,7 @@ const Token = (props) => {
 
       // only 1155 can see the token's total supply
       setIs1155(true);
-    } else if (contractType === "ERC721") {
+    } else if (standard === "ERC721") {
       if (isConnect) {
         let ownResult = balanceOf721(contractInstance, accountAddress);
         ownResult.then((msg) => setOwn(msg));
@@ -137,8 +169,7 @@ const Token = (props) => {
       let { contract } = await makeContract(contractAddress);
       setContractInstance(contract);
       return contract;
-    }
-    else {
+    } else {
       return null;
     }
   };
@@ -176,6 +207,7 @@ const Token = (props) => {
     setTokenLoading(false);
     if (val) {
       setShowToken(1);
+      props.setTokenId(event.target.value);
       navigate(`${event.target.value}`);
     } else {
       setShowToken(0);
@@ -183,7 +215,6 @@ const Token = (props) => {
   };
 
   function renderScanLink() {
-
     let link = "";
     switch (currentNetwork) {
       case "Ethereum Mainnet":
@@ -192,8 +223,9 @@ const Token = (props) => {
             href={"https://etherscan.io/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on EtherScan
+            View on Etherscan<LinkOutlined></LinkOutlined>
           </a>
         );
         break;
@@ -203,8 +235,9 @@ const Token = (props) => {
             href={"https://rinkeby.etherscan.io/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on EtherScan
+            View on Etherscan <LinkOutlined className="linkIcon"></LinkOutlined>
           </a>
         );
         break;
@@ -214,8 +247,9 @@ const Token = (props) => {
             href={"https://ropsten.etherscan.io/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on EtherScan
+            Original data
           </a>
         );
         break;
@@ -225,8 +259,9 @@ const Token = (props) => {
             href={"https://scan.thundercore.com/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on ThunderCore Scan
+            View on Thundercore Scan
           </a>
         );
         break;
@@ -238,33 +273,34 @@ const Token = (props) => {
             }
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on ThunderCore Scan
+            View on Thundercore Scan
           </a>
         );
         break;
-  
+
       case "Smart Chain Mainnet":
         link = (
           <a
             href={"https://bscscan.com/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on BscScan
+            View on BSC Scan
           </a>
         );
         break;
       case "Smart Chain Testnet":
         link = (
           <a
-            href={
-              "https://testnet.bscscan.com/address/" + contractAddress
-            }
+            href={"https://testnet.bscscan.com/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on BscScan
+            View on BSC Scan
           </a>
         );
         break;
@@ -274,8 +310,9 @@ const Token = (props) => {
             href={"https://polygonscan.com/address/" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on BscScan
+            View on Polyscan
           </a>
         );
         break;
@@ -285,8 +322,9 @@ const Token = (props) => {
             href={"https://mumbai.polygonscan.com/address" + contractAddress}
             target="_blank"
             rel="noreferrer"
+            className="viewLink"
           >
-            View on BscScan
+            View on Polyscan
           </a>
         );
         break;
@@ -303,12 +341,12 @@ const Token = (props) => {
       <div>
         {isDisable && (
           <div>
-            You have changed your chain, please return to the home page to search again.
+            You have changed your chain, please return to the home page to
+            search again.
           </div>
         )}
       </div>
       <div>
-        <span className="tokenText">Token:</span>
         {showToken === 0 && isDisable === false && (
           <div className="token-search">
             <InputGroup className="searchbar">
@@ -337,32 +375,121 @@ const Token = (props) => {
           </Container>
         )}
       </div>
-    
+
       <div>
         {showToken === 1 && (
-          <Container>
+          <Container className="p-0 mx-auto">
             <Row>
-              <Col md={6}>
-                {isImg && <img src={img} className="tokenImg"></img>}
+              <Col md={5} className="leftTokenSection">
+                {isImg && (
+                  <div className="imgBox">
+                    <img src={img} className="contractImg"></img>
+                  </div>
+                )}
                 {isVideo && (
                   <video controls className="tokenImg">
                     <source src={img} type="video/mp4"></source>
                   </video>
                 )}
               </Col>
-              <Col md={6}>
+              <Col md={5}>
                 <div className="tokenInfo">
-                  Name: {name} <br />
-                  Description: {description} <br />
+                  <div className="nameSection">{name}</div>
                   <br />
-                  External Link:  <br />
-                  {renderScanLink()}
+                  <div className="desSection">
+                    {description === null ? description : "No description"}
+                  </div>
+                  <br />
+                  {/* External Link: {exLink} <br /> */}
+                  <div className="cardsSection">
+                    <Container className="p-0">
+                      <Row>
+                        <Col className="p-0">
+                          <Card className="tokenCard">
+                            <Card.Body className="tokenBody">
+                              <Card.Title className="cardTitle">
+                                Blockchain
+                              </Card.Title>
+                              <hr className="tokenHr" />
+                              <Card.Text className="cardText">
+                                {chainName}
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                        <Col className="p-0">
+                          <Card className="tokenCard">
+                            <Card.Body className="tokenBody">
+                              <Card.Title className="cardTitle">
+                                Standard
+                              </Card.Title>
+                              <hr className="tokenHr" />
+
+                              <Card.Text className="cardText">
+                                {standard}
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                        <Col className="p-0">
+                          <Card className="tokenCard">
+                            <Card.Body className="tokenBody">
+                              <Card.Title className="cardTitle">
+                                Token Id
+                              </Card.Title>
+                              <hr className="tokenHr" />
+
+                              <Card.Text className="cardText">
+                                {tokenId}
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col className="p-0">
+                          {standard == "ERC1155" && (
+                            <Card className="tokenCard">
+                              <Card.Body className="tokenBody">
+                                <Card.Title className="cardTitle">
+                                  Total Supply
+                                </Card.Title>
+                                <hr className="tokenHr" />
+
+                                <Card.Text className="cardText">
+                                  {supply}
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          )}
+                        </Col>
+                        <Col className="p-0">
+                          {isConnect && (
+                            <Card className="tokenCard">
+                              <Card.Body className="tokenBody">
+                                <Card.Title className="cardTitle">
+                                  You Owned
+                                </Card.Title>
+                                <hr className="tokenHr" />
+
+                                <Card.Text className="cardText">
+                                  {own}
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          )}
+                        </Col>
+                        <Col className="p-0"></Col>
+                      </Row>
+                    </Container>
+                  </div>
+                  <div className="scanLink"> {renderScanLink()}</div>
                   <br />
                   {/* Other meta: {meta} <br /> */}
                   <br />
                   <br />
-                  {is1155 && <p>Total Supply: {supply}</p>}
-                  You owned: {own}
+                  {/* {is1155 && <p>Total Supply: {supply}</p>}
+                  You owned: {own} */}
                 </div>
               </Col>
             </Row>
@@ -375,12 +502,10 @@ const Token = (props) => {
 
 Token.propTypes = {
   contractAddress: PropTypes.string,
-  tokenId: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  tokenId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   isDisable: PropTypes.bool,
-  passImage: PropTypes.func
+  setTokenId: PropTypes.func,
+  passImage: PropTypes.func,
 };
 
 export default Token;

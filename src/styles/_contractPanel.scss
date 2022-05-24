@@ -82,6 +82,113 @@
       }
     }
   }
+}
+
+.btnPanel{
+  background-color: rgb(104, 113, 132);
+  border: none;
+  border-radius: 5px;
+}
+
+.panelTitle{
+  padding:0.75rem 0rem;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.customAccordition{
+
+  .accordion-button{
+    padding:0.5rem 1.25rem;
+    // border: 1px solid black;
+  
+  }
+
+  
+.accordion-button:not(.collapsed){
+  color:black;
+  background-color: #E6E6E6;
+
+}
+.accordion-button::after{
+  background-image: url(../triangle.png);
+}
+.accordion-button:not(.collapsed)::after{
+  background-image: url(../triangle.png);
+}
+
+.accordion-button:focus{
+  box-shadow: none;
+  
+}
+
+
+}
+
+.contractunit{
+  .btnClick{
+    background-color: #6C757D;
+    color: white;
+    border: none;
+
+  }
+}
+
+.Accordion{
+  border-radius: 0;
+ .accordionItem{
+   border: 1px solid #6C757D;
+ }
+ .accordionItemNext{
+  border: 1px solid #6C757D;
+  border-top: none;
+ }
+ 
+}
+
+// .contractInfo{
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   margin: 1rem;
+//   margin-top: 3rem;
+//   .contractTitle{
+//     text-align: center;
+//     font-weight: 400;
+//     color: gray;
+//   }
+//   .contractText{
+//     text-align: center;
+//     font-size: 1.25rem;
+//     font-weight: 600;
+//     padding :0rem 0.5rem;
+//   }
+
+
+.contractAddress{
+  margin: 0;
+  padding:0;
+  border:1px solid black;
+
+  .tokenHr{
+    border: 1px solid black;
+    border-top: none;
+    opacity: 100%;
+    
+}
+.tokenBody{
+  padding: 1rem 0rem;
+}
+}
+
+.alert-danger{
+  border: none;
+  padding: 0.25rem 1rem;
+  font-size: 1rem;
+}
+
+.btn-check:focus + .btn-primary, .btn-primary:focus{
+  box-shadow: 0 0 0 .1rem black;
 
   .bottomField {
     padding: 50px 50px 100px 50px;

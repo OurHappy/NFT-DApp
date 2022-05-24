@@ -9,15 +9,18 @@ import {
 import { balanceOf, totalSupply, burn, transfer, uri } from "../utils/contract";
 import PropTypes from "prop-types";
 
-const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }) => {
+const Panel_ERC1155 = ({
+  contractInstance,
+  userAddress,
+  isConnected,
+  isDisable,
+}) => {
   const [balanceAccount, setBalanceAccount] = useState(null);
   const [balanceId, setBalanceid] = useState(null);
   const [supplyId, setSupplyId] = useState(null);
   const [uriId, setUriId] = useState(null);
   const [uriResult, setUriResult] = useState();
-  const [burnAccount, setBurnAccount] = useState("unit256");
-  const [burnId, setBurnId] = useState("uint256");
-  const [burnAmount, setBurnAmount] = useState("uint256");
+
   const [transferFrom, setTransferFrom] = useState();
   const [transferTo, setTransferTo] = useState();
   const [transferId, setTransferId] = useState();
@@ -26,6 +29,9 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
   const [supplyResult, setSupplyResult] = useState("unit256");
   const [balanceResult, setBalanceResult] = useState("unit256");
   const [burnResult, setBurnresult] = useState("result");
+  const [burnAccount, setBurnAccount] = useState("unit256");
+  const [burnId, setBurnId] = useState("uint256");
+  const [burnAmount, setBurnAmount] = useState("uint256");
   const [transferResult, setTransferResult] = useState("result");
 
   const balanceAccountOnChange = (e) => {
@@ -249,7 +255,7 @@ const Panel_ERC1155 = ({ contractInstance, userAddress, isConnected, isDisable }
                 </Button>
               )}
               {!isConnected && (
-                <Alert variant="danger" className="alertClass">
+                <Alert variant="danger" className="alertClass alert-danger">
                   Please connect your metamask wallet before burning.
                 </Alert>
               )}

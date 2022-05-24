@@ -5,13 +5,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import Searchbox from "./components/Searchbox";
 import "./styles/style.css";
+import LinkOutlined from "@ant-design/icons/LinkOutlined";
 
 import { getChain, init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
-import AppState from './context/appState';
-import UserWallet from './context/userWallet';
-import Detail from './pages/Detail';
+import AppState from "./context/appState";
+import UserWallet from "./context/userWallet";
+import Detail from "./pages/Detail";
 
 function App() {
   /* Variables */
@@ -22,6 +23,7 @@ function App() {
   const [providerExist, setProviderExist] = useState(false);
   const [web3Instance, setWeb3Instance] = useState(null);
   const [currentNetwork, setCurrentNetwork] = useState(null);
+  const [contractType, setContractType] = useState(null);
 
   useEffect(() => {
     initApp();
@@ -49,35 +51,40 @@ function App() {
     }
   }
 
-  function isConnected () {
+  function isConnected() {
     return !!userAddress;
   }
 
   /* Render Function */
   return (
     <AppState.Provider value={appState}>
-      <UserWallet.Provider 
-        value={{ 
-          address: userAddress, 
-          setAddress: setUserAddress, 
-          network: currentNetwork, 
+      <UserWallet.Provider
+        value={{
+          address: userAddress,
+          setAddress: setUserAddress,
+          network: currentNetwork,
           setNetwork: setCurrentNetwork,
-          isConnected
+          isConnected,
         }}
       >
         <Router>
           <Fragment>
             <div className="App">
-              <Navbar/>
+              <Navbar />
 
               <Routes>
-
                 <Route
                   path="/"
-                  element={ providerExist ? <Searchbox /> : <Defaultpage />}
+                  element={
+                    providerExist ? (
+                      <Searchbox currentNetwork={currentNetwork} />
+                    ) : (
+                      <Defaultpage />
+                    )
+                  }
                 />
-                <Route path="contract/:address" element={<Detail/>}>
-                  <Route path=":tokenId" element={<Detail/>}/>
+                <Route path="contract/:address" element={<Detail />}>
+                  <Route path=":tokenId" element={<Detail />} />
                 </Route>
               </Routes>
             </div>

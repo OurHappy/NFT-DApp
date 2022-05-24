@@ -96,18 +96,98 @@
   color: gray;
 }
 
-.contractPanel .bottomField {
+.btnPanel {
+  background-color: #687184;
+  border: none;
+  border-radius: 5px;
+}
+
+.panelTitle {
+  padding: 0.75rem 0rem;
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.customAccordition .accordion-button {
+  padding: 0.5rem 1.25rem;
+}
+
+.customAccordition .accordion-button:not(.collapsed) {
+  color: black;
+  background-color: #E6E6E6;
+}
+
+.customAccordition .accordion-button::after {
+  background-image: url(../triangle.png);
+}
+
+.customAccordition .accordion-button:not(.collapsed)::after {
+  background-image: url(../triangle.png);
+}
+
+.customAccordition .accordion-button:focus {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.contractunit .btnClick {
+  background-color: #6C757D;
+  color: white;
+  border: none;
+}
+
+.Accordion {
+  border-radius: 0;
+}
+
+.Accordion .accordionItem {
+  border: 1px solid #6C757D;
+}
+
+.Accordion .accordionItemNext {
+  border: 1px solid #6C757D;
+  border-top: none;
+}
+
+.contractAddress {
+  margin: 0;
+  padding: 0;
+  border: 1px solid black;
+}
+
+.contractAddress .tokenHr {
+  border: 1px solid black;
+  border-top: none;
+  opacity: 100%;
+}
+
+.contractAddress .tokenBody {
+  padding: 1rem 0rem;
+}
+
+.alert-danger {
+  border: none;
+  padding: 0.25rem 1rem;
+  font-size: 1rem;
+}
+
+.btn-check:focus + .btn-primary, .btn-primary:focus {
+  -webkit-box-shadow: 0 0 0 .1rem black;
+          box-shadow: 0 0 0 .1rem black;
+}
+
+.btn-check:focus + .btn-primary .bottomField, .btn-primary:focus .bottomField {
   padding: 50px 50px 100px 50px;
   margin-left: 40px;
   margin-right: 40px;
 }
 
-.contractPanel .bottomField .actionText {
+.btn-check:focus + .btn-primary .bottomField .actionText, .btn-primary:focus .bottomField .actionText {
   font-size: 30px;
   padding-bottom: 20px;
 }
 
-.contractPanel .bottomField .etherscanLink {
+.btn-check:focus + .btn-primary .bottomField .etherscanLink, .btn-primary:focus .bottomField .etherscanLink {
   margin-top: 15px;
   font-size: 15px;
   color: gray;
@@ -120,23 +200,77 @@
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  background-color: #232629;
-  color: azure;
-}
-
-.navClass h2 {
-  font-size: 2rem;
+  background-color: #F8F9FA;
+  color: #000000;
 }
 
 .navClass #titleText:hover {
   color: #89a8bb;
+  cursor: pointer;
 }
 
 .navClass button {
-  margin: 0rem 2rem;
+  font-size: 1rem;
+  color: #858484;
+  border: 1px solid #858484;
+  border-radius: 10px;
 }
 
-.navClass div.chainBlock {
+.navClass button:hover {
+  color: white;
+  background-color: #858484;
+}
+
+.addressBtn {
+  margin: 0;
+  border: none;
+}
+
+@media (max-width: 500px) {
+  .navClass {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+  }
+}
+
+.searchBoxClass.invalid {
+  color: #ff5d51;
+}
+
+.searchBoxClass:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem #EDEDED;
+          box-shadow: 0 0 0 0.2rem #EDEDED;
+}
+
+.leftcontent {
+  /* the left part of searchBox */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #EDEDED;
+  color: black;
+  height: 100%;
+  min-width: 400px;
+}
+
+.leftcontent p {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.divClass-search {
+  /* the right part of searchBox */
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -144,32 +278,27 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  margin: 0rem 1rem;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
+  height: 100%;
+  margin: 0rem 2rem;
+  /*input box*/
 }
 
-.navClass div.chainBlock span.addressText {
-  color: lightblue;
-  font-size: 1rem;
-}
-
-.searchBoxClass {
-  margin: 1rem;
+.divClass-search .searchBoxClass {
+  width: 50%;
+  padding: 0;
+  margin: 0.5rem;
   text-align: center;
-  width: 60%;
   height: 3rem;
-  border: 1px solid #ccc;
+  border: 2px solid gray;
   border-radius: 4px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-}
-
-.searchBoxClass.invalid {
-  color: #ff5d51;
-}
-
-.divClass-search {
-  text-align: center;
-  padding: 100px 100px 0px 100px;
 }
 
 .warnClass {
@@ -183,16 +312,48 @@
   font-size: 15px;
 }
 
+#btnSearch {
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 6px;
+  margin-left: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 2rem;
+}
+
+.mainContainer {
+  max-width: 13000px;
+}
+
+@media (max-width: 500px) {
+  .divClass-search {
+    height: 20rem;
+  }
+}
+
 .tokenSearchClass {
-  margin: 20px;
+  margin: 2rem 20rem;
   text-align: center;
   font-size: 20px;
-  width: 30%;
+  width: 50%;
   height: 50px;
-  border: 1px solid #ccc;
+  border: 1px solid #6C757D;
   border-radius: 5px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+@media (max-width: 500px) {
+  .tokenSearchClass {
+    margin: 2rem 4rem;
+  }
+}
+
+.tokenSearchClass:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem #EDEDED;
+          box-shadow: 0 0 0 0.2rem #EDEDED;
 }
 
 .tokenText {
@@ -200,29 +361,137 @@
 }
 
 .divClass {
-  text-align: left;
-  padding: 30px 100px 30px 60px;
+  background-color: #EDEDED;
 }
 
 .tokenInfo {
-  background-color: rgba(214, 214, 215, 0.742);
   color: #3e3e3e;
   padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
   font-size: 15px;
 }
 
+.tokenInfo .nameSection {
+  font-weight: 600;
+  font-size: 2rem;
+  color: black;
+  margin-left: 1rem;
+}
+
+.tokenInfo .desSection {
+  color: gray;
+  margin-left: 1rem;
+  font-size: 1.25rem;
+}
+
+.tokenInfo .cardsSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+}
+
+.tokenInfo .cardsSection .tokenCard {
+  width: 8rem;
+  margin: 1rem 0rem;
+  border: 1px solid black;
+  border-radius: 6px;
+}
+
+.tokenInfo .cardsSection .tokenCard .tokenBody {
+  padding: 1rem 0rem;
+}
+
+.tokenInfo .cardsSection .cardTitle {
+  text-align: center;
+  font-size: 1rem;
+  margin: 0rem 0.5rem;
+}
+
+.tokenInfo .cardsSection .cardText {
+  text-align: center;
+  font-size: 1rem;
+}
+
+.tokenInfo .cardsSection .tokenHr {
+  border: 1px solid black;
+  border-top: none;
+  opacity: 100%;
+}
+
+.leftTokenSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .tokenImg {
-  width: 40%;
+  width: 100%;
   padding: 10px;
-  margin: 10px;
+  background-color: white;
 }
 
 .tokenImgAdapt {
   width: 50px;
   padding: 40px;
   margin: 40px;
+}
+
+.form-control:focus {
+  border-color: black;
+  border: 1.5px solid black;
+}
+
+.viewLink {
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.scanLink {
+  margin-left: 1rem;
+}
+
+.linkIcon {
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.imgBox {
+  width: 350px;
+  height: 350px;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: white;
+}
+
+.imgBox .contractImg {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .defaultPage .errorTitle {

@@ -1,37 +1,111 @@
 .tokenSearchClass {
-    margin: 20px;
+    margin: 2rem 20rem;
     text-align: center;
     font-size: 20px;
 
-    width: 30%;
+    width: 50%;
     height: 50px;
-    border: 1px solid #ccc;
+    border: 1px solid #6C757D;
     border-radius: 5px;
     box-sizing: border-box;
+}
+
+@media(max-width:500px) {
+    .tokenSearchClass{
+        margin:2rem 4rem;
+    }
+    
+}
+
+
+.tokenSearchClass:focus{
+    box-shadow: 0 0 0 0.2rem #EDEDED;
 }
 
 .tokenText {
     font-size: 25px;
 }
 
+
 .divClass {
-    text-align: left;
-    padding: 30px 100px 30px 60px;
+    // padding: 30px 100px 30px 100px;
+    background-color: #EDEDED;
+    // display: flex;
+    // flex-direction: row;
+    // justify-content: center;
+    // align-items: center;
+
 }
 
 .tokenInfo {
-    background-color: rgba(214, 214, 215, 0.742);
     color: rgb(62, 62, 62);
     padding: 20px;
-    margin: 20px;
-    border-radius: 10px;
+    // margin: 20px;
+    // border-radius: 10px;
     font-size: 15px;
+    // width: 60%;
+    
+    .nameSection{
+        // text-align: center;
+        font-weight: 600;
+        font-size: 2rem;
+        color: black;
+        margin-left: 1rem;
+
+    }
+    .desSection{
+        // text-align: center;
+        color: gray;
+        margin-left: 1rem;
+        font-size: 1.25rem;
+
+    }
+    // Card Info Section
+    .cardsSection{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: start;
+    
+        .tokenCard{
+            width:8rem;
+            margin: 1rem 0rem;
+            border:1px solid black;
+            border-radius: 6px;
+            .tokenBody{
+             padding: 1rem 0rem;
+            }
+        }
+        .cardTitle{
+            text-align: center;
+            font-size: 1rem;
+            margin:0rem 0.5rem;
+        }
+        .cardText{
+            text-align: center;
+            font-size: 1rem;
+        }
+        .tokenHr{
+            border: 1px solid black;
+            border-top: none;
+            opacity: 100%;
+            
+        }
+    }
+}
+
+.leftTokenSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
 }
 
 .tokenImg {
-    width: 40%;
+    width: 100%;
     padding: 10px;
-    margin: 10px;
+    background-color: white;
 }
 
 .tokenImgAdapt {
@@ -41,3 +115,51 @@
     padding: 40px;
     margin: 40px;
 }
+
+
+
+.form-control:focus{
+    border-color: black;
+    border: 1.5px solid black;
+}
+
+.viewLink{
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.scanLink{
+    margin-left: 1rem;
+}
+
+.linkIcon{
+    margin-left: 0.5rem;
+    margin-bottom:0.5rem;
+}
+
+
+.imgBox {
+    width: 350px;
+    height: 350px;
+    margin-bottom: 20px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+
+    .contractImg {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+}
+
+
+
+// @media (min-width:600px) {
+//     .cardsSection{
+//         min-width: 600px;
+//     }
+    
+// }
