@@ -11,7 +11,7 @@ import {
 import { useParams, useNavigate } from "react-router";
 import PropTypes from "prop-types";
 import {
-  balanceOf721,
+  ownerOf721,
   getTokenMeta,
   balanceOf,
   totalSupply,
@@ -62,9 +62,8 @@ const Token = (props) => {
   /* Functions */
 
   useEffect(() => {
-    if (isConnect) {
-      let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
-      ownResult.then((msg) => setOwn(msg));
+    if (isConnect && contractInstance && accountAddress && tokenId) {
+      updateBalance();
     }
   }, [isConnect]);
 
@@ -110,17 +109,15 @@ const Token = (props) => {
           supplyResult.then((msg) => setSupply(msg));
           setIs1155(true);
         }
-
-        if (isConnect) {
-          console.log("connected!");
-          let ownResult = balanceOf(result.contract, accountAddress, tokenId);
-          ownResult.then((msg) => setOwn(msg));
-        }
       } else {
         // setMeta(...value);
       }
     }
 
+    updateBalance();
+  };
+
+  async function updateBalance() {
     if (standard === "ERC1155") {
       console.log("1155");
       let supplyResult = totalSupply(contractInstance, tokenId);
@@ -137,13 +134,13 @@ const Token = (props) => {
       setIs1155(true);
     } else if (standard === "ERC721") {
       if (isConnect) {
-        let ownResult = balanceOf721(contractInstance, accountAddress);
-        ownResult.then((msg) => setOwn(msg));
+        let ownResult = ownerOf721(contractInstance, tokenId);
+        ownResult.then((ownerAddr) => ownerAddr === accountAddress ? setOwn(true) : setOwn(false));
       } else {
         setOwn("Please connect the Metamask to check balance");
       }
     }
-  };
+  }
 
   let uriTokenValid = async (ID) => {
     let result = await makeContract(contractAddress);
@@ -336,6 +333,49 @@ const Token = (props) => {
     return link;
   }
   /* Render functions */
+
+  const renderOwnerStatus = () => {
+    if (!isConnect) return;
+
+    if (standard === 'ERC1155') {
+      return (
+        <>
+          <Card className="tokenCard">
+            <Card.Body className="tokenBody">
+              <Card.Title className="cardTitle">
+            You Owned
+              </Card.Title>
+              <hr className="tokenHr" />
+
+              <Card.Text className="cardText">
+                {own}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </>
+      );
+    } else if (standard === 'ERC721') {
+      return (
+        <>
+          <Card className="tokenCard">
+            <Card.Body className="tokenBody">
+              <Card.Title className="cardTitle">
+            You Owned
+              </Card.Title>
+              <hr className="tokenHr" />
+
+              <Card.Text className="cardText">
+                {own ? 'True' : 'False'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </>
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div className="divClass">
       <div>
@@ -464,20 +504,7 @@ const Token = (props) => {
                           )}
                         </Col>
                         <Col className="p-0">
-                          {isConnect && (
-                            <Card className="tokenCard">
-                              <Card.Body className="tokenBody">
-                                <Card.Title className="cardTitle">
-                                  You Owned
-                                </Card.Title>
-                                <hr className="tokenHr" />
-
-                                <Card.Text className="cardText">
-                                  {own}
-                                </Card.Text>
-                              </Card.Body>
-                            </Card>
-                          )}
+                          {renderOwnerStatus()}
                         </Col>
                         <Col className="p-0"></Col>
                       </Row>
