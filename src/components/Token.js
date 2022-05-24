@@ -53,6 +53,7 @@ const Token = (props) => {
   const [contractInstance, setContractInstance] = useState(null);
   const [tokenLoading, setTokenLoading] = useState(false);
   const [standard, setStandard] = useState("");
+  const [tokenUri, setTokenUri] = useState("");
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -149,6 +150,13 @@ const Token = (props) => {
     let result = await makeContract(contractAddress);
 
     if (result.contract !== null && loadToken === false) {
+      // let tokenInfo = await getTokenMeta(result.contract, ID);
+      // let tokenMeta = tokenInfo['tokenMeta'];
+      // setTokenUri(tokenInfo['tokenURI']);
+      // console.log(tokenInfo);
+      // console.log(tokenMeta);
+      // console.log(tokenInfo['tokenURI']);
+
       let tokenMeta = await getTokenMeta(result.contract, ID);
 
       if (tokenMeta === null) {
@@ -179,7 +187,11 @@ const Token = (props) => {
     let contract = await getContract();
 
     if (contract !== null) {
-      tokenMeta = await getTokenMeta(contract, ID);
+      // let tokenInfo = await getTokenMeta(contract, ID);
+      // tokenMeta = tokenInfo['tokenMeta'];
+      // setTokenUri(tokenReturn['tokenURI']);
+      
+      let tokenMeta = await getTokenMeta(contract, ID);
 
       if (tokenMeta === null) {
         return false;
@@ -335,6 +347,11 @@ const Token = (props) => {
     // console.log("Network:", currentNetwork, link);
     return link;
   }
+
+  const clickToTokenMeta = () => {
+    window.open(tokenUri);
+  };
+
   /* Render functions */
   return (
     <div className="divClass">
@@ -346,7 +363,7 @@ const Token = (props) => {
           </div>
         )}
       </div>
-      <div>
+      {/* <div>
         {showToken === 0 && isDisable === false && (
           <div className="token-search">
             <InputGroup className="searchbar">
@@ -360,7 +377,7 @@ const Token = (props) => {
             </InputGroup>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div>
         {tokenLoading && (
@@ -378,122 +395,128 @@ const Token = (props) => {
 
       <div>
         {showToken === 1 && (
-          <Container className="p-0 mx-auto">
-            <Row>
-              <Col md={5} className="leftTokenSection">
-                {isImg && (
-                  <div className="imgBox">
-                    <img src={img} className="contractImg"></img>
-                  </div>
-                )}
-                {isVideo && (
-                  <video controls className="tokenImg">
-                    <source src={img} type="video/mp4"></source>
-                  </video>
-                )}
-              </Col>
-              <Col md={5}>
-                <div className="tokenInfo">
-                  <div className="nameSection">{name}</div>
-                  <br />
-                  <div className="desSection">
-                    {description === null ? description : "No description"}
-                  </div>
-                  <br />
-                  {/* External Link: {exLink} <br /> */}
-                  <div className="cardsSection">
-                    <Container className="p-0">
-                      <Row>
-                        <Col className="p-0">
-                          <Card className="tokenCard">
-                            <Card.Body className="tokenBody">
-                              <Card.Title className="cardTitle">
-                                Blockchain
-                              </Card.Title>
-                              <hr className="tokenHr" />
-                              <Card.Text className="cardText">
-                                {chainName}
-                              </Card.Text>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                        <Col className="p-0">
-                          <Card className="tokenCard">
-                            <Card.Body className="tokenBody">
-                              <Card.Title className="cardTitle">
-                                Standard
-                              </Card.Title>
-                              <hr className="tokenHr" />
-
-                              <Card.Text className="cardText">
-                                {standard}
-                              </Card.Text>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                        <Col className="p-0">
-                          <Card className="tokenCard">
-                            <Card.Body className="tokenBody">
-                              <Card.Title className="cardTitle">
-                                Token Id
-                              </Card.Title>
-                              <hr className="tokenHr" />
-
-                              <Card.Text className="cardText">
-                                {tokenId}
-                              </Card.Text>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col className="p-0">
-                          {standard == "ERC1155" && (
+          <div className="tokenArea">
+            <h1 className="text-center tokenTitle">Token</h1>
+            <Container className="p-0 mx-auto tokenField">
+              <Row>
+                <Col  className="leftTokenSection">
+                  {isImg && (
+                    <div className="imgBox">
+                      <img src={img} className="contractImg"></img>
+                    </div>
+                  )}
+                  {isVideo && (
+                    <video controls className="tokenImg">
+                      <source src={img} type="video/mp4"></source>
+                    </video>
+                  )}
+                </Col>
+                <Col >
+                  <div className="tokenInfo">
+                    <div className="nameSection">{name}</div>
+                    <br />
+                    <div className="desSection">
+                      {description === null ? description : "No description"}
+                    </div>
+                    <br />
+                    {/* External Link: {exLink} <br /> */}
+                    <div className="cardsSection">
+                      <Container className="p-0">
+                        <Row>
+                          <Col className="p-0">
                             <Card className="tokenCard">
                               <Card.Body className="tokenBody">
                                 <Card.Title className="cardTitle">
-                                  Total Supply
+                                  Blockchain
+                                </Card.Title>
+                                <hr className="tokenHr" />
+                                <Card.Text className="cardText">
+                                  {chainName}
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          </Col>
+                          <Col className="p-0">
+                            <Card className="tokenCard">
+                              <Card.Body className="tokenBody">
+                                <Card.Title className="cardTitle">
+                                  Standard
                                 </Card.Title>
                                 <hr className="tokenHr" />
 
                                 <Card.Text className="cardText">
-                                  {supply}
+                                  {standard}
                                 </Card.Text>
                               </Card.Body>
                             </Card>
-                          )}
-                        </Col>
-                        <Col className="p-0">
-                          {isConnect && (
+                          </Col>
+                          <Col className="p-0">
                             <Card className="tokenCard">
                               <Card.Body className="tokenBody">
                                 <Card.Title className="cardTitle">
-                                  You Owned
+                                  Token Id
                                 </Card.Title>
                                 <hr className="tokenHr" />
 
                                 <Card.Text className="cardText">
-                                  {own}
+                                  {tokenId}
                                 </Card.Text>
                               </Card.Body>
                             </Card>
-                          )}
-                        </Col>
-                        <Col className="p-0"></Col>
-                      </Row>
-                    </Container>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col className="p-0">
+                            {standard == "ERC1155" && (
+                              <Card className="tokenCard">
+                                <Card.Body className="tokenBody">
+                                  <Card.Title className="cardTitle">
+                                    Total Supply
+                                  </Card.Title>
+                                  <hr className="tokenHr" />
+
+                                  <Card.Text className="cardText">
+                                    {supply}
+                                  </Card.Text>
+                                </Card.Body>
+                              </Card>
+                            )}
+                          </Col>
+                          <Col className="p-0">
+                            {isConnect && (
+                              <Card className="tokenCard">
+                                <Card.Body className="tokenBody">
+                                  <Card.Title className="cardTitle">
+                                    You Owned
+                                  </Card.Title>
+                                  <hr className="tokenHr" />
+
+                                  <Card.Text className="cardText">
+                                    {own}
+                                  </Card.Text>
+                                </Card.Body>
+                              </Card>
+                            )}
+                          </Col>
+                          <Col className="p-0"></Col>
+                        </Row>
+                      </Container>
+                    </div>
+                    <div className="originalData">
+                      Original data: <LinkOutlined onClick={clickToTokenMeta}/>
+                    </div>
+                    <div className="scanLink"> {renderScanLink()}</div>
+                    <br />
+                    {/* Other meta: {meta} <br /> */}
+                    <br />
+                    <br />
+                    {/* {is1155 && <p>Total Supply: {supply}</p>}
+                    You owned: {own} */}
                   </div>
-                  <div className="scanLink"> {renderScanLink()}</div>
-                  <br />
-                  {/* Other meta: {meta} <br /> */}
-                  <br />
-                  <br />
-                  {/* {is1155 && <p>Total Supply: {supply}</p>}
-                  You owned: {own} */}
-                </div>
-              </Col>
-            </Row>
-          </Container>
+                </Col>
+              </Row>
+            </Container>
+          </div>
         )}
       </div>
     </div>
