@@ -82,6 +82,23 @@
       }
     }
   }
+
+  .bottomField {
+    padding: 50px 50px 100px 50px;
+    margin-left: 40px;
+    margin-right: 40px;
+
+    .actionText {
+      font-size: 30px;
+      padding-bottom: 20px;
+    }
+
+    .etherscanLink {
+      margin-top: 15px;
+      font-size: 15px;
+      color: gray;
+    }
+  }
 }
 
 .btnPanel{
