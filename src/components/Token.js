@@ -53,7 +53,6 @@ const Token = (props) => {
   const [contractInstance, setContractInstance] = useState(null);
   const [tokenLoading, setTokenLoading] = useState(false);
   const [standard, setStandard] = useState("");
-  const [tokenUri, setTokenUri] = useState("");
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -150,13 +149,6 @@ const Token = (props) => {
     let result = await makeContract(contractAddress);
 
     if (result.contract !== null && loadToken === false) {
-      // let tokenInfo = await getTokenMeta(result.contract, ID);
-      // let tokenMeta = tokenInfo['tokenMeta'];
-      // setTokenUri(tokenInfo['tokenURI']);
-      // console.log(tokenInfo);
-      // console.log(tokenMeta);
-      // console.log(tokenInfo['tokenURI']);
-
       let tokenMeta = await getTokenMeta(result.contract, ID);
 
       if (tokenMeta === null) {
@@ -187,10 +179,7 @@ const Token = (props) => {
     let contract = await getContract();
 
     if (contract !== null) {
-      // let tokenInfo = await getTokenMeta(contract, ID);
-      // tokenMeta = tokenInfo['tokenMeta'];
-      // setTokenUri(tokenReturn['tokenURI']);
-      
+
       let tokenMeta = await getTokenMeta(contract, ID);
 
       if (tokenMeta === null) {
@@ -348,10 +337,6 @@ const Token = (props) => {
     return link;
   }
 
-  const clickToTokenMeta = () => {
-    window.open(tokenUri);
-  };
-
   /* Render functions */
   return (
     <div className="divClass">
@@ -501,9 +486,6 @@ const Token = (props) => {
                           <Col className="p-0"></Col>
                         </Row>
                       </Container>
-                    </div>
-                    <div className="originalData">
-                      Original data: <LinkOutlined onClick={clickToTokenMeta}/>
                     </div>
                     <div className="scanLink"> {renderScanLink()}</div>
                     <br />
