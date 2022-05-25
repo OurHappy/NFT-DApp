@@ -45,8 +45,9 @@ export async function getTokenMeta(contract, tokenId) {
         return ipfsdata;
       } else if (tokenURI.includes("data:application/json;base64")) {
         // the meta is base64 format
-        let base64data = getBase64data(tokenURI);
-        return base64data;
+        let tokenMeta = getBase64data(tokenURI);
+        // return {tokenMeta, tokenURI};
+        return tokenMeta;
       } else {
         // replace the {id} with the actual token ID in lowercase, and leading zero padded to 64 hex characters
         let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
@@ -70,6 +71,7 @@ export async function getTokenMeta(contract, tokenId) {
           console.log(err);
           return null;
         });
+      // return {tokenMeta, tokenURI};
       return tokenMeta;
     } else if (ERC721) {
       let tokenURI = await contract.methods.tokenURI(tokenId).call();
@@ -77,13 +79,13 @@ export async function getTokenMeta(contract, tokenId) {
       if (tokenURI.includes("ipfs://")) {
         //the meta is stored in IPFS
         let ipfsdata = await getIPFSdata(tokenURI);
-        console.log("msg", ipfsdata);
-
+        // console.log("msg", ipfsdata);
         return ipfsdata;
       } else if (tokenURI.includes("data:application/json;base64")) {
         // the meta is base64 format
-        let base64data = getBase64data(tokenURI);
-        return base64data;
+        let tokenMeta = getBase64data(tokenURI);
+        // return {tokenMeta, tokenURI};
+        return tokenMeta;
       } else {
         // get metadata with Oursong API
         let newDataUrl = dataUrl + "?uri=" + tokenURI;
@@ -98,6 +100,7 @@ export async function getTokenMeta(contract, tokenId) {
             console.log(err);
             return null;
           });
+        // return {tokenMeta, tokenURI};
         return tokenMeta;
       }
     }
