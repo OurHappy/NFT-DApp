@@ -41,7 +41,7 @@ export async function getTokenMeta(contract, tokenId) {
       let tokenURI = await contract.methods.uri(tokenId).call();
       if (tokenURI.includes("ipfs://")) {
         //the meta is stored in IPFS
-        let ipfsdata = getIPFSdata(tokenURI);
+        let ipfsdata = await getIPFSdata(tokenURI);
         return ipfsdata;
       } else if (tokenURI.includes("data:application/json;base64")) {
         // the meta is base64 format
@@ -73,10 +73,12 @@ export async function getTokenMeta(contract, tokenId) {
       return tokenMeta;
     } else if (ERC721) {
       let tokenURI = await contract.methods.tokenURI(tokenId).call();
-  
+
       if (tokenURI.includes("ipfs://")) {
         //the meta is stored in IPFS
-        let ipfsdata = getIPFSdata(tokenURI);
+        let ipfsdata = await getIPFSdata(tokenURI);
+        console.log("msg", ipfsdata);
+
         return ipfsdata;
       } else if (tokenURI.includes("data:application/json;base64")) {
         // the meta is base64 format
@@ -98,7 +100,7 @@ export async function getTokenMeta(contract, tokenId) {
           });
         return tokenMeta;
       }
-    } 
+    }
   }
 }
 
@@ -129,7 +131,7 @@ export async function getContractMeta(contract) {
           console.log(err);
           return null;
         });
-      return {contractMeta, contractUri};
+      return { contractMeta, contractUri };
     } else if (ERC721) {
       let newDataUrl = dataUrl + "?uri=" + contractUri;
       let contractMeta = await axios
@@ -143,7 +145,7 @@ export async function getContractMeta(contract) {
           console.log(err);
           return null;
         });
-      return {contractMeta, contractUri};
+      return { contractMeta, contractUri };
     }
     return null;
   }
@@ -152,9 +154,7 @@ export async function getContractMeta(contract) {
 export async function isERC721(contract) {
   let result = null;
   try {
-    result = await contract.methods
-      .supportsInterface(ERC721InterfaceID)
-      .call();
+    result = await contract.methods.supportsInterface(ERC721InterfaceID).call();
     return result;
   } catch (error) {
     console.log(error);

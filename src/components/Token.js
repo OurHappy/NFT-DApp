@@ -17,6 +17,9 @@ import {
   totalSupply,
   isERC1155,
   isERC721,
+  balanceOf721,
+  uri,
+  uri721,
 } from "../utils/contract";
 import { makeContract } from "../utils/web3Client";
 import UserWallet from "../context/userWallet";
@@ -53,6 +56,7 @@ const Token = (props) => {
   const [contractInstance, setContractInstance] = useState(null);
   const [tokenLoading, setTokenLoading] = useState(false);
   const [standard, setStandard] = useState("");
+  const [tokenUri, setTokenUri] = useState(null);
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -75,6 +79,40 @@ const Token = (props) => {
       searchToken(event);
     }
   };
+
+  //link to original token metadata
+  let clickToTokenMeta = () => {
+    if (is1155) {
+      //ERC 1155
+      let result = uri(contractInstance, tokenId);
+      result.then((uri) => {
+        if (uri.includes("ipfs://")) {
+          let newUri = uri.replace(
+            "ipfs://",
+            "https://api.ipfsbrowser.com/ipfs/get.php?hash="
+          );
+          window.open(newUri);
+        } else {
+          window.open(uri);
+        }
+      });
+    } else {
+      //ERC 721
+      let result = uri721(contractInstance, tokenId);
+      result.then((uri) => {
+        if (uri.includes("ipfs://")) {
+          let newUri = uri.replace(
+            "ipfs://",
+            "https://api.ipfsbrowser.com/ipfs/get.php?hash="
+          );
+          window.open(newUri);
+        } else {
+          window.open(uri);
+        }
+      });
+    }
+  };
+
   // build token meta data
   let showTokenMeta = async (tokenMeta, tokenId) => {
     const defaultType = ["id", "name", "description", "external_url", "image"];
@@ -134,8 +172,10 @@ const Token = (props) => {
       setIs1155(true);
     } else if (standard === "ERC721") {
       if (isConnect) {
-        let ownResult = ownerOf721(contractInstance, tokenId);
-        ownResult.then((ownerAddr) => ownerAddr === accountAddress ? setOwn(true) : setOwn(false));
+        // let ownResult = ownerOf721(contractInstance, tokenId);
+        // ownResult.then((ownerAddr) => ownerAddr === accountAddress ? setOwn(true) : setOwn(false));
+        let result = balanceOf721(contractInstance, accountAddress);
+        result.then((msg) => setOwn(msg));
       } else {
         setOwn("Please connect the Metamask to check balance");
       }
@@ -337,35 +377,29 @@ const Token = (props) => {
   const renderOwnerStatus = () => {
     if (!isConnect) return;
 
-    if (standard === 'ERC1155') {
+    if (standard === "ERC1155") {
       return (
         <>
           <Card className="tokenCard">
             <Card.Body className="tokenBody">
-              <Card.Title className="cardTitle">
-            You Owned
-              </Card.Title>
+              <Card.Title className="cardTitle">You Owned</Card.Title>
               <hr className="tokenHr" />
 
-              <Card.Text className="cardText">
-                {own}
-              </Card.Text>
+              <Card.Text className="cardText">{own}</Card.Text>
             </Card.Body>
           </Card>
         </>
       );
-    } else if (standard === 'ERC721') {
+    } else if (standard === "ERC721") {
       return (
         <>
           <Card className="tokenCard">
             <Card.Body className="tokenBody">
-              <Card.Title className="cardTitle">
-            You Owned
-              </Card.Title>
+              <Card.Title className="cardTitle">You Owned</Card.Title>
               <hr className="tokenHr" />
 
               <Card.Text className="cardText">
-                {own ? 'True' : 'False'}
+                {own ? "True" : "False"}
               </Card.Text>
             </Card.Body>
           </Card>
@@ -503,9 +537,7 @@ const Token = (props) => {
                             </Card>
                           )}
                         </Col>
-                        <Col className="p-0">
-                          {renderOwnerStatus()}
-                        </Col>
+                        <Col className="p-0">{renderOwnerStatus()}</Col>
                         <Col className="p-0"></Col>
                       </Row>
                     </Container>
@@ -513,6 +545,9 @@ const Token = (props) => {
                   <div className="scanLink"> {renderScanLink()}</div>
                   <br />
                   {/* Other meta: {meta} <br /> */}
+                  <div className="originalData">
+                    Original data: <LinkOutlined onClick={clickToTokenMeta} />
+                  </div>
                   <br />
                   <br />
                   {/* {is1155 && <p>Total Supply: {supply}</p>}
