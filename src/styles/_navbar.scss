@@ -1,0 +1,54 @@
+.navClass {
+  padding: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #F8F9FA;
+  color: #000000;
+
+  #titleText:hover {
+    color:rgb(137, 168, 187);
+    cursor: pointer;
+  }
+
+  button {
+    font-size: 1rem;
+
+    // margin: 0rem 2rem;
+    color: rgb(133, 132, 132);
+    border: 1px solid rgb(133, 132, 132);
+    border-radius: 10px;
+  }
+
+  button:hover{
+    color: white;
+    background-color: rgb(133, 132, 132);
+  }
+
+  // div.chainBlock {
+  //   // display: flex;
+  //   // flex-wrap: wrap;
+  //   // flex-direction: row;
+  //   // margin: 0rem 1rem;
+
+  //   span.addressText {
+  //     color: lightblue;
+  //     font-size: 1rem;
+  //   }
+  // }
+}
+
+
+.addressBtn{
+margin: 0;  
+border: none;
+}
+
+@media (max-width:500px){
+
+  .navClass{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  
+}
