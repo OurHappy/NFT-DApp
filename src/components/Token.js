@@ -71,6 +71,12 @@ const Token = (props) => {
     }
   }, [isConnect]);
 
+  useEffect(() => {
+    if (standard !== "" && contractInstance !== null) {
+      updateBalance();
+    }
+  }, [standard, contractInstance]);
+
   const resetStates = () => {
     setShowToken(0);
   };
@@ -164,28 +170,32 @@ const Token = (props) => {
   };
 
   async function updateBalance() {
-    if (standard === "ERC1155") {
-      console.log("1155");
-      let supplyResult = totalSupply(contractInstance, tokenId);
-      supplyResult.then((msg) => console.log("supply=", msg));
+    if (contractInstance !== null) {
+      if (standard === "ERC1155") {
+        let supplyResult = totalSupply(contractInstance, tokenId);
+        supplyResult.then((msg) => console.log("supply=", msg));
 
-      if (isConnect) {
-        let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
-        ownResult.then((msg) => setOwn(msg));
-      } else {
-        setOwn("Please connect the Metamask to check balance");
-      }
+        if (isConnect) {
+          let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
+          ownResult.then((msg) => setOwn(msg));
+        } else {
+          setOwn("Please connect the Metamask to check balance");
+        }
 
-      // only 1155 can see the token's total supply
-      setIs1155(true);
-    } else if (standard === "ERC721") {
-      if (isConnect) {
-        // let ownResult = ownerOf721(contractInstance, tokenId);
-        // ownResult.then((ownerAddr) => ownerAddr === accountAddress ? setOwn(true) : setOwn(false));
-        let result = balanceOf721(contractInstance, accountAddress);
-        result.then((msg) => setOwn(msg));
+        // only 1155 can see the token's total supply
+        setIs1155(true);
+      } else if (standard === "ERC721") {
+        if (isConnect) {
+          // let ownResult = ownerOf721(contractInstance, tokenId);
+          // ownResult.then((ownerAddr) => ownerAddr === accountAddress ? setOwn(true) : setOwn(false));
+          let result = await balanceOf721(contractInstance, accountAddress);
+
+          setOwn(result);
+        } else {
+          setOwn("Please connect the Metamask to check balance");
+        }
       } else {
-        setOwn("Please connect the Metamask to check balance");
+        console.log("nothing");
       }
     }
   }
@@ -224,7 +234,6 @@ const Token = (props) => {
     let contract = await getContract();
 
     if (contract !== null) {
-
       let tokenMeta = await getTokenMeta(contract, ID);
 
       if (tokenMeta === null) {
@@ -466,7 +475,7 @@ const Token = (props) => {
             <h1 className="text-center tokenTitle">Token</h1>
             <Container className="p-0 mx-auto tokenField">
               <Row>
-                <Col  className="leftTokenSection">
+                <Col className="leftTokenSection">
                   {isImg && (
                     <div className="imgBox">
                       <img src={img} className="contractImg"></img>
@@ -478,7 +487,7 @@ const Token = (props) => {
                     </video>
                   )}
                 </Col>
-                <Col >
+                <Col>
                   <div className="tokenInfo">
                     <div className="nameSection">{name}</div>
                     <br />
@@ -549,9 +558,7 @@ const Token = (props) => {
                               </Card>
                             )}
                           </Col>
-                          <Col className="p-0">
-                            {renderOwnerStatus()}
-                          </Col>
+                          <Col className="p-0">{renderOwnerStatus()}</Col>
                           <Col className="p-0"></Col>
                         </Row>
                       </Container>
