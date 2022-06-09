@@ -7,10 +7,14 @@ import {
   getChainName,
   on,
   removeListener,
+  addNetwork,
+  changeNetwork,
 } from "../utils/web3Client";
 import { useNavigate } from "react-router-dom";
 import UserWallet from "../context/userWallet";
 import AppState from "../context/appState";
+import { DropdownButton, Dropdown } from "react-bootstrap";
+import { logDOM } from "@testing-library/react";
 
 export const Navbar = (props) => {
   /**
@@ -55,6 +59,13 @@ export const Navbar = (props) => {
 
   /* Functions */
 
+  let dropdownHandler = async (netowrkId) => {
+    let result = changeNetwork(netowrkId);
+    result.catch((msg) => {
+      addNetwork(netowrkId);
+    });
+  };
+
   let clickAction = async () => {
     if (isConnect) {
       await disconnect();
@@ -91,6 +102,7 @@ export const Navbar = (props) => {
       <div id="titleText" onClick={clickMenu}>
         OurSong NFT Viewer
       </div>
+
       {/* <div className="ms-auto chainBlock"> */}
       <div className="ms-auto">
         <div>{chainName}</div>
@@ -102,6 +114,36 @@ export const Navbar = (props) => {
           ) : null}
         </div>
       </div>
+      <DropdownButton
+        variant="outline-light"
+        id="dropdown-basic-button"
+        title="network"
+      >
+        <Dropdown.Item onClick={() => dropdownHandler(1)}>
+          Ethereum Mainnet
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => dropdownHandler(4)}>
+          Rinkeby Testnet
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => dropdownHandler(108)}>
+          ThunderCore Mainnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(18)}>
+          ThunderCore Testnet{" "}
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => dropdownHandler(56)}>
+          Smart Chain Mainnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(97)}>
+          Smart Chain Testnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(137)}>
+          Polygon Mainnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(80001)}>
+          Polygon Testnet{" "}
+        </Dropdown.Item>
+      </DropdownButton>
       {appState === "ready" ? (
         <div>
           <Button
