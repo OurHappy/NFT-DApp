@@ -62,7 +62,11 @@ export const Navbar = (props) => {
   let dropdownHandler = async (netowrkId) => {
     let result = changeNetwork(netowrkId);
     result.catch((msg) => {
-      addNetwork(netowrkId);
+      if (msg.code === 4902) {
+        addNetwork(netowrkId);
+      } else {
+        console.log("uncaught error with code ", msg.code);
+      }
     });
   };
 
