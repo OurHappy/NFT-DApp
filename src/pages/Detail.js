@@ -7,6 +7,7 @@ import ContractPanel from "../components/ContractPanel";
 import AppState from "../context/appState";
 import UserWallet from "../context/userWallet";
 import { isContractAddress } from "../utils/web3Client";
+import WrongChain from "../components/WrongChain";
 
 export const Detail = (props) => {
   /**
@@ -16,6 +17,7 @@ export const Detail = (props) => {
   const userWallet = useContext(UserWallet);
 
   const params = useParams();
+  const navigate = useNavigate();
 
   /**
    * States
@@ -25,8 +27,20 @@ export const Detail = (props) => {
   const [isValidAddress, setIsValidAddress] = useState(null);
   const [address] = useState(params.address);
   const [tokenId, setTokenId] = useState(params.tokenId);
+  const [uriChain, setUriChain] = useState(params.chain);
   const [isDisable, setIsDisable] = useState(false);
   const [tokenImg, setTokenImg] = useState(null);
+  const [correctChain, setCorrectChain] = useState("123");
+
+  useEffect(() => {
+    if (userWallet.network !== null) {
+      if (userWallet.network === uriChain) {
+        setCorrectChain(1);
+      } else {
+        setCorrectChain(0);
+      }
+    }
+  }, [userWallet.network, params.chain]);
 
   useEffect(() => {
     if (appState === "ready") {
@@ -68,48 +82,26 @@ export const Detail = (props) => {
       </div>
     );
   } else {
-    return (
-      <>
-        <Token
-          contractAddress={address}
-          tokenId={tokenId}
-          isDisable={isDisable}
-          passImage={passImage}
-          setTokenId={setTokenId}
-        />
-        <ContractPanel
-          contractAddress={address}
-          isDisable={isDisable}
-          tokenImg={tokenImg}
-        />
-      </>
-    );
-    // return (
-    //   <>
-    //     <Token
-    //       contractAddress={address}
-    //       accountAddress={userAddress}
-    //       isConnect={isConnect}
-    //       contractInstance={contractInstance}
-    //       setContractInstance={setContractInstance}
-    //       web3Instance={web3Instance}
-    //       setWeb3Instance={setWeb3Instance}
-    //       currentNetwork={currentNetwork}
-    //     />
-    //     <ContractPanel
-    //       contractAddress={address}
-    //       setContractAddress={setAddress}
-    //       userAddress={userAddress}
-    //       initAtAppjs={initAtAppjs}
-    //       contractInstance={contractInstance}
-    //       setContractInstance={setContractInstance}
-    //       appState={appState}
-    //       web3Instance={web3Instance}
-    //       setWeb3Instance={setWeb3Instance}
-    //       isConnected={isConnected}
-    //     />
-    //   </>
-    // );
+    if (correctChain) {
+      return (
+        <div>
+          <Token
+            contractAddress={address}
+            tokenId={tokenId}
+            isDisable={isDisable}
+            passImage={passImage}
+            setTokenId={setTokenId}
+          />
+          <ContractPanel
+            contractAddress={address}
+            isDisable={isDisable}
+            tokenImg={tokenImg}
+          />
+        </div>
+      );
+    } else {
+      return <WrongChain></WrongChain>;
+    }
   }
 };
 

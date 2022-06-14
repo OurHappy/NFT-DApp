@@ -10,7 +10,7 @@ import {
   addNetwork,
   changeNetwork,
 } from "../utils/web3Client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserWallet from "../context/userWallet";
 import AppState from "../context/appState";
 import { DropdownButton, Dropdown } from "react-bootstrap";
@@ -21,6 +21,7 @@ export const Navbar = (props) => {
    * Props and Constants
    */
   const navigate = useNavigate();
+  const param = useParams();
   const userWallet = useContext(UserWallet);
   const chainName = userWallet.network;
   const address = userWallet.address;
@@ -29,6 +30,7 @@ export const Navbar = (props) => {
   /* States */
   const [connectText, setConnectText] = useState("Connect");
   const [isLoading, setIsLoading] = useState(false);
+  const chainList = {};
 
   /* Listeners */
   useEffect(() => {
@@ -54,6 +56,15 @@ export const Navbar = (props) => {
       }
     };
   }, [appState]);
+
+  // useEffect(() => {
+  //   if (param.chain === undefined) {
+  //     navigate(`${userWallet.network}`);
+  //     console.log("done");
+  //   } else {
+  //     console.log("already have uri chain!");
+  //   }
+  // }, [userWallet.network]);
 
   /* API calls */
 
