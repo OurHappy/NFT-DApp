@@ -23,9 +23,7 @@ const WrongChain = () => {
       case "Rinkeby":
         networkId = 4;
         break;
-      case "ThunderCore":
-        networkId = 104;
-        break;
+
       case "ThunderCore_test":
         networkId = 18;
         break;
