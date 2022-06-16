@@ -1,6 +1,12 @@
 import "./App.css";
-import React, { Fragment, useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { Fragment, useEffect, useState, useContext } from "react";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+  useParams,
+} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import Searchbox from "./components/Searchbox";
@@ -11,11 +17,13 @@ import { getChain, init } from "./utils/web3Client";
 import { getProvider } from "./utils/provider";
 import Defaultpage from "./components/Defaultpage";
 import AppState from "./context/appState";
-import UserWallet from "./context/userWallet";
+import UserWallet, { userWallet } from "./context/userWallet";
 import Detail from "./pages/Detail";
+import WrongChain from "./components/WrongChain";
 
 function App() {
   /* Variables */
+  const params = useParams();
 
   /* States */
   const [appState, setAppState] = useState("initializing");
@@ -24,12 +32,14 @@ function App() {
   const [web3Instance, setWeb3Instance] = useState(null);
   const [currentNetwork, setCurrentNetwork] = useState(null);
   const [contractType, setContractType] = useState(null);
+  const [onCorrectChain, setOnCorrectChain] = useState(null);
 
   useEffect(() => {
     initApp();
   }, []);
 
   /* Functions */
+
   async function initApp() {
     if (web3Instance === null) {
       const provider = await getProvider();
@@ -40,7 +50,34 @@ function App() {
 
         if (initialized.result) {
           const network = await getChain();
-          setCurrentNetwork(network);
+          let newNetwork;
+          switch (network) {
+            case "Ethereum Mainnet":
+              newNetwork = "Ethereum";
+              break;
+            case "Rinkeby Testnet":
+              newNetwork = "Rinkeby";
+              break;
+            case "ThunderCore Testnet":
+              newNetwork = "ThunderCore_test";
+              break;
+            case "Smart Chain Mainnet":
+              newNetwork = "SmartChain";
+              break;
+            case "Smart Chain Testnet":
+              newNetwork = "SmartChain_test";
+              break;
+            case "ThunderCore Mainnet":
+              newNetwork = "ThunderCore";
+              break;
+            case "Polygon Mainnet":
+              newNetwork = "Polygon";
+              break;
+            case "Polygon Testnet":
+              newNetwork = "Polygun_test";
+              break;
+          }
+          setCurrentNetwork(newNetwork);
           setAppState("ready");
           return;
         }
@@ -82,8 +119,8 @@ function App() {
                       <Defaultpage />
                     )
                   }
-                />
-                <Route path="contract/:address" element={<Detail />}>
+                ></Route>
+                <Route path=":chain/contract/:address" element={<Detail />}>
                   <Route path=":tokenId" element={<Detail />} />
                 </Route>
               </Routes>

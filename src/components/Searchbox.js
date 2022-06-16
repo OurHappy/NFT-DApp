@@ -15,12 +15,14 @@ import {
   Col,
   Button,
 } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Stack from "react-bootstrap/Stack";
+import userWallet from "../context/userWallet";
 
 const Searchbox = (props) => {
   /* Variables */
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+  const params = useParams();
 
   /* States */
   const [warnText, setWarnText] = useState("");
@@ -68,7 +70,7 @@ const Searchbox = (props) => {
     setContractLoading(false);
 
     if (isValid) {
-      navigate(`contract/${inputVal}/${inputId}`);
+      navigate(`${props.currentNetwork}/contract/${inputVal}/${inputId}`);
     } else {
       setWarnText("This is not a valid contract address");
     }
@@ -89,7 +91,7 @@ const Searchbox = (props) => {
     setContractLoading(false);
 
     if (isValid) {
-      navigate(`contract/${inputVal}`);
+      navigate(`${props.currentNetwork}/contract/${inputVal}`);
     } else {
       setWarnText("This is not a valid contract address");
     }
