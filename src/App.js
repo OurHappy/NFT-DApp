@@ -19,7 +19,6 @@ import Defaultpage from "./components/Defaultpage";
 import AppState from "./context/appState";
 import UserWallet, { userWallet } from "./context/userWallet";
 import Detail from "./pages/Detail";
-import WrongChain from "./components/WrongChain";
 
 function App() {
   /* Variables */
