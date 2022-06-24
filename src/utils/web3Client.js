@@ -243,6 +243,13 @@ export function getChainName(chainId) {
   return name;
 }
 
+export function getChainAbb(chainId) {
+  const networkId = parseInt(chainId, 16);
+
+  const abb = chains.getChainAbbById(networkId) ?? "Unknown";
+  return abb;
+}
+
 export async function getChain() {
   // get chain ID without connect, and return chain name
   let networkId = await provider.request({
