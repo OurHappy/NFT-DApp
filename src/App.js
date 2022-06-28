@@ -19,11 +19,11 @@ import Defaultpage from "./components/Defaultpage";
 import AppState from "./context/appState";
 import UserWallet, { userWallet } from "./context/userWallet";
 import Detail from "./pages/Detail";
-import WrongChain from "./components/WrongChain";
 
 function App() {
   /* Variables */
   const params = useParams();
+  const userWallet = useContext(UserWallet);
 
   /* States */
   const [appState, setAppState] = useState("initializing");
@@ -50,34 +50,37 @@ function App() {
 
         if (initialized.result) {
           const network = await getChain();
+          console.log("network=",network);
+          userWallet.setNetwork(network);
           let newNetwork;
           switch (network) {
             case "Ethereum Mainnet":
-              newNetwork = "Ethereum";
+              newNetwork = "ethereum";
               break;
             case "Rinkeby Testnet":
-              newNetwork = "Rinkeby";
+              newNetwork = "rinkeby";
               break;
             case "ThunderCore Testnet":
-              newNetwork = "ThunderCore_test";
+              newNetwork = "thundercore_test";
               break;
             case "Smart Chain Mainnet":
-              newNetwork = "SmartChain";
+              newNetwork = "bsc";
               break;
             case "Smart Chain Testnet":
-              newNetwork = "SmartChain_test";
+              newNetwork = "bsc_test";
               break;
             case "ThunderCore Mainnet":
-              newNetwork = "ThunderCore";
+              newNetwork = "thundercore";
               break;
             case "Polygon Mainnet":
-              newNetwork = "Polygon";
+              newNetwork = "polygon";
               break;
             case "Polygon Testnet":
-              newNetwork = "Polygun_test";
+              newNetwork = "polygun_test";
               break;
           }
           setCurrentNetwork(newNetwork);
+          console.log("set newnetwork done");
           setAppState("ready");
           return;
         }

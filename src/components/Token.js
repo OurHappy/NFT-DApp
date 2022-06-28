@@ -7,6 +7,7 @@ import {
   InputGroup,
   Spinner,
   Card,
+  Carousel,
 } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router";
 import PropTypes from "prop-types";
@@ -57,6 +58,7 @@ const Token = (props) => {
   const [tokenLoading, setTokenLoading] = useState(false);
   const [standard, setStandard] = useState("");
   const [tokenUri, setTokenUri] = useState(null);
+  const [animation, setAnimation] = useState(null);
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -129,7 +131,14 @@ const Token = (props) => {
 
   // build token meta data
   let showTokenMeta = async (tokenMeta, tokenId) => {
-    const defaultType = ["id", "name", "description", "external_url", "image"];
+    const defaultType = [
+      "id",
+      "name",
+      "description",
+      "external_url",
+      "image",
+      "animation_url",
+    ];
 
     let tokenObject;
     if (tokenMeta["data"]) tokenObject = tokenMeta["data"];
@@ -151,6 +160,10 @@ const Token = (props) => {
             setIsVideo(true);
             setIsImg(false);
           }
+        } else if (key === "animation_url") {
+          console.log("in");
+          console.log(value);
+          setAnimation(value);
         }
         // check standard type
         let result = await makeContract(contractAddress);
@@ -172,9 +185,6 @@ const Token = (props) => {
   async function updateBalance() {
     if (contractInstance !== null) {
       if (standard === "ERC1155") {
-        let supplyResult = totalSupply(contractInstance, tokenId);
-        supplyResult.then((msg) => console.log("supply=", msg));
-
         if (isConnect) {
           let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
           ownResult.then((msg) => setOwn(msg));
@@ -205,6 +215,7 @@ const Token = (props) => {
 
     if (result.contract !== null && loadToken === false) {
       let tokenMeta = await getTokenMeta(result.contract, ID);
+      console.log("tokenMeta=", tokenMeta.data.animation_url);
 
       if (tokenMeta === null) {
         return false;
@@ -476,15 +487,41 @@ const Token = (props) => {
             <Container className="p-0 mx-auto tokenField">
               <Row>
                 <Col className="leftTokenSection">
-                  {isImg && (
+                  {isImg && animation === null && (
                     <div className="imgBox">
                       <img src={img} className="contractImg"></img>
                     </div>
                   )}
-                  {isVideo && (
+                  {/* {isVideo && (
                     <video controls className="tokenImg">
                       <source src={img} type="video/mp4"></source>
                     </video>
+                  )} */}
+                  {animation !== null && (
+                    <Carousel variant="dark" interval={null}>
+                      <Carousel.Item>
+                        <div className="imgBox">
+                          <img
+                            className="contractImg"
+                            src={img}
+                            alt="Token Image"
+                          />
+                        </div>
+                      </Carousel.Item>
+                      <Carousel.Item>
+                        <div className="imgBox">
+                          <video
+                            className="contractImg"
+                            src={animation}
+                            alt="Token Video"
+                            loop
+                            autoPlay
+                            muted
+                            controls
+                          />
+                        </div>
+                      </Carousel.Item>
+                    </Carousel>
                   )}
                 </Col>
                 <Col>

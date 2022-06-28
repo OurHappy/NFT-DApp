@@ -17,29 +17,29 @@ const WrongChain = () => {
     let pname = params.chain;
     let networkId;
     switch (pname) {
-      case "Ethereum":
+      case "ethereum":
         networkId = 1;
         break;
-      case "Rinkeby":
+      case "rinkeby":
         networkId = 4;
         break;
 
-      case "ThunderCore_test":
+      case "thundercore_test":
         networkId = 18;
         break;
-      case "SmartChain":
+      case "bsc":
         networkId = 56;
         break;
-      case "SmartChain_test":
+      case "bsc_test":
         networkId = 97;
         break;
-      case "ThunderCore":
+      case "thundercore":
         networkId = 108;
         break;
-      case "Polygon":
+      case "polygon":
         networkId = 137;
         break;
-      case "Polygon":
+      case "polygon_test":
         networkId = 80001;
         break;
     }

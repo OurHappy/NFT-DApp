@@ -5,6 +5,7 @@ import {
   connect,
   disconnect,
   getChainName,
+  getChainAbb,
   on,
   removeListener,
   addNetwork,
@@ -14,7 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import UserWallet from "../context/userWallet";
 import AppState from "../context/appState";
 import { DropdownButton, Dropdown } from "react-bootstrap";
-import { logDOM } from "@testing-library/react";
+import { chains } from "../constants";
 
 export const Navbar = (props) => {
   /**
@@ -40,8 +41,13 @@ export const Navbar = (props) => {
       };
 
       const handleChainChanged = (chainId) => {
-        const result = getChainName(chainId);
-        userWallet.setNetwork(result);
+        // const result = getChainName(chainId);
+        // userWallet.setNetwork(result);
+        console.log("id=", chainId);
+        const abb = getChainAbb(chainId);
+        console.log(abb);
+        userWallet.setNetwork(abb);
+        console.log("userwallet network",abb);
       };
 
       on("accountsChanged", handleAccountsChanged);
