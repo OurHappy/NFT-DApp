@@ -509,6 +509,8 @@
 .imgBox .contractImg {
   max-width: 100%;
   max-height: 100%;
+  min-height: auto;
+  min-width: auto;
 }
 
 .tokenArea {
@@ -518,6 +520,10 @@
 .tokenArea .tokenTitle {
   padding-top: 30px;
   padding-bottom: 60px;
+}
+
+.carousel-inner > .item {
+  width: 100%;
 }
 
 .defaultPage .errorTitle {
