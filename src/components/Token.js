@@ -522,7 +522,11 @@ const Token = (props) => {
                     </video>
                   )} */}
                   {animation !== null && (
-                    <Carousel variant="dark" interval={null} className="w-50">
+                    <Carousel
+                      variant="dark"
+                      interval={null}
+                      className=" carou"
+                    >
                       <Carousel.Item>
                         <div className="imgBox">
                           <img
