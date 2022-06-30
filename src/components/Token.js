@@ -100,8 +100,24 @@ const Token = (props) => {
             "https://api.ipfsbrowser.com/ipfs/get.php?hash="
           );
           window.open(newUri);
+        } else if (uri.includes("base64")) {
+          var string = uri;
+          var iframe =
+            "<iframe width='100%' height='100%' src='" + string + "'></iframe>";
+          var x = window.open();
+          x.document.open();
+          x.document.write(iframe);
+          x.document.close();
         } else {
-          window.open(uri);
+          let tokenURI = uri;
+          let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
+          let zeroNum = 64 - tokenIdNew.length;
+          for (let i = 0; i < zeroNum; i++) {
+            tokenIdNew = "0" + tokenIdNew;
+          }
+          tokenURI = tokenURI.replace("{id}", tokenIdNew);
+
+          window.open(tokenURI);
         }
       });
     } else {
@@ -123,7 +139,15 @@ const Token = (props) => {
           x.document.write(iframe);
           x.document.close();
         } else {
-          window.open(uri);
+          let tokenURI = uri;
+          let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
+          let zeroNum = 64 - tokenIdNew.length;
+          for (let i = 0; i < zeroNum; i++) {
+            tokenIdNew = "0" + tokenIdNew;
+          }
+          tokenURI = tokenURI.replace("{id}", tokenIdNew);
+
+          window.open(tokenURI);
         }
       });
     }
@@ -498,7 +522,7 @@ const Token = (props) => {
                     </video>
                   )} */}
                   {animation !== null && (
-                    <Carousel variant="dark" interval={null}>
+                    <Carousel variant="dark" interval={null} className="w-50">
                       <Carousel.Item>
                         <div className="imgBox">
                           <img
