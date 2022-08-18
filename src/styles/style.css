@@ -509,6 +509,7 @@
 .imgBox .contractImg {
   max-width: 100%;
   max-height: 100%;
+  margin-right: 30x;
 }
 
 .tokenArea {
@@ -520,15 +521,82 @@
   padding-bottom: 60px;
 }
 
+.carousel-inner > .item {
+  width: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .carou {
+    width: 100% !important;
+  }
+  .contractImg {
+    margin-right: 40px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .carou {
+    width: 50% !important;
+  }
+  .carou .contractImg {
+    margin-right: 25px;
+  }
+}
+
+@media screen and (min-width: 415px) and (max-width: 447px) {
+  .carou {
+    width: 90% !important;
+  }
+}
+
+@media screen and (min-width: 448px) and (max-width: 513px) {
+  .carou {
+    width: 70% !important;
+  }
+  .carou .contractImg {
+    margin-right: 90px;
+  }
+}
+
+@media screen and (min-width: 514px) and (max-width: 617px) {
+  .carou {
+    width: 70% !important;
+  }
+  .carou .contractImg {
+    margin-right: 30px;
+  }
+}
+
+@media screen and (min-width: 618px) and (max-width: 989px) {
+  .carou {
+    width: 80% !important;
+  }
+  .carou .contractImg {
+    margin-right: 70px;
+  }
+}
+
+@media screen and (min-width: 990px) and (max-width: 1200px) {
+  .carou {
+    width: 80% !important;
+  }
+  .carou .contractImg {
+    margin-right: 70px;
+  }
+  .carou .imgBox {
+    width: 120%;
+  }
+}
+
 .defaultPage .errorTitle {
   background-color: #F4F2F2;
-  font-size: 40px;
+  font-size: 2rem;
   text-align: center;
   padding: 80px 30px 80px 30px;
 }
 
 .defaultPage .errorText {
-  font-size: 20px;
+  font-size: 1rem;
   text-align: center;
   padding: 60px;
 }

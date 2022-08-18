@@ -5,18 +5,24 @@ import {
   connect,
   disconnect,
   getChainName,
+  getChainAbb,
   on,
   removeListener,
+  addNetwork,
+  changeNetwork,
 } from "../utils/web3Client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UserWallet from "../context/userWallet";
 import AppState from "../context/appState";
+import { DropdownButton, Dropdown } from "react-bootstrap";
+import { chains } from "../constants";
 
 export const Navbar = (props) => {
   /**
    * Props and Constants
    */
   const navigate = useNavigate();
+  const param = useParams();
   const userWallet = useContext(UserWallet);
   const chainName = userWallet.network;
   const address = userWallet.address;
@@ -25,6 +31,7 @@ export const Navbar = (props) => {
   /* States */
   const [connectText, setConnectText] = useState("Connect");
   const [isLoading, setIsLoading] = useState(false);
+  const chainList = {};
 
   /* Listeners */
   useEffect(() => {
@@ -34,8 +41,13 @@ export const Navbar = (props) => {
       };
 
       const handleChainChanged = (chainId) => {
-        const result = getChainName(chainId);
-        userWallet.setNetwork(result);
+        // const result = getChainName(chainId);
+        // userWallet.setNetwork(result);
+        console.log("id=", chainId);
+        const abb = getChainAbb(chainId);
+        console.log(abb);
+        userWallet.setNetwork(abb);
+        console.log("userwallet network",abb);
       };
 
       on("accountsChanged", handleAccountsChanged);
@@ -51,9 +63,29 @@ export const Navbar = (props) => {
     };
   }, [appState]);
 
+  // useEffect(() => {
+  //   if (param.chain === undefined) {
+  //     navigate(`${userWallet.network}`);
+  //     console.log("done");
+  //   } else {
+  //     console.log("already have uri chain!");
+  //   }
+  // }, [userWallet.network]);
+
   /* API calls */
 
   /* Functions */
+
+  let dropdownHandler = async (netowrkId) => {
+    let result = changeNetwork(netowrkId);
+    result.catch((msg) => {
+      if (msg.code === 4902) {
+        addNetwork(netowrkId);
+      } else {
+        console.log("uncaught error with code ", msg.code);
+      }
+    });
+  };
 
   let clickAction = async () => {
     if (isConnect) {
@@ -91,6 +123,7 @@ export const Navbar = (props) => {
       <div id="titleText" onClick={clickMenu}>
         OurSong NFT Viewer
       </div>
+
       {/* <div className="ms-auto chainBlock"> */}
       <div className="ms-auto">
         <div>{chainName}</div>
@@ -102,6 +135,36 @@ export const Navbar = (props) => {
           ) : null}
         </div>
       </div>
+      <DropdownButton
+        variant="outline-light"
+        id="dropdown-basic-button"
+        title="network"
+      >
+        <Dropdown.Item onClick={() => dropdownHandler(1)}>
+          Ethereum Mainnet
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => dropdownHandler(4)}>
+          Rinkeby Testnet
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => dropdownHandler(108)}>
+          ThunderCore Mainnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(18)}>
+          ThunderCore Testnet{" "}
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => dropdownHandler(56)}>
+          Smart Chain Mainnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(97)}>
+          Smart Chain Testnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(137)}>
+          Polygon Mainnet{" "}
+        </Dropdown.Item>{" "}
+        <Dropdown.Item onClick={() => dropdownHandler(80001)}>
+          Polygon Testnet{" "}
+        </Dropdown.Item>
+      </DropdownButton>
       {appState === "ready" ? (
         <div>
           <Button

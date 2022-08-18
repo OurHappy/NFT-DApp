@@ -148,7 +148,6 @@
     width: 350px;
     height: 350px;
     margin-bottom: 20px;
-    
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,6 +156,8 @@
     .contractImg {
       max-width: 100%;
       max-height: 100%;
+      margin-right: 30x;
+    
     }
 
 }
@@ -169,32 +170,118 @@
         padding-bottom: 60px;
     }
 }
-// .tokenField {
-//     padding: 30px 50px 50px 50px;
-//     background-color: #F4F2F2;
+.carousel-inner>.item {
+    width: 100%;
 
-//     .imgBox {
-//         width: 350px;
-//         height: 350px;
-//         margin-bottom: 20px;
+}
+
+@media screen and (max-width:500px) {
+    .carou{
+        width: 100%!important;
+    }
+    .contractImg {
+   
+        margin-right: 40px;
+      
+      }
+    
+}
+
+@media screen and (min-width:500px) {
+    .carou{
+        width: 50%!important;
+        .contractImg {
+   
+            margin-right: 25px;
+          
+          }
+    }
+    
+}
+
+@media screen and (min-width:415px) and (max-width:447px){
+    .carou{
+        width:90%!important;
+
+        .contractImg {
+   
+            // margin-right: 70px;
+          
+          }
+
         
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         background-color: white;
+       
+    }
     
+}
+
+@media screen and (min-width:448px) and (max-width:513px){
+    .carou{
+        width:70%!important;
+
+        .contractImg {
+   
+            margin-right: 90px;
+          
+          }
+
+    }
+    
+}
+
+@media screen and (min-width:514px) and (max-width:617px){
+    .carou{
+        width:70%!important;
+
+        .contractImg {
+   
+            margin-right: 30px;
+          
+          }
+
+    }
+    
+}
+
+@media screen and (min-width:618px) and (max-width:989px){
+    .carou{
+        width: 80%!important;
+
+        .contractImg {
+   
+            margin-right: 70px;
+          
+          }
+    }
+    
+}
+@media screen and (min-width:990px) and(max-width:1200px){
+    .carou{
+        width: 80%!important;
+        // background-color: aqua;
+
+        .contractImg {
+   
+            margin-right: 70px;
+          
+          }
+        .imgBox{
+            width: 120%;
+        }
+    }
+    
+}
+
+// @media screen and (min-width:800px) and (min-width:100px){
+//     .carou{
+//         width: 30%!important;
 //         .contractImg {
-//           max-width: 100%;
-//           max-height: 100%;
-//         }
-    
-//     }
-// }
-
-
-// @media (min-width:600px) {
-//     .cardsSection{
-//         min-width: 600px;
+   
+//             margin-right: 200px;
+          
+//           }
 //     }
     
 // }
+
+

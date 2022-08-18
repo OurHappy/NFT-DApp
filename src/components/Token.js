@@ -7,6 +7,7 @@ import {
   InputGroup,
   Spinner,
   Card,
+  Carousel,
 } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router";
 import PropTypes from "prop-types";
@@ -57,6 +58,7 @@ const Token = (props) => {
   const [tokenLoading, setTokenLoading] = useState(false);
   const [standard, setStandard] = useState("");
   const [tokenUri, setTokenUri] = useState(null);
+  const [animation, setAnimation] = useState(null);
 
   useEffect(() => {
     if (contractAddress && tokenId) {
@@ -70,6 +72,12 @@ const Token = (props) => {
       updateBalance();
     }
   }, [isConnect]);
+
+  useEffect(() => {
+    if (standard !== "" && contractInstance !== null) {
+      updateBalance();
+    }
+  }, [standard, contractInstance]);
 
   const resetStates = () => {
     setShowToken(0);
@@ -92,8 +100,24 @@ const Token = (props) => {
             "https://api.ipfsbrowser.com/ipfs/get.php?hash="
           );
           window.open(newUri);
+        } else if (uri.includes("base64")) {
+          var string = uri;
+          var iframe =
+            "<iframe width='100%' height='100%' src='" + string + "'></iframe>";
+          var x = window.open();
+          x.document.open();
+          x.document.write(iframe);
+          x.document.close();
         } else {
-          window.open(uri);
+          let tokenURI = uri;
+          let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
+          let zeroNum = 64 - tokenIdNew.length;
+          for (let i = 0; i < zeroNum; i++) {
+            tokenIdNew = "0" + tokenIdNew;
+          }
+          tokenURI = tokenURI.replace("{id}", tokenIdNew);
+
+          window.open(tokenURI);
         }
       });
     } else {
@@ -115,7 +139,15 @@ const Token = (props) => {
           x.document.write(iframe);
           x.document.close();
         } else {
-          window.open(uri);
+          let tokenURI = uri;
+          let tokenIdNew = Number(tokenId).toString(16).toLowerCase();
+          let zeroNum = 64 - tokenIdNew.length;
+          for (let i = 0; i < zeroNum; i++) {
+            tokenIdNew = "0" + tokenIdNew;
+          }
+          tokenURI = tokenURI.replace("{id}", tokenIdNew);
+
+          window.open(tokenURI);
         }
       });
     }
@@ -123,7 +155,14 @@ const Token = (props) => {
 
   // build token meta data
   let showTokenMeta = async (tokenMeta, tokenId) => {
-    const defaultType = ["id", "name", "description", "external_url", "image"];
+    const defaultType = [
+      "id",
+      "name",
+      "description",
+      "external_url",
+      "image",
+      "animation_url",
+    ];
 
     let tokenObject;
     if (tokenMeta["data"]) tokenObject = tokenMeta["data"];
@@ -145,6 +184,10 @@ const Token = (props) => {
             setIsVideo(true);
             setIsImg(false);
           }
+        } else if (key === "animation_url") {
+          console.log("in");
+          console.log(value);
+          setAnimation(value);
         }
         // check standard type
         let result = await makeContract(contractAddress);
@@ -164,28 +207,29 @@ const Token = (props) => {
   };
 
   async function updateBalance() {
-    if (standard === "ERC1155") {
-      console.log("1155");
-      let supplyResult = totalSupply(contractInstance, tokenId);
-      supplyResult.then((msg) => console.log("supply=", msg));
+    if (contractInstance !== null) {
+      if (standard === "ERC1155") {
+        if (isConnect) {
+          let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
+          ownResult.then((msg) => setOwn(msg));
+        } else {
+          setOwn("Please connect the Metamask to check balance");
+        }
 
-      if (isConnect) {
-        let ownResult = balanceOf(contractInstance, accountAddress, tokenId);
-        ownResult.then((msg) => setOwn(msg));
-      } else {
-        setOwn("Please connect the Metamask to check balance");
-      }
+        // only 1155 can see the token's total supply
+        setIs1155(true);
+      } else if (standard === "ERC721") {
+        if (isConnect) {
+          // let ownResult = ownerOf721(contractInstance, tokenId);
+          // ownResult.then((ownerAddr) => ownerAddr === accountAddress ? setOwn(true) : setOwn(false));
+          let result = await balanceOf721(contractInstance, accountAddress);
 
-      // only 1155 can see the token's total supply
-      setIs1155(true);
-    } else if (standard === "ERC721") {
-      if (isConnect) {
-        // let ownResult = ownerOf721(contractInstance, tokenId);
-        // ownResult.then((ownerAddr) => ownerAddr === accountAddress ? setOwn(true) : setOwn(false));
-        let result = balanceOf721(contractInstance, accountAddress);
-        result.then((msg) => setOwn(msg));
+          setOwn(result);
+        } else {
+          setOwn("Please connect the Metamask to check balance");
+        }
       } else {
-        setOwn("Please connect the Metamask to check balance");
+        console.log("nothing");
       }
     }
   }
@@ -195,6 +239,7 @@ const Token = (props) => {
 
     if (result.contract !== null && loadToken === false) {
       let tokenMeta = await getTokenMeta(result.contract, ID);
+      console.log("tokenMeta=", tokenMeta.data.animation_url);
 
       if (tokenMeta === null) {
         return false;
@@ -224,7 +269,6 @@ const Token = (props) => {
     let contract = await getContract();
 
     if (contract !== null) {
-
       let tokenMeta = await getTokenMeta(contract, ID);
 
       if (tokenMeta === null) {
@@ -466,19 +510,49 @@ const Token = (props) => {
             <h1 className="text-center tokenTitle">Token</h1>
             <Container className="p-0 mx-auto tokenField">
               <Row>
-                <Col  className="leftTokenSection">
-                  {isImg && (
+                <Col className="leftTokenSection">
+                  {isImg && animation === null && (
                     <div className="imgBox">
                       <img src={img} className="contractImg"></img>
                     </div>
                   )}
-                  {isVideo && (
+                  {/* {isVideo && (
                     <video controls className="tokenImg">
                       <source src={img} type="video/mp4"></source>
                     </video>
+                  )} */}
+                  {animation !== null && (
+                    <Carousel
+                      variant="dark"
+                      interval={null}
+                      className=" carou"
+                    >
+                      <Carousel.Item>
+                        <div className="imgBox">
+                          <img
+                            className="contractImg"
+                            src={img}
+                            alt="Token Image"
+                          />
+                        </div>
+                      </Carousel.Item>
+                      <Carousel.Item>
+                        <div className="imgBox">
+                          <video
+                            className="contractImg"
+                            src={animation}
+                            alt="Token Video"
+                            loop
+                            autoPlay
+                            muted
+                            controls
+                          />
+                        </div>
+                      </Carousel.Item>
+                    </Carousel>
                   )}
                 </Col>
-                <Col >
+                <Col>
                   <div className="tokenInfo">
                     <div className="nameSection">{name}</div>
                     <br />
@@ -549,9 +623,7 @@ const Token = (props) => {
                               </Card>
                             )}
                           </Col>
-                          <Col className="p-0">
-                            {renderOwnerStatus()}
-                          </Col>
+                          <Col className="p-0">{renderOwnerStatus()}</Col>
                           <Col className="p-0"></Col>
                         </Row>
                       </Container>
